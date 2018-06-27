@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>kb_jay的开发站台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="MscSdk引擎： 在线：需要网络，速度慢，需要流量；（针对速度慢的优化：会话模式（边录边传）；音频压缩） 离线：不用网，识别速度快，需要付费；需要下载离线包；  ####语音识别相关：  语音听写：语音转文本；可以提取语音中的文字信息，可以识别个性化数据；不需要构建语法。（离线听写暂未开放购买）  语法识别：语音转文本；识别的匹配率高（需要上传语法规则）；识别结果有置信度；多用于需要准确结果且有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kb_jay的开发站台">
+<meta property="og:url" content="http://yoursite.com/2018/06/25/MSC-Android开发文档/index.html">
+<meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="MscSdk引擎： 在线：需要网络，速度慢，需要流量；（针对速度慢的优化：会话模式（边录边传）；音频压缩） 离线：不用网，识别速度快，需要付费；需要下载离线包；  ####语音识别相关：  语音听写：语音转文本；可以提取语音中的文字信息，可以识别个性化数据；不需要构建语法。（离线听写暂未开放购买）  语法识别：语音转文本；识别的匹配率高（需要上传语法规则）；识别结果有置信度；多用于需要准确结果且有">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-06-26T02:09:29.487Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kb_jay的开发站台">
+<meta name="twitter:description" content="MscSdk引擎： 在线：需要网络，速度慢，需要流量；（针对速度慢的优化：会话模式（边录边传）；音频压缩） 离线：不用网，识别速度快，需要付费；需要下载离线包；  ####语音识别相关：  语音听写：语音转文本；可以提取语音中的文字信息，可以识别个性化数据；不需要构建语法。（离线听写暂未开放购买）  语法识别：语音转文本；识别的匹配率高（需要上传语法规则）；识别结果有置信度；多用于需要准确结果且有">
+  
+    <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">kb_jay的开发站台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MSC-Android开发文档" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/25/MSC-Android开发文档/" class="article-date">
+  <time datetime="2018-06-25T11:03:39.931Z" itemprop="datePublished">2018-06-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="MscSdk引擎："><a href="#MscSdk引擎：" class="headerlink" title="MscSdk引擎："></a>MscSdk引擎：</h4><ol>
+<li>在线：需要网络，速度慢，需要流量；（针对速度慢的优化：会话模式（边录边传）；音频压缩）</li>
+<li>离线：不用网，识别速度快，需要付费；需要下载离线包；</li>
+</ol>
+<p>####语音识别相关：</p>
+<ol>
+<li><p>语音听写：语音转文本；可以提取语音中的文字信息，可以识别个性化数据；不需要构建语法。（离线听写暂未开放购买）</p>
+</li>
+<li><p>语法识别：语音转文本；识别的匹配率高（需要上传语法规则）；识别结果有置信度；多用于需要准确结果且有限说法的语音控制（eg：语音控制空调）。</p>
+<p>tip：构建语法：</p>
+<pre><code> 1. ABNF (在线) :在线语法识别服务已经下线了！！！
+2. BNF（离线）:
+</code></pre></li>
+<li><p>更新词典：</p>
+<ol>
+<li>在线语法词典：用于语音听写时的热词匹配，可以上传到讯飞后台（txt文件，一行一个热词）；</li>
+<li>离线语法词典：</li>
+</ol>
+</li>
+<li><p>识别对话框：sdk提供给开发者的识别ui。</p>
+</li>
+</ol>
+<h4 id="语音合成相关："><a href="#语音合成相关：" class="headerlink" title="语音合成相关："></a>语音合成相关：</h4><p>文字转语音：可以设置转换结果的语言，方言，发音人的特征，语速，音量，语调，音频采样率。</p>
+<h4 id="语义理解相关："><a href="#语义理解相关：" class="headerlink" title="语义理解相关："></a>语义理解相关：</h4><p>理解用户意图，做相应的处理。</p>
+<p>AIUI:需要开启</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjix3ayrj0001avwax8gp1zhu" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/24/leetcode-不同的二叉搜索树/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode-不同的二叉搜索树</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/25/MSC-Android开发文档/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/24/leetcode-不同的二叉搜索树/">leetcode-不同的二叉搜索树</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/18/leetcode-解码方法/">leetcode-解码方法</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/16/leetcode-爬楼梯/">leetcode-爬楼梯</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/16/leetcode-最大子序列/">leetcode-最大子序列和</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 kb_jay<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
