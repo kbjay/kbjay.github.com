@@ -62,6 +62,54 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-leetcode-三角形最小路径" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/27/leetcode-三角形最小路径/" class="article-date">
+  <time datetime="2018-06-27T12:29:34.500Z" itemprop="datePublished">2018-06-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/27/leetcode-三角形最小路径/">leetcode-三角形最小路径</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。</p>
+<p>例如，给定三角形：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">     [2],</span><br><span class="line">    [3,4],</span><br><span class="line">   [6,5,7],</span><br><span class="line">  [4,1,8,3]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>自顶向下的最小路径和为 <code>11</code>（即，<strong>2</strong> + <strong>3</strong> + <strong>5</strong> + <strong>1</strong> = 11）。</p>
+<p><strong>说明：</strong></p>
+<p>如果你可以只使用 <em>O</em>(<em>n</em>) 的额外空间（<em>n</em> 为三角形的总行数）来解决这个问题，那么你的算法会很加分。</p>
+<p><strong>思路</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如上图中的三角形，考虑到<span class="number">4</span>的最小路径为到<span class="number">6</span>的最小路径+<span class="number">4</span>；到<span class="number">1</span>的最小路径为min(到<span class="number">6</span>的最小路径，到<span class="number">5</span>的最小路径)+<span class="number">1</span>；。。。。。</span><br></pre></td></tr></table></figure>
+<p><strong>代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minimumTotal</span><span class="params">(List&lt;List&lt;Integer&gt;&gt; t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] preArr=<span class="keyword">new</span> <span class="keyword">int</span>[t.size()];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;t.size();i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i==<span class="number">0</span>)&#123;</span><br><span class="line">                preArr[i]=t.get(<span class="number">0</span>).get(<span class="number">0</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                preArr[i]=Integer.MAX_VALUE;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;t.size();i++)&#123;</span><br><span class="line">            List&lt;Integer&gt;arr = t.get(i);</span><br><span class="line">            <span class="keyword">int</span> temp =preArr[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">0</span>;j&lt;arr.size();j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(j==<span class="number">0</span>)&#123;</span><br><span class="line">                    preArr[j]=preArr[j]+arr.get(j);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">int</span> temp1=preArr[j];</span><br><span class="line">                    preArr[j]=arr.get(j)+(temp&gt;temp1?temp1:temp);</span><br><span class="line">                    temp=temp1;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> re=preArr[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>;i&lt;preArr.length;i++)&#123;</span><br><span class="line">            re=(re&gt;preArr[i]?preArr[i]:re);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> re;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjix3ksdd0001c8wa06kv31zx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-leetcode-股票最大收益" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/27/leetcode-股票最大收益/" class="article-date">
@@ -100,7 +148,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjix3bx9y0005bgwapqg8cesn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjix3ksdo0006c8wa951s5m5o" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -153,7 +201,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjix3bx9i0000bgwankfenpoz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjix3ksd70000c8wa3qbar3rq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -196,7 +244,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjix3bx9o0001bgwa3zjz04c8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjix3ksdg0002c8wajke6luxq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -245,7 +293,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/18/leetcode-解码方法/" data-id="cjix3bx9z0006bgwa48vcskvs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/18/leetcode-解码方法/" data-id="cjix3ksds0009c8waru9pzqso" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -294,7 +342,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/16/leetcode-爬楼梯/" data-id="cjix3bx9w0004bgwalfz5io66" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/16/leetcode-爬楼梯/" data-id="cjix3ksdm0005c8wal7ecw7xr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -347,7 +395,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/16/leetcode-最大子序列/" data-id="cjix3bx9r0002bgwackka3x3q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/16/leetcode-最大子序列/" data-id="cjix3ksdl0004c8wai47onswx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -398,7 +446,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/15/学习计划/" data-id="cjix3bxa10009bgwawqemurk3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/15/学习计划/" data-id="cjix3ksdu000bc8wayhezzg9s" class="article-share-link">Share</a>
       
       
     </footer>
@@ -453,6 +501,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/27/leetcode-三角形最小路径/">leetcode-三角形最小路径</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/27/leetcode-股票最大收益/">leetcode-股票最大收益</a>
           </li>
         
@@ -466,10 +518,6 @@
         
           <li>
             <a href="/2018/06/18/leetcode-解码方法/">leetcode-解码方法</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/16/leetcode-爬楼梯/">leetcode-爬楼梯</a>
           </li>
         
       </ul>
