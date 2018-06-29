@@ -62,6 +62,56 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-leetcode-Bit位计数" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/29/leetcode-Bit位计数/" class="article-date">
+  <time datetime="2018-06-29T15:40:39.337Z" itemprop="datePublished">2018-06-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/29/leetcode-Bit位计数/">leetcode-Bit位计数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>给定一个非负整数 <strong>num</strong>。 对于范围 <strong>0 ≤ i ≤ num</strong> 中的每个数字 <strong>i</strong> ，计算其二进制数中的1的数目并将它们作为数组返回。</p>
+<p><strong>示例：</strong><br>比如给定 <code>num = 5</code> ，应该返回 <code>[0,1,1,2,1,2]</code>.</p>
+<p><strong>进阶：</strong></p>
+<ul>
+<li>给出时间复杂度为<strong>O(n * sizeof(integer))</strong> 的解答非常容易。 但是你可以在线性时间<strong>O(n)</strong>内用一次遍历做到吗？</li>
+<li>要求算法的空间复杂度为<strong>O(n)</strong>。</li>
+<li>你能进一步完善解法吗？ 在c ++或任何其他语言中不使用任何内置函数（如c++里的 <strong>__builtin_popcount</strong>）来执行此操作。</li>
+</ul>
+<p><strong>思路</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">考虑<span class="number">5</span> （<span class="number">111</span>） 除以<span class="number">2</span>就相当于把后面的<span class="number">1</span>砍掉剩下<span class="number">11</span>（<span class="number">2</span>）余 <span class="number">1</span> </span><br><span class="line"> 这样a[<span class="number">5</span>]=a[<span class="number">2</span>]+<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">考虑<span class="number">4</span> <span class="number">100</span>除以<span class="number">2</span> 就相当于把<span class="number">0</span>砍掉=<span class="number">2</span> 余 <span class="number">0</span> </span><br><span class="line">  这样a[<span class="number">4</span>]=a[<span class="number">2</span>];</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p><strong>代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] countBits(<span class="keyword">int</span> num) &#123;        </span><br><span class="line">        <span class="keyword">int</span> [] arr= <span class="keyword">new</span> <span class="keyword">int</span>[num+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">if</span>(num==<span class="number">0</span>)&#123;</span><br><span class="line">            arr[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(num==<span class="number">1</span>)&#123;</span><br><span class="line">            arr[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">            arr[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        arr[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">        arr[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">2</span>;i&lt;=num;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp1=i/<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">int</span> temp2=i%<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(temp2==<span class="number">1</span>)&#123;</span><br><span class="line">                arr[i]=<span class="number">1</span>+arr[temp1];</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                arr[i]=arr[temp1];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="cjj05a7zu0003nxuqdrwhlcg0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android-反编译调试smali文件" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/29/Android-反编译调试smali文件/" class="article-date">
@@ -122,7 +172,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjj03tp5p0000lbuqkclta5e0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjj05a7zk0000nxuq4oplklhm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -176,7 +226,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjj03tp610003lbuqh2b9whvp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjj05a8000008nxuqd0el08cx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -224,7 +274,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjj03tp650005lbuqdc41gs8h" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjj05a7zx0004nxuq6c3z18fo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -274,7 +324,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjj03tp690009lbuqb8a4f46p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjj05a806000dnxuq7fumrdek" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -394,7 +444,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjj03tp5x0001lbuqm4gfh29e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjj05a7zq0001nxuqh0y3yz9b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -439,7 +489,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjj03tp630004lbuqptyeto2u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjj05a7zy0005nxuqhbinaa55" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -488,7 +538,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/18/leetcode-解码方法/" data-id="cjj03tp6c000dlbuqzli1l4pk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/18/leetcode-解码方法/" data-id="cjj05a80a000gnxuqix56yuoc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -537,7 +587,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/16/leetcode-爬楼梯/" data-id="cjj03tp6b000blbuqoyk2kht7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/16/leetcode-爬楼梯/" data-id="cjj05a805000bnxuqvwwjxp3i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -590,7 +640,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/16/leetcode-最大子序列/" data-id="cjj03tp660008lbuqyepkpih0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/16/leetcode-最大子序列/" data-id="cjj05a8030009nxuqc794o6m0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -602,56 +652,12 @@
 
 
   
-    <article id="post-学习计划" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/15/学习计划/" class="article-date">
-  <time datetime="2018-06-15T02:42:04.550Z" itemprop="datePublished">2018-06-15</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/15/学习计划/">学习计划表</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><br></p>
-<h3 id="周一到周五，每天一道算法题"><a href="#周一到周五，每天一道算法题" class="headerlink" title="周一到周五，每天一道算法题"></a>周一到周五，每天一道算法题</h3><p>每天在leetcode上学习一道算法题，并记录下解题思路。</p>
-<h3 id="熟悉23种设计模式"><a href="#熟悉23种设计模式" class="headerlink" title="熟悉23种设计模式"></a>熟悉23种设计模式</h3><p>需要熟练的掌握23种基本的设计模式。</p>
-<h3 id="学习数据结构"><a href="#学习数据结构" class="headerlink" title="学习数据结构"></a>学习数据结构</h3><p>熟练掌握链表，栈，队列，树。</p>
-<h3 id="学习Java集合类"><a href="#学习Java集合类" class="headerlink" title="学习Java集合类"></a>学习Java集合类</h3><p>源码分析hashMap<br>…</p>
-<h3 id="学习Java输入输出流"><a href="#学习Java输入输出流" class="headerlink" title="学习Java输入输出流"></a>学习Java输入输出流</h3><p>熟练掌握各种输入输出流。</p>
-<h3 id="学习数据库的基本操作"><a href="#学习数据库的基本操作" class="headerlink" title="学习数据库的基本操作"></a>学习数据库的基本操作</h3><p>需要熟练掌握数据库相关知识。</p>
-<h3 id="复习Android基础"><a href="#复习Android基础" class="headerlink" title="复习Android基础"></a>复习Android基础</h3><p>四大组件，fragment，动画，自定义view，view事件机制。</p>
-<h3 id="Android框架学习"><a href="#Android框架学习" class="headerlink" title="Android框架学习"></a>Android框架学习</h3><p>网络框架：okHttp ，Retrofit<br>异步框架：Rxjava<br>依赖注入框架：Dragger2<br>图片框架：Glide<br>事件总线框架：RxBus（Rxjava）</p>
-<h3 id="Android架构学习"><a href="#Android架构学习" class="headerlink" title="Android架构学习"></a>Android架构学习</h3><p>mvp<br>mvvm<br>谷歌官方架构组件（Room，LiveData，ViewModel，LifeCycle）</p>
-<h3 id="Android-View源码"><a href="#Android-View源码" class="headerlink" title="Android View源码"></a>Android View源码</h3><p>RecycleView<br>TabLayout<br>CardView<br>…</p>
-<h3 id="Android-网络框架封装"><a href="#Android-网络框架封装" class="headerlink" title="Android 网络框架封装"></a>Android 网络框架封装</h3><p>自己封装一个网络请求框架</p>
-<h3 id="Android-性能优化"><a href="#Android-性能优化" class="headerlink" title="Android 性能优化"></a>Android 性能优化</h3><p>布局优化<br>过度渲染<br>内存优化<br>电池优化<br>…</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/15/学习计划/" data-id="cjj03tp6f000glbuq6espi0dr" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
@@ -696,6 +702,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/29/leetcode-Bit位计数/">leetcode-Bit位计数</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/29/Android-反编译调试smali文件/">Android-反编译调试smali文件</a>
           </li>
         
@@ -709,10 +719,6 @@
         
           <li>
             <a href="/2018/06/27/leetcode-股票最大收益/">leetcode-股票最大收益</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/25/MSC-Android开发文档/">MSC-Android开发文档</a>
           </li>
         
       </ul>
