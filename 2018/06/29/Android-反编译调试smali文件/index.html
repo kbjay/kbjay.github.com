@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>kb_jay的开发站台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="title：Android-反编译调试smali文件 tags：Android工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中  在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kb_jay的开发站台">
+<meta property="og:url" content="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/index.html">
+<meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="title：Android-反编译调试smali文件 tags：Android工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中  在">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-06-29T11:01:22.527Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kb_jay的开发站台">
+<meta name="twitter:description" content="title：Android-反编译调试smali文件 tags：Android工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中  在">
+  
+    <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">kb_jay的开发站台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android-反编译调试smali文件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/29/Android-反编译调试smali文件/" class="article-date">
+  <time datetime="2018-06-29T11:01:20.239Z" itemprop="datePublished">2018-06-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>title：Android-反编译调试smali文件</p>
+<h2 id="tags：Android"><a href="#tags：Android" class="headerlink" title="tags：Android"></a>tags：Android</h2><h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><ol>
+<li><p>apktool</p>
+</li>
+<li><p>smalidea插件（需要安装到as）</p>
+</li>
+</ol>
+<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li><p>使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）</p>
+</li>
+<li><p>使用apktool回编生成新的apk</p>
+</li>
+<li><p>给新的apk签名</p>
+</li>
+<li><p>安装新的apk</p>
+</li>
+<li><p>将smali文件导入as中</p>
+</li>
+<li><p>在as中创建remote调试（注意设置填写端口号为8800：将as的remote调试跟本机的8800端口“打通”）</p>
+</li>
+<li><p>在as终端输入</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -D -n com.xxx.xxx/com.xxx.xxx.xxx</span><br></pre></td></tr></table></figure>
+<p>以调试模式开启安装的apk</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb shell ps | grep com.xxx.xxx     </span><br><span class="line"><span class="comment">//查看手机中该apk程序的pid</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb forward tcp:<span class="number">8800</span> jdwp:查找到的pid</span><br><span class="line"><span class="comment">//将本机的8800端口跟该apk进程“打通”</span></span><br><span class="line"><span class="comment">//记得设置remote调试的时候将本机的8800端口跟as的remote调试“打通”了，那么remote调试就跟手机的apk进程“打通”了；</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在smali文件中打好断点</p>
+</li>
+<li><p>as-》run-〉debug</p>
+</li>
+</ol>
+<p>参考<a href="https://www.cnblogs.com/gordon0918/p/5570811.html" target="_blank" rel="noopener">https://www.cnblogs.com/gordon0918/p/5570811.html</a></p>
+<p><a href="http://www.cnblogs.com/goodhacker/p/5592313.html" target="_blank" rel="noopener">http://www.cnblogs.com/goodhacker/p/5592313.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjizvcq520000j3vg9xf04877" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/28/leetcode-单词拆分/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode-单词拆分</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/29/Android-反编译调试smali文件/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/28/leetcode-单词拆分/">leetcode-单词拆分</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/27/leetcode-三角形最小路径/">leetcode-三角形最小路径</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/27/leetcode-股票最大收益/">leetcode-股票最大收益</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/25/MSC-Android开发文档/">MSC-Android开发文档</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 kb_jay<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

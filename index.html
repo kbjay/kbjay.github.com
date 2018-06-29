@@ -62,6 +62,68 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Android-反编译调试smali文件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/29/Android-反编译调试smali文件/" class="article-date">
+  <time datetime="2018-06-29T11:01:20.239Z" itemprop="datePublished">2018-06-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>title：Android-反编译调试smali文件</p>
+<h2 id="tags：Android"><a href="#tags：Android" class="headerlink" title="tags：Android"></a>tags：Android</h2><h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><ol>
+<li><p>apktool</p>
+</li>
+<li><p>smalidea插件（需要安装到as）</p>
+</li>
+</ol>
+<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li><p>使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）</p>
+</li>
+<li><p>使用apktool回编生成新的apk</p>
+</li>
+<li><p>给新的apk签名</p>
+</li>
+<li><p>安装新的apk</p>
+</li>
+<li><p>将smali文件导入as中</p>
+</li>
+<li><p>在as中创建remote调试（注意设置填写端口号为8800：将as的remote调试跟本机的8800端口“打通”）</p>
+</li>
+<li><p>在as终端输入</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -D -n com.xxx.xxx/com.xxx.xxx.xxx</span><br></pre></td></tr></table></figure>
+<p>以调试模式开启安装的apk</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb shell ps | grep com.xxx.xxx     </span><br><span class="line"><span class="comment">//查看手机中该apk程序的pid</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb forward tcp:<span class="number">8800</span> jdwp:查找到的pid</span><br><span class="line"><span class="comment">//将本机的8800端口跟该apk进程“打通”</span></span><br><span class="line"><span class="comment">//记得设置remote调试的时候将本机的8800端口跟as的remote调试“打通”了，那么remote调试就跟手机的apk进程“打通”了；</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在smali文件中打好断点</p>
+</li>
+<li><p>as-》run-〉debug</p>
+</li>
+</ol>
+<p>参考<a href="https://www.cnblogs.com/gordon0918/p/5570811.html" target="_blank" rel="noopener">https://www.cnblogs.com/gordon0918/p/5570811.html</a></p>
+<p><a href="http://www.cnblogs.com/goodhacker/p/5592313.html" target="_blank" rel="noopener">http://www.cnblogs.com/goodhacker/p/5592313.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjizvcq520000j3vg9xf04877" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-leetcode-单词拆分" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/28/leetcode-单词拆分/" class="article-date">
@@ -104,7 +166,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjizdzjkm00048dvg2ve51hva" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjizvcq5l0005j3vgqd93jl4a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -152,7 +214,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjizdzjkf00018dvg91q7b4v4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjizvcq5f0002j3vg5ggf89co" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -202,7 +264,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjizdzjkr00098dvg3mh8b4j7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjizvcq5o0009j3vguqlsk30s" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -322,7 +384,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjizdzjk900008dvg05xrws3y" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjizvcq5d0001j3vg78837742" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -367,7 +429,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjizdzjkk00038dvgh0ofqyk8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjizvcq5k0004j3vgaww0ulyh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -416,7 +478,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/18/leetcode-解码方法/" data-id="cjizdzjkv000c8dvgch8v1c1t" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/18/leetcode-解码方法/" data-id="cjizvcq5y000fj3vgojsej8zc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -465,7 +527,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/16/leetcode-爬楼梯/" data-id="cjizdzjkp00088dvg106i0yrk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/16/leetcode-爬楼梯/" data-id="cjizvcq5q000aj3vgy8xjkegb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -518,7 +580,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/16/leetcode-最大子序列/" data-id="cjizdzjkn00058dvg98uecraw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/16/leetcode-最大子序列/" data-id="cjizvcq5m0006j3vgafecg1rl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -569,7 +631,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/15/学习计划/" data-id="cjizdzjky000e8dvgwcqwffmi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/15/学习计划/" data-id="cjizvcq5u000dj3vg4p6mhibf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -624,6 +686,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/29/Android-反编译调试smali文件/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/28/leetcode-单词拆分/">leetcode-单词拆分</a>
           </li>
         
@@ -637,10 +703,6 @@
         
           <li>
             <a href="/2018/06/25/MSC-Android开发文档/">MSC-Android开发文档</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/24/leetcode-不同的二叉搜索树/">leetcode-不同的二叉搜索树</a>
           </li>
         
       </ul>
