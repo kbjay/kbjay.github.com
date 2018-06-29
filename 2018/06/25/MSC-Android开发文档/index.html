@@ -7,17 +7,17 @@
   
   <title>kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="MscSdk引擎： 在线：需要网络，速度慢，需要流量；（针对速度慢的优化：会话模式（边录边传）；音频压缩） 离线：不用网，识别速度快，需要付费；需要下载离线包；  ####语音识别相关：  语音听写：语音转文本；可以提取语音中的文字信息，可以识别个性化数据；不需要构建语法。（离线听写暂未开放购买）  语法识别：语音转文本；识别的匹配率高（需要上传语法规则）；识别结果有置信度；多用于需要准确结果且有">
+  <meta name="description" content="title：Android-MscSdk(讯飞语音) tags：AndroidMscSdk引擎#####在线  需要网络；  速度慢（通过会话模式（边录边传）跟音频压缩的优化，在讯飞输入法的实际速度并不比离线的慢）；   #####离线：  不需要网络； 识别速度快； 需要付费； 需要下载离线包；  语音识别相关#####语音听写  语音转文本； 可以提取语音中的文字信息，可以识别个性化数据；">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kb_jay的开发站台">
 <meta property="og:url" content="http://yoursite.com/2018/06/25/MSC-Android开发文档/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="MscSdk引擎： 在线：需要网络，速度慢，需要流量；（针对速度慢的优化：会话模式（边录边传）；音频压缩） 离线：不用网，识别速度快，需要付费；需要下载离线包；  ####语音识别相关：  语音听写：语音转文本；可以提取语音中的文字信息，可以识别个性化数据；不需要构建语法。（离线听写暂未开放购买）  语法识别：语音转文本；识别的匹配率高（需要上传语法规则）；识别结果有置信度；多用于需要准确结果且有">
+<meta property="og:description" content="title：Android-MscSdk(讯飞语音) tags：AndroidMscSdk引擎#####在线  需要网络；  速度慢（通过会话模式（边录边传）跟音频压缩的优化，在讯飞输入法的实际速度并不比离线的慢）；   #####离线：  不需要网络； 识别速度快； 需要付费； 需要下载离线包；  语音识别相关#####语音听写  语音转文本； 可以提取语音中的文字信息，可以识别个性化数据；">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-06-26T02:09:29.487Z">
+<meta property="og:updated_time" content="2018-06-29T02:44:59.428Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kb_jay的开发站台">
-<meta name="twitter:description" content="MscSdk引擎： 在线：需要网络，速度慢，需要流量；（针对速度慢的优化：会话模式（边录边传）；音频压缩） 离线：不用网，识别速度快，需要付费；需要下载离线包；  ####语音识别相关：  语音听写：语音转文本；可以提取语音中的文字信息，可以识别个性化数据；不需要构建语法。（离线听写暂未开放购买）  语法识别：语音转文本；识别的匹配率高（需要上传语法规则）；识别结果有置信度；多用于需要准确结果且有">
+<meta name="twitter:description" content="title：Android-MscSdk(讯飞语音) tags：AndroidMscSdk引擎#####在线  需要网络；  速度慢（通过会话模式（边录边传）跟音频压缩的优化，在讯飞输入法的实际速度并不比离线的慢）；   #####离线：  不需要网络； 识别速度快； 需要付费； 需要下载离线包；  语音识别相关#####语音听写  语音转文本； 可以提取语音中的文字信息，可以识别个性化数据；">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -76,36 +76,89 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="MscSdk引擎："><a href="#MscSdk引擎：" class="headerlink" title="MscSdk引擎："></a>MscSdk引擎：</h4><ol>
-<li>在线：需要网络，速度慢，需要流量；（针对速度慢的优化：会话模式（边录边传）；音频压缩）</li>
-<li>离线：不用网，识别速度快，需要付费；需要下载离线包；</li>
-</ol>
-<p>####语音识别相关：</p>
-<ol>
-<li><p>语音听写：语音转文本；可以提取语音中的文字信息，可以识别个性化数据；不需要构建语法。（离线听写暂未开放购买）</p>
+        <hr>
+<p>title：Android-MscSdk(讯飞语音)</p>
+<h2 id="tags：Android"><a href="#tags：Android" class="headerlink" title="tags：Android"></a>tags：Android</h2><h3 id="MscSdk引擎"><a href="#MscSdk引擎" class="headerlink" title="MscSdk引擎"></a>MscSdk引擎</h3><p>#####在线</p>
+<ul>
+<li><p>需要网络；</p>
 </li>
-<li><p>语法识别：语音转文本；识别的匹配率高（需要上传语法规则）；识别结果有置信度；多用于需要准确结果且有限说法的语音控制（eg：语音控制空调）。</p>
-<p>tip：构建语法：</p>
-<pre><code> 1. ABNF (在线) :在线语法识别服务已经下线了！！！
-2. BNF（离线）:
-</code></pre></li>
-<li><p>更新词典：</p>
-<ol>
-<li>在线语法词典：用于语音听写时的热词匹配，可以上传到讯飞后台（txt文件，一行一个热词）；</li>
-<li>离线语法词典：</li>
-</ol>
+<li><p>速度慢（通过会话模式（边录边传）跟音频压缩的优化，在讯飞输入法的实际速度并不比离线的慢）；</p>
 </li>
-<li><p>识别对话框：sdk提供给开发者的识别ui。</p>
-</li>
-</ol>
-<h4 id="语音合成相关："><a href="#语音合成相关：" class="headerlink" title="语音合成相关："></a>语音合成相关：</h4><p>文字转语音：可以设置转换结果的语言，方言，发音人的特征，语速，音量，语调，音频采样率。</p>
-<h4 id="语义理解相关："><a href="#语义理解相关：" class="headerlink" title="语义理解相关："></a>语义理解相关：</h4><p>理解用户意图，做相应的处理。</p>
-<p>AIUI:需要开启</p>
+</ul>
+<p>#####离线：</p>
+<ul>
+<li>不需要网络；</li>
+<li>识别速度快；</li>
+<li>需要付费；</li>
+<li>需要下载离线包；</li>
+</ul>
+<h3 id="语音识别相关"><a href="#语音识别相关" class="headerlink" title="语音识别相关"></a>语音识别相关</h3><p>#####语音听写</p>
+<ul>
+<li>语音转文本；</li>
+<li>可以提取语音中的文字信息，可以识别个性化数据；</li>
+<li>不需要构建语法；</li>
+<li>可以通过上传词典的方式提高匹配率；</li>
+<li>离线的只支持普通话转文本，且暂未开放购买；</li>
+<li>在线的可以支持多种语言；</li>
+</ul>
+<p>#####语法识别</p>
+<ul>
+<li>语音转文本；</li>
+<li>识别的匹配率高（因为上传了语法规则）；</li>
+<li>识别结果有置信度，可以根据这个值判断该识别结果是否有效；</li>
+<li>使用场景多是需要准确结果并且结果有限的语音控制（比如语音控制空调）；</li>
+<li>需要构建语法；</li>
+<li>在线语法识别已经下线，新用户无法使用；</li>
+</ul>
+<p>#####构建语法</p>
+<ul>
+<li>abnf（在线语法规则）：需要指定引擎类型为在线引擎；需要指定语法格式为abnf;构建成功之后会在回调里返回一个id，在识别时会用到；</li>
+<li>bnf（离线语法规则）:需要指定引擎为本地引擎；需要指定语法格式为bnf；需要指定本地语法构建结果文件的路径；需要下载对应的离线sdk；</li>
+</ul>
+<p>#####更新词典</p>
+<p>实质是个性化热词上传。</p>
+<p>有以下两种方式指定词典：</p>
+<ul>
+<li>在线听写词典：考虑这种情况：发音是‘zhangsan’,习惯上出现概率最高的应该是”张三”，但实际我们想要的是”张散”（假如有个手机联系人是张散），此时我们可以通过上传个性化热词的方式告诉语音云服务器优先匹配”张散”。</li>
+<li>离线语法词典：用于更新已经构建的语法文件中某个规则的内容。</li>
+</ul>
+<p>#####识别对话框</p>
+<p>这个是讯飞提供的语音输入ui。</p>
+<ul>
+<li>在显示对话框后，录音自动开始；</li>
+<li>点击对话框内任意地方，可结束录音，点击对话框外，则取消会话；</li>
+<li>出现错误后，再点击对话框内，可启动下一次会话。</li>
+</ul>
+<p>#####翻译</p>
+<p>将语音翻译成目标语种文本，涉及到如下参数：</p>
+<ul>
+<li>SpeechConstant.ASR_SCH 启用翻译</li>
+<li>SpeechConstant.ADD_CAP 翻译通道</li>
+<li>SpeechConstant.ORI_LANG 原始语种</li>
+<li>SpeechConstant.TRANS_LANG 目标语种</li>
+<li>SpeechConstant.TRS_SRC 结果格式</li>
+</ul>
+<h3 id="语音合成相关"><a href="#语音合成相关" class="headerlink" title="语音合成相关"></a>语音合成相关</h3><p>文字转为语言：可以设置转换结果的语言，方言，发音人的特征语速等；</p>
+<p>###语义理解相关</p>
+<ul>
+<li>将语言内容转换为一定结构的文本数据，之后抓取重点信息，理解用户意图，进行下一步处里。</li>
+<li>分为两种：文本语义跟语音语义（先转为文本之后再进行文本语义理解）；</li>
+<li>仅有在线模式；</li>
+<li>默认不开通，需要再aiui开放平台开通；</li>
+<li>aiui:主要用于人机交互</li>
+</ul>
+<h3 id="目前支持的离线在线服务："><a href="#目前支持的离线在线服务：" class="headerlink" title="目前支持的离线在线服务："></a>目前支持的离线在线服务：</h3><ul>
+<li>离线服务（离线命令词、离线合成、唤醒），体验期均为35天，装机量3台，体验期结束后，点击控制台-》我的应用-》立即购买按钮</li>
+<li>在线服务（听写、合成）：免费500次/天-》免费提额通过后2w次/天-》超过2w/天-》联系商务<a href="/var/folders/c6/m_jcqqv17s5_50fj49sdq4q80000gn/T/abnerworks.Typora/05F1C73B-61FA-47F5-98CF-A3037B0BE982/mailto:msp_business@iflytek.com">msp_business@iflytek.com</a></li>
+<li>在线服务（人脸、声纹）：免费500次/天-》超过500次/天-》联系商务<a href="/var/folders/c6/m_jcqqv17s5_50fj49sdq4q80000gn/T/abnerworks.Typora/05F1C73B-61FA-47F5-98CF-A3037B0BE982/mailto:msp_business@iflytek.com">msp_business@iflytek.com</a></li>
+</ul>
+<p>ps:具体接入及使用代码示例参见<a href="https://doc.xfyun.cn/msc_android" target="_blank" rel="noopener">https://doc.xfyun.cn/msc_android</a></p>
+<p>参考文档：<a href="https://doc.xfyun.cn/msc_android" target="_blank" rel="noopener">https://doc.xfyun.cn/msc_android</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjiyj98q30000vrvg26t5h3zn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjizdkuvv00005jvg3qjzn05v" class="article-share-link">Share</a>
       
       
     </footer>
