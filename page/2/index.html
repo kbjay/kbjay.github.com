@@ -62,6 +62,108 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-leetcode-爬楼梯" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/16/leetcode-爬楼梯/" class="article-date">
+  <time datetime="2018-06-16T15:18:37.592Z" itemprop="datePublished">2018-06-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/16/leetcode-爬楼梯/">leetcode-爬楼梯</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>假设你正在爬楼梯。需要 <em>n</em> 步你才能到达楼顶。</p>
+<p>每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？</p>
+<p><strong>注意：</strong>给定 <em>n</em> 是一个正整数。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入： 2</span><br><span class="line">输出： 2</span><br><span class="line">解释： 有两种方法可以爬到楼顶。</span><br><span class="line">1.  1 步 + 1 步</span><br><span class="line">2.  2 步</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入： 3</span><br><span class="line">输出： 3</span><br><span class="line">解释： 有三种方法可以爬到楼顶。</span><br><span class="line">1.  1 步 + 1 步 + 1 步</span><br><span class="line">2.  1 步 + 2 步</span><br><span class="line">3.  2 步 + 1 步</span><br></pre></td></tr></table></figure>
+<p><strong>1:思路</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">假设一直a[n-<span class="number">1</span>]之前的所有情况，此时增加一个台阶，那么最后增加的这个台阶有两种<span class="keyword">case</span>：</span><br><span class="line"><span class="number">1</span>:最后这个是一步，那么爬上来的方式数量=a[n-<span class="number">1</span>]</span><br><span class="line"><span class="number">2</span>:最后这个是两步种的一步，那么爬上来的方式数量=a[n-<span class="number">2</span>]</span><br><span class="line">所以：a[n]=a[n-<span class="number">1</span>]+a[n-<span class="number">2</span>];</span><br></pre></td></tr></table></figure>
+<p><strong>2:代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">climbStairs</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//a[n]= a[n-1]+a[n-2]</span></span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> j=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">3</span>;k&lt;=n;k++)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp = i+j;</span><br><span class="line">            i=j;</span><br><span class="line">            j=temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> j;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/16/leetcode-爬楼梯/" data-id="cjj4esfia000ippuqmpcr99kr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode-最大子序列" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/16/leetcode-最大子序列/" class="article-date">
+  <time datetime="2018-06-16T01:57:04.770Z" itemprop="datePublished">2018-06-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/16/leetcode-最大子序列/">leetcode-最大子序列和</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>给定一个整数数组 <code>nums</code> ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
+<p><strong>示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [-2,1,-3,4,-1,2,1,-5,4],</span><br><span class="line">输出: 6</span><br><span class="line">解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。</span><br></pre></td></tr></table></figure>
+<p><strong>进阶:</strong></p>
+<p>如果你已经实现复杂度为 O(<em>n</em>) 的解法，尝试使用更为精妙的分治法求解。</p>
+<p><strong>1：动态规划 O(n)</strong></p>
+<p>思路：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">动态式：sum[i]:以i为结尾的最大子序列=Max&#123;sum[i-1]+a[i],a[i]&#125;;</span><br><span class="line"></span><br><span class="line">可以计算出以a[i]为结尾的最大子序列和，从中选出最大的。</span><br></pre></td></tr></table></figure>
+<p>代码示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//sum[i]:以a[i]为结尾的最大子序列和=max&#123;sum[i-1]+a[i],a[i]&#125;</span></span><br><span class="line">        <span class="keyword">if</span>(nums.length==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> nums[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> max=nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> maxPre=nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp= nums[i]&gt;(maxPre+nums[i])?nums[i]:(maxPre+nums[i]);</span><br><span class="line">            maxPre=temp;</span><br><span class="line">            max=max&gt;temp?max:temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2:分治法O(nLogn)</strong></p>
+<p>思路：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">将数组分成两份，左边跟右边，那么最大的子序列 = Max &#123;left,right,center&#125;</span><br><span class="line">递归结束条件：只有一个元素，<span class="keyword">return</span> 该元素的值；</span><br></pre></td></tr></table></figure>
+<p>代码示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">binarySubArray</span><span class="params">(<span class="keyword">int</span>[] nums,<span class="keyword">int</span> left,<span class="keyword">int</span> right)</span></span>&#123;</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">if</span>(left == right)&#123;</span><br><span class="line">        <span class="keyword">return</span> nums[left];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> center = (right +left )&gt;&gt;<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> leftMaxValue = binarySubArray(nums,left,center);<span class="comment">//左边的最大子序列和</span></span><br><span class="line">    <span class="keyword">int</span> rightMaxValue = binarySubArray(nums,center+<span class="number">1</span>,right);<span class="comment">//右边的最大子序列和</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> centerLeftMaxValue=<span class="number">0</span>;<span class="comment">//从中心往左遍历找到的最大值（必须包含中心点）</span></span><br><span class="line">    <span class="keyword">int</span> centerRightMaxValue=<span class="number">0</span>;<span class="comment">//从中心往右遍历找到的最大值（必须包含中心点）</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> sumLeft=<span class="number">0</span>;<span class="comment">//用于记录遍历左侧的sum值</span></span><br><span class="line">    <span class="keyword">int</span> sumRight=<span class="number">0</span>;<span class="comment">//用于记录遍历右侧的sum值</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=center ;i&gt;=left;i--)&#123;</span><br><span class="line">        <span class="keyword">if</span>(i==center)&#123;</span><br><span class="line">            centerLeftMaxValue=nums[i];</span><br><span class="line">            sumLeft=nums[i];</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        sumLeft+=nums[i];</span><br><span class="line">        centerLeftMaxValue=centerLeftMaxValue&gt;sumLeft?centerLeftMaxValue:sumLeft;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j =center+<span class="number">1</span>;j&lt;=right;j++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(j==center+<span class="number">1</span>)&#123;</span><br><span class="line">            centerRightMaxValue=nums[j];</span><br><span class="line">            sumRight=nums[j];</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        sumRight+=nums[j];</span><br><span class="line">        centerRightMaxValue=</span><br><span class="line">            centerRightMaxValue&gt;sumRight?centerRightMaxValue:sumRight;</span><br><span class="line">    &#125;        </span><br><span class="line">    <span class="comment">//返回Max&#123;left,right,center&#125;</span></span><br><span class="line">    <span class="keyword">int</span> sum = leftMaxValue&gt;rightMaxValue?leftMaxValue:rightMaxValue;</span><br><span class="line">    <span class="keyword">return</span> sum&gt;(centerLeftMaxValue+centerRightMaxValue)?sum:(centerLeftMaxValue+centerRightMaxValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/16/leetcode-最大子序列/" data-id="cjj4esfhw000dppuqu9u45ajq" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-学习计划" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/15/学习计划/" class="article-date">
@@ -101,7 +203,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/15/学习计划/" data-id="cjj05a80g000inxuquo0v65s5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/15/学习计划/" data-id="cjj4esfif000mppuq9j8fk0mg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -129,7 +231,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
     </div>
   </div>
 
@@ -139,7 +241,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
     </div>
   </div>
 
@@ -148,7 +250,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -161,6 +263,14 @@
       <ul>
         
           <li>
+            <a href="/2018/07/02/leetcode-整数拆分/">leetcode-整数拆分</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/02/查找讯飞输入法的下载资源的路径（7.2）/">查找讯飞输入法的下载资源的路径（7.2）</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/29/leetcode-Bit位计数/">leetcode-Bit位计数</a>
           </li>
         
@@ -170,14 +280,6 @@
         
           <li>
             <a href="/2018/06/28/leetcode-单词拆分/">leetcode-单词拆分</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/27/leetcode-三角形最小路径/">leetcode-三角形最小路径</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/27/leetcode-股票最大收益/">leetcode-股票最大收益</a>
           </li>
         
       </ul>
