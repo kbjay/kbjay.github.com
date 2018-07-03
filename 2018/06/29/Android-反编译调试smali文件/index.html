@@ -7,18 +7,18 @@
   
   <title>Android-反编译调试smali文件 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中  在as中创建remote调试（注意设置填写端口号为8800：将as的remote调">
+  <meta name="description" content="工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中，将smali文件夹设置为source root  在as中创建remote调试（注意">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android-反编译调试smali文件">
 <meta property="og:url" content="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中  在as中创建remote调试（注意设置填写端口号为8800：将as的remote调">
+<meta property="og:description" content="工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中，将smali文件夹设置为source root  在as中创建remote调试（注意">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-06-29T11:04:49.269Z">
+<meta property="og:updated_time" content="2018-07-03T15:31:23.325Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android-反编译调试smali文件">
-<meta name="twitter:description" content="工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中  在as中创建remote调试（注意设置填写端口号为8800：将as的remote调">
+<meta name="twitter:description" content="工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中，将smali文件夹设置为source root  在as中创建remote调试（注意">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -102,9 +102,11 @@
 </li>
 <li><p>安装新的apk</p>
 </li>
-<li><p>将smali文件导入as中</p>
+<li><p>将smali文件导入as中，将smali文件夹设置为source root</p>
 </li>
-<li><p>在as中创建remote调试（注意设置填写端口号为8800：将as的remote调试跟本机的8800端口“打通”）</p>
+<li><p>在as中创建remote调试（注意设置填写端口号为8800：将as的remote调试跟本机的8800端口“打通”）run-&gt;edit xxx</p>
+</li>
+<li><p>设置project的jdk</p>
 </li>
 <li><p>在as终端输入</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -D -n com.xxx.xxx/com.xxx.xxx.xxx</span><br></pre></td></tr></table></figure>
@@ -113,19 +115,13 @@
 <li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb shell ps | grep com.xxx.xxx     </span><br><span class="line"><span class="comment">//查看手机中该apk程序的pid</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb forward tcp:<span class="number">8800</span> jdwp:查找到的pid</span><br><span class="line"><span class="comment">//将本机的8800端口跟该apk进程“打通”</span></span><br><span class="line"><span class="comment">//记得设置remote调试的时候将本机的8800端口跟as的remote调试“打通”了，那么remote调试就跟手机的apk进程“打通”了；</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在smali文件中打好断点</p>
-</li>
-<li><p>as-》run-〉debug</p>
-</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">10. 在smali文件中打好断点</span><br><span class="line"></span><br><span class="line">11. as-》run-〉debug</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">参考https://www.cnblogs.com/gordon0918/p/5570811.html</span><br><span class="line"></span><br><span class="line">http://www.cnblogs.com/goodhacker/p/5592313.html</span><br></pre></td></tr></table></figure></li>
 </ol>
-<p>参考<a href="https://www.cnblogs.com/gordon0918/p/5570811.html" target="_blank" rel="noopener">https://www.cnblogs.com/gordon0918/p/5570811.html</a></p>
-<p><a href="http://www.cnblogs.com/goodhacker/p/5592313.html" target="_blank" rel="noopener">http://www.cnblogs.com/goodhacker/p/5592313.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjj4esfh10000ppuqhoe4bpm5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjj5ur1qo0000touqhyuh8tiq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -167,7 +163,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
     </div>
   </div>
 
@@ -177,7 +173,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
     </div>
   </div>
 
@@ -199,6 +195,10 @@
       <ul>
         
           <li>
+            <a href="/2018/07/03/查找讯飞输入法下载资源/">查找讯飞输入法下载的离线资源</a>
+          </li>
+        
+          <li>
             <a href="/2018/07/02/leetcode-整数拆分/">leetcode-整数拆分</a>
           </li>
         
@@ -212,10 +212,6 @@
         
           <li>
             <a href="/2018/06/29/Android-反编译调试smali文件/">Android-反编译调试smali文件</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/28/leetcode-单词拆分/">leetcode-单词拆分</a>
           </li>
         
       </ul>
