@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Android-查找讯飞输入法的下载资源的路径01 | kb_jay的开发站台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="查找讯飞输入法的下载资源的路径(间接证据)： 点击下载之后可以看到sd卡下“./iFlyIME/speech”文件夹下多了如下两个so,删除离线包之后so消失。  libAitalk5_v5_rnn.so  libAitalk5_res_cnsms_v5_rnn.so      调试smali文件可以看到：点击开启离线功能时，会先调用SpeechHelper的getAitalkChildType方">
+<meta name="keywords" content="Andoird 反编译 讯飞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android-查找讯飞输入法的下载资源的路径01">
+<meta property="og:url" content="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/index.html">
+<meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="查找讯飞输入法的下载资源的路径(间接证据)： 点击下载之后可以看到sd卡下“./iFlyIME/speech”文件夹下多了如下两个so,删除离线包之后so消失。  libAitalk5_v5_rnn.so  libAitalk5_res_cnsms_v5_rnn.so      调试smali文件可以看到：点击开启离线功能时，会先调用SpeechHelper的getAitalkChildType方">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-07-03T15:36:08.336Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android-查找讯飞输入法的下载资源的路径01">
+<meta name="twitter:description" content="查找讯飞输入法的下载资源的路径(间接证据)： 点击下载之后可以看到sd卡下“./iFlyIME/speech”文件夹下多了如下两个so,删除离线包之后so消失。  libAitalk5_v5_rnn.so  libAitalk5_res_cnsms_v5_rnn.so      调试smali文件可以看到：点击开启离线功能时，会先调用SpeechHelper的getAitalkChildType方">
+  
+    <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">kb_jay的开发站台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android-查找讯飞输入法的下载资源的路径01" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" class="article-date">
+  <time datetime="2018-07-02T12:29:20.641Z" itemprop="datePublished">2018-07-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android-查找讯飞输入法的下载资源的路径01
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="查找讯飞输入法的下载资源的路径-间接证据-："><a href="#查找讯飞输入法的下载资源的路径-间接证据-：" class="headerlink" title="查找讯飞输入法的下载资源的路径(间接证据)："></a>查找讯飞输入法的下载资源的路径(间接证据)：</h4><ol>
+<li><p>点击下载之后可以看到sd卡下“./iFlyIME/speech”文件夹下多了如下两个so,删除离线包之后so消失。</p>
+<ul>
+<li><p>libAitalk5_v5_rnn.so</p>
+</li>
+<li><p>libAitalk5_res_cnsms_v5_rnn.so</p>
+</li>
+</ul>
+</li>
+</ol>
+<ol start="2">
+<li>调试smali文件可以看到：点击开启离线功能时，会先调用SpeechHelper的getAitalkChildType方法，在该方法中回去调用isV5RnnExist方法，之后会调用到getV5RnnSo跟getV5RnnRes方法，而这两个方法分别是获取这两个so的。（调试过程中截 取的数据中有这两个路径）。</li>
+</ol>
+<h5 id="SpeechHelper"><a href="#SpeechHelper" class="headerlink" title="SpeechHelper"></a>SpeechHelper</h5><ol>
+<li>getAitalkChildType</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getAitalkChildType</span><span class="params">(Context paramContext)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">   	。。。</span><br><span class="line">    <span class="keyword">if</span> (isV5RnnExist()) &#123;<span class="comment">///////////////////////////////******1*******////////////////////</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    。。。</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>isV5RnnExist </li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isV5RnnExist</span><span class="params">()</span></span></span><br><span class="line"><span class="function"> </span>&#123;</span><br><span class="line">   <span class="keyword">boolean</span> bool2 = <span class="keyword">false</span>;</span><br><span class="line">   removeFilesToHiddenDir();</span><br><span class="line">   File[] arrayOfFile1 = getV5RnnSo();<span class="comment">//////////*******2******////////////////</span></span><br><span class="line">   File[] arrayOfFile2 = getV5RnnRes();<span class="comment">/////////*******3******////////////////</span></span><br><span class="line">   <span class="keyword">boolean</span> bool1 = bool2;</span><br><span class="line">   <span class="keyword">if</span> (arrayOfFile1 != <span class="keyword">null</span>)</span><br><span class="line">   &#123;</span><br><span class="line">     bool1 = bool2;</span><br><span class="line">     <span class="keyword">if</span> (arrayOfFile1.length &gt; <span class="number">0</span>)</span><br><span class="line">     &#123;</span><br><span class="line">       bool1 = bool2;</span><br><span class="line">       <span class="keyword">if</span> (arrayOfFile2 != <span class="keyword">null</span>)</span><br><span class="line">       &#123;</span><br><span class="line">         bool1 = bool2;</span><br><span class="line">         <span class="keyword">if</span> (arrayOfFile2.length &gt; <span class="number">0</span>)</span><br><span class="line">         &#123;</span><br><span class="line">           <span class="keyword">int</span> i;</span><br><span class="line">           String str;</span><br><span class="line">           <span class="keyword">int</span> j;</span><br><span class="line">           <span class="keyword">if</span> (arrayOfFile1.length &gt; arrayOfFile2.length)</span><br><span class="line">           &#123;</span><br><span class="line">             i = <span class="number">0</span>;</span><br><span class="line">             <span class="keyword">if</span> (i &lt; arrayOfFile2.length)</span><br><span class="line">             &#123;</span><br><span class="line">               str = arrayOfFile2[i].getName().substring(DIR_AITALK5_5_RNN_RES_PREFIX.length());</span><br><span class="line">               j = <span class="number">0</span>;</span><br><span class="line">               <span class="keyword">for</span> (;;)</span><br><span class="line">               &#123;</span><br><span class="line">                 <span class="keyword">if</span> (j &lt; arrayOfFile1.length)</span><br><span class="line">                 &#123;</span><br><span class="line">                   <span class="keyword">if</span> (arrayOfFile1[i].getName().endsWith(str)) &#123;</span><br><span class="line">                     mRnnVer = str;</span><br><span class="line">                   &#125;</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">else</span></span><br><span class="line">                 &#123;</span><br><span class="line">                   i += <span class="number">1</span>;</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">                 &#125;</span><br><span class="line">                 j += <span class="number">1</span>;</span><br><span class="line">               &#125;</span><br><span class="line">             &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">else</span></span><br><span class="line">           &#123;</span><br><span class="line">             i = <span class="number">0</span>;</span><br><span class="line">             <span class="keyword">if</span> (i &lt; arrayOfFile1.length)</span><br><span class="line">             &#123;</span><br><span class="line">               str = arrayOfFile1[i].getName().substring(DIR_AITALK5_5_RNN_SO_PREFIX.length());</span><br><span class="line">               j = <span class="number">0</span>;</span><br><span class="line">               <span class="keyword">for</span> (;;)</span><br><span class="line">               &#123;</span><br><span class="line">                 <span class="keyword">if</span> (j &lt; arrayOfFile1.length)</span><br><span class="line">                 &#123;</span><br><span class="line">                   <span class="keyword">if</span> (arrayOfFile2[i].getName().endsWith(str)) &#123;</span><br><span class="line">                     mRnnVer = str;</span><br><span class="line">                   &#125;</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">else</span></span><br><span class="line">                 &#123;</span><br><span class="line">                   i += <span class="number">1</span>;</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">                 &#125;</span><br><span class="line">                 j += <span class="number">1</span>;</span><br><span class="line">               &#125;</span><br><span class="line">             &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (Logging.isDebugLogging()) &#123;</span><br><span class="line">             Logging.d(TAG, <span class="string">"rnn ver: "</span> + mRnnVer);</span><br><span class="line">           &#125;</span><br><span class="line">           bool1 = bool2;</span><br><span class="line">           <span class="keyword">if</span> (!TextUtils.isEmpty(mRnnVer)) &#123;</span><br><span class="line">             bool1 = <span class="keyword">true</span>;</span><br><span class="line">           &#125;</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> bool1;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>getV5RnnSo</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DIR_AITALK5_5_RNN_SO_PREFIX = "libAitalk5_v5_rnn"</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> File[] getV5RnnSo()</span><br><span class="line">  &#123;</span><br><span class="line">    removeFilesToHiddenDir();</span><br><span class="line">    File localFile = <span class="keyword">new</span> File(DIR_AITALK5_5_RNN_ROOT);</span><br><span class="line">    <span class="keyword">if</span> ((localFile.exists()) &amp;&amp; (localFile.isDirectory())) &#123;</span><br><span class="line">      <span class="keyword">return</span> localFile.listFiles(<span class="keyword">new</span> ccf(Pattern.compile(DIR_AITALK5_5_RNN_SO_PREFIX + <span class="string">"(_v)?[0-9]*.so"</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>getV5RnnRes</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DIR_AITALK5_5_RNN_RES_PREFIX = "libAitalk5_res_cnsms_v5_rnn"</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> File[] getV5RnnRes()</span><br><span class="line">  &#123;</span><br><span class="line">    removeFilesToHiddenDir();</span><br><span class="line">    File localFile = <span class="keyword">new</span> File(DIR_AITALK5_5_RNN_ROOT);</span><br><span class="line">    <span class="keyword">if</span> ((localFile.exists()) &amp;&amp; (localFile.isDirectory())) &#123;</span><br><span class="line">      <span class="keyword">return</span> localFile.listFiles(<span class="keyword">new</span> ccg(Pattern.compile(DIR_AITALK5_5_RNN_RES_PREFIX + <span class="string">"(_v)?[0-9]*.so"</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>调试过程截取的常量</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">CPU_ARM_V6 = <span class="string">"(v6"</span></span><br><span class="line">CURRENT_DIR_SPEECH = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">DIR_AITALK5_2_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v2.so"</span></span><br><span class="line">DIR_AITALK5_2_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v2.so"</span></span><br><span class="line">DIR_AITALK5_2_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v2.so"</span></span><br><span class="line">DIR_AITALK5_2_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v2.so"</span></span><br><span class="line">DIR_AITALK5_3_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v3.so"</span></span><br><span class="line">DIR_AITALK5_3_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v3.so"</span></span><br><span class="line">DIR_AITALK5_3_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v3.so"</span></span><br><span class="line">DIR_AITALK5_3_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v3.so"</span></span><br><span class="line">DIR_AITALK5_4_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v4.so"</span></span><br><span class="line">DIR_AITALK5_4_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v4.so"</span></span><br><span class="line">DIR_AITALK5_4_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v4.so"</span></span><br><span class="line">DIR_AITALK5_4_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v4.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_PATTERN = <span class="string">"(_v)?[0-9]*.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_RES_PREFIX = <span class="string">"libAitalk5_res_cnsms_v5_rnn"</span></span><br><span class="line">DIR_AITALK5_5_RNN_ROOT = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">DIR_AITALK5_5_RNN_ROOT_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">DIR_AITALK5_5_RNN_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_SO_PREFIX = <span class="string">"libAitalk5_v5_rnn"</span></span><br><span class="line">DIR_AITALK6_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK6_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK6_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6.so"</span></span><br><span class="line">DIR_AITALK6_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6.so"</span></span><br><span class="line">DIR_AITALK_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5.so"</span></span><br><span class="line">DIR_AITALK_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_2_SO = <span class="string">"/libs/libAitalk5_v2.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_3_SO = <span class="string">"/libs/libAitalk5_v3.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_4_SO = <span class="string">"/libs/libAitalk5_v4.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_5_RNN_ROOT = <span class="string">"/libs/"</span></span><br><span class="line">DIR_LIBS_AITALK5_5_RNN_SO = <span class="string">"/libs/libAitalk5_v5_rnn.so"</span></span><br><span class="line">DIR_LIBS_AITALK6_SO = <span class="string">"/libs/libAitalk6.so"</span></span><br><span class="line">DIR_LIBS_AITALK_SO = <span class="string">"/libs/libAitalk5.so"</span></span><br><span class="line">DIR_SPEECH = <span class="string">"/storage/emulated/0/iFlyIME/speech/"</span></span><br><span class="line">DIR_SPEECH_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">FILE_PATH = <span class="string">"FILE_PATH"</span></span><br><span class="line">MAX_SYNC_CALL_WAIT_TIME = <span class="number">20000</span></span><br><span class="line">MIN_RAM_REQUIRE = <span class="number">50</span></span><br><span class="line">RAM_REQUIRE_1G = <span class="number">1000</span></span><br><span class="line">RAM_REQUIRE_2G = <span class="number">1700</span></span><br><span class="line">TAG = <span class="string">"SpeechHelper"</span></span><br><span class="line">URL_PATH = <span class="string">"URL_PATH"</span></span><br><span class="line">VER_AITALK_5 = <span class="number">1003</span></span><br><span class="line">VER_AITALK_5_2 = <span class="number">1015</span></span><br><span class="line">VER_AITALK_5_3 = <span class="number">1022</span></span><br><span class="line">VER_AITALK_6 = <span class="number">1100</span></span><br><span class="line">mRnnVer = <span class="string">".so"</span></span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>。。。。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="cjj5uvt4g0003u7uqfmlc8cmt" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/02/leetcode-整数拆分/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          leetcode-整数拆分
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/29/leetcode-Bit位计数/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode-Bit位计数</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Android/" style="font-size: 10px;">Android</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/03/Android-查找讯飞输入法下载的离线资源02/">Android-查找讯飞输入法下载的离线资源02</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/02/leetcode-整数拆分/">leetcode-整数拆分</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/">Android-查找讯飞输入法的下载资源的路径01</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/29/leetcode-Bit位计数/">leetcode-Bit位计数</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/29/Android-反编译调试smali文件/">Android-反编译调试smali文件</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 kb_jay<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
