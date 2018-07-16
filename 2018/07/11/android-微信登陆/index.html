@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Android-微信登陆 | kb_jay的开发站台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、创建应用并成为开发者1、创建应用1)到微信开放平台管理中心，点击“创建移动应用”2)填写基本的应用信息3)填写平台信息 这里还是说一下怎么获取应用签名吧：  到“资源中心”–&amp;gt;“资源下载”–&amp;gt;“Android资源下载”，找到“签名生成工具”下载即可。飞机直达:Gen_Signature_Android2 将APP进行打包安装到手机（如果是在IDE中直接运行后安装的话，是使用debu">
+<meta name="keywords" content="Andoird 第三方登录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android-微信登陆">
+<meta property="og:url" content="http://yoursite.com/2018/07/11/android-微信登陆/index.html">
+<meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="一、创建应用并成为开发者1、创建应用1)到微信开放平台管理中心，点击“创建移动应用”2)填写基本的应用信息3)填写平台信息 这里还是说一下怎么获取应用签名吧：  到“资源中心”–&amp;gt;“资源下载”–&amp;gt;“Android资源下载”，找到“签名生成工具”下载即可。飞机直达:Gen_Signature_Android2 将APP进行打包安装到手机（如果是在IDE中直接运行后安装的话，是使用debu">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/4/19/f9825a496572a8e263ecafa803cbb23d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/4/19/95cd1778b1d4c45f37078be0731b074f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2017/4/19/1816b86b1fee78aba49d5211494fc6cd?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="og:updated_time" content="2018-07-11T06:17:23.141Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android-微信登陆">
+<meta name="twitter:description" content="一、创建应用并成为开发者1、创建应用1)到微信开放平台管理中心，点击“创建移动应用”2)填写基本的应用信息3)填写平台信息 这里还是说一下怎么获取应用签名吧：  到“资源中心”–&amp;gt;“资源下载”–&amp;gt;“Android资源下载”，找到“签名生成工具”下载即可。飞机直达:Gen_Signature_Android2 将APP进行打包安装到手机（如果是在IDE中直接运行后安装的话，是使用debu">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2017/4/19/f9825a496572a8e263ecafa803cbb23d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+  
+    <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">kb_jay的开发站台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-android-微信登陆" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/11/android-微信登陆/" class="article-date">
+  <time datetime="2018-07-11T02:34:12.683Z" itemprop="datePublished">2018-07-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android-微信登陆
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、创建应用并成为开发者"><a href="#一、创建应用并成为开发者" class="headerlink" title="一、创建应用并成为开发者"></a>一、创建应用并成为开发者</h1><h2 id="1、创建应用"><a href="#1、创建应用" class="headerlink" title="1、创建应用"></a>1、创建应用</h2><h3 id="1-到微信开放平台管理中心，点击“创建移动应用”"><a href="#1-到微信开放平台管理中心，点击“创建移动应用”" class="headerlink" title="1)到微信开放平台管理中心，点击“创建移动应用”"></a>1)到微信开放平台管理中心，点击“创建移动应用”</h3><h3 id="2-填写基本的应用信息"><a href="#2-填写基本的应用信息" class="headerlink" title="2)填写基本的应用信息"></a>2)填写基本的应用信息</h3><h3 id="3-填写平台信息"><a href="#3-填写平台信息" class="headerlink" title="3)填写平台信息"></a>3)填写平台信息</h3><p><img src="https://user-gold-cdn.xitu.io/2017/4/19/f9825a496572a8e263ecafa803cbb23d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p><strong>这里还是说一下怎么获取应用签名吧：</strong></p>
+<ol>
+<li>到“资源中心”–&gt;“资源下载”–&gt;“Android资源下载”，找到“签名生成工具”下载即可。<a href="https://link.juejin.im/?target=https%3A%2F%2Fres.wx.qq.com%2Fopen%2Fzh_CN%2Fhtmledition%2Fres%2Fdev%2Fdownload%2Fsdk%2FGen_Signature_Android2.apk" target="_blank" rel="noopener">飞机直达:Gen_Signature_Android2</a></li>
+<li>将APP进行打包安装到手机（如果是在IDE中直接运行后安装的话，是使用debug签名的，跟上线后使用jks文件签名的不一样!!!）</li>
+<li>给手机安装第一步中下载的签名工具，打开后输入APP的包名(包名是AndroidManifest.xml中package的值)，点击生成，就可以看到应用签名了。</li>
+</ol>
+<blockquote>
+<p><strong>*注意：</strong></p>
+<p>签名工具得到的签名根你APP的打包步骤有关，默认的debug和jks文件签名，结果是不一样，如果app签名与微信开放平台的不一样，将无法调出微信登录界面!!!</p>
+</blockquote>
+<h3 id="4-最后提交，等待审核。（说是7天，一般1天后就审核通过了）"><a href="#4-最后提交，等待审核。（说是7天，一般1天后就审核通过了）" class="headerlink" title="4)最后提交，等待审核。（说是7天，一般1天后就审核通过了）"></a>4)最后提交，等待审核。（说是7天，一般1天后就审核通过了）</h3><h2 id="2、成为开发者"><a href="#2、成为开发者" class="headerlink" title="2、成为开发者"></a>2、成为开发者</h2><p>很简单，去“个人中心”，找到“开发者资质认证”，点击“申请”，然后一步步按要示填写信息，最后交钱就行，300大洋~~</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/4/19/95cd1778b1d4c45f37078be0731b074f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<h1 id="二、微信登录"><a href="#二、微信登录" class="headerlink" title="二、微信登录"></a>二、微信登录</h1><p>当审核通过之后，就可以开始使用微信开放平台提供的功能了。要使用“微信登录”功能必须成功开放者，也就是交了300块后默认开通此功能。</p>
+<p>在这里可以得到AppId和AppSecret，记下，之后会用到。如下图所示：</p>
+<p><img src="https://user-gold-cdn.xitu.io/2017/4/19/1816b86b1fee78aba49d5211494fc6cd?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<h2 id="1、引入微信SDK依赖"><a href="#1、引入微信SDK依赖" class="headerlink" title="1、引入微信SDK依赖"></a>1、引入微信SDK依赖</h2><h3 id="1-Android-Studio"><a href="#1-Android-Studio" class="headerlink" title="1)Android Studio:"></a>1)Android Studio:</h3><p>在build.gradle的dependencies中加入以下语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compile &apos;com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="2-Eclipse-ADT"><a href="#2-Eclipse-ADT" class="headerlink" title="2)Eclipse(ADT):"></a>2)Eclipse(ADT):</h3><p>去微信开放平台，“资源中心”–&gt;“资源下载”–&gt;“Android资源下载”，找到“开发工具包（SDK）”后下载。<a href="https://link.juejin.im/?target=https%3A%2F%2Fres.wx.qq.com%2Fopen%2Fzh_CN%2Fhtmledition%2Fres%2Fdev%2Fdownload%2Fsdk%2FAndroid_SDK_4.0.2.zip" target="_blank" rel="noopener">飞机直达:Android_SDK_4.0.2.zip</a>。</p>
+<p>解压后找到lib文件夹，把wechat-sdk-android-with-mta-1.0.2.jar和wechat-sdk-android-without-mta-1.0.2.jar复制到工程lib文件夹下，rebuild一下。</p>
+<h2 id="2、申明应用权限"><a href="#2、申明应用权限" class="headerlink" title="2、申明应用权限"></a>2、申明应用权限</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot;/&gt; </span><br><span class="line">&lt;uses-permission android:name=&quot;android.permission.ACCESS_NETWORK_STATE&quot;/&gt; </span><br><span class="line">&lt;uses-permission android:name=&quot;android.permission.ACCESS_WIFI_STATE&quot;/&gt; </span><br><span class="line">&lt;uses-permission android:name=&quot;android.permission.READ_PHONE_STATE&quot;/&gt; </span><br><span class="line">&lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="3、向微信注册APP"><a href="#3、向微信注册APP" class="headerlink" title="3、向微信注册APP"></a>3、向微信注册APP</h2><p>在自定义的Application的onCreate中调用registToWX方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void onCreate() &#123;</span><br><span class="line">    super.onCreate();</span><br><span class="line">    registToWX();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void registToWX() &#123;</span><br><span class="line">    //AppConst.WEIXIN.APP_ID是指你应用在微信开放平台上的AppID，记得替换。</span><br><span class="line">    mWxApi = WXAPIFactory.createWXAPI(this, AppConst.WEIXIN.APP_ID, false);</span><br><span class="line">    // 将该app注册到微信</span><br><span class="line">    mWxApi.registerApp(AppConst.WEIXIN.APP_ID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4、调用微信登录界面"><a href="#4、调用微信登录界面" class="headerlink" title="4、调用微信登录界面"></a>4、调用微信登录界面</h2><p>一般会在登录界面会有一个微信图标，对微信图标设置点击事件，调用如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public void wxLogin() &#123;</span><br><span class="line">    if (!MyApp.mWxApi.isWXAppInstalled()) &#123;</span><br><span class="line">        UIUtils.showToast(&quot;您还未安装微信客户端&quot;);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    final SendAuth.Req req = new SendAuth.Req();</span><br><span class="line">    req.scope = &quot;snsapi_userinfo&quot;;</span><br><span class="line">    req.state = &quot;diandi_wx_login&quot;;</span><br><span class="line">    MyApp.mWxApi.sendReq(req);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至此，就可以调用微信登录界面来进行登录认证了。</p>
+<h2 id="5、创建WXEntryActivity-java微信接收响应"><a href="#5、创建WXEntryActivity-java微信接收响应" class="headerlink" title="5、创建WXEntryActivity.java微信接收响应"></a>5、创建WXEntryActivity.java微信接收响应</h2><p>WXEntryActivity是一个Activity，用来接收微信的响应信息。这里有几个需要注意的地方：</p>
+<ol>
+<li><p>它必须在”包名.wxapi”这个包下，如：你的应用包名为：com.lqr.test，则WXEntryActivity所在的包名必须为com.lqr.test.wxapi。</p>
+</li>
+<li><p>创建后在AndroidManifest.xml文件中对WXEntryActivity进行设置：android:exported=”true”。</p>
+<activity android:name=".wxapi.WXEntryActivity" android:exported="true">
+</activity></li>
+<li><p>WXEntryActivity.Java继承自Activity,实现IWXAPIEventHandler接口，该接口即处理微信和app通信的不同event。</p>
+</li>
+</ol>
+<p>以下是一个示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">public class WXEntryActivity extends Activity implements IWXAPIEventHandler &#123;</span><br><span class="line">    private static final int RETURN_MSG_TYPE_LOGIN = 1;</span><br><span class="line">    private static final int RETURN_MSG_TYPE_SHARE = 2;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line"></span><br><span class="line">        //如果没回调onResp，八成是这句没有写</span><br><span class="line">        MyApp.mWxApi.handleIntent(getIntent(), this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 微信发送请求到第三方应用时，会回调到该方法</span><br><span class="line">    @Override</span><br><span class="line">    public void onReq(BaseReq req) &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 第三方应用发送到微信的请求处理后的响应结果，会回调到该方法</span><br><span class="line">    //app发送消息给微信，处理返回消息的回调</span><br><span class="line">    @Override</span><br><span class="line">    public void onResp(BaseResp resp) &#123;</span><br><span class="line">        LogUtils.sf(resp.errStr);</span><br><span class="line">        LogUtils.sf(&quot;错误码 : &quot; + resp.errCode + &quot;&quot;);</span><br><span class="line">        switch (resp.errCode) &#123;</span><br><span class="line"></span><br><span class="line">            case BaseResp.ErrCode.ERR_AUTH_DENIED:</span><br><span class="line">            case BaseResp.ErrCode.ERR_USER_CANCEL:</span><br><span class="line">                if (RETURN_MSG_TYPE_SHARE == resp.getType()) UIUtils.showToast(&quot;分享失败&quot;);</span><br><span class="line">                else UIUtils.showToast(&quot;登录失败&quot;);</span><br><span class="line">                break;</span><br><span class="line">            case BaseResp.ErrCode.ERR_OK:</span><br><span class="line">                switch (resp.getType()) &#123;</span><br><span class="line">                    case RETURN_MSG_TYPE_LOGIN:</span><br><span class="line">                        //拿到了微信返回的code,立马再去请求access_token</span><br><span class="line">                        String code = ((SendAuth.Resp) resp).code;</span><br><span class="line">                        LogUtils.sf(&quot;code = &quot; + code);</span><br><span class="line"></span><br><span class="line">                        //就在这个地方，用网络库什么的或者自己封的网络api，发请求去咯，注意是get请求</span><br><span class="line"></span><br><span class="line">                        break;</span><br><span class="line"></span><br><span class="line">                    case RETURN_MSG_TYPE_SHARE:</span><br><span class="line">                        UIUtils.showToast(&quot;微信分享成功&quot;);</span><br><span class="line">                        finish();</span><br><span class="line">                        break;</span><br><span class="line">                &#125;</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当微信授权第三登录后，会自动调用WXEntryActivity的onResp方法，可以在((SendAuth.Resp) resp).code得到“授权临时票据code”,之后可以通过code参数加上AppID和AppSecret等，通过API换取access_token,再通过access_token进行接口调用，获取用户基本数据资源或帮助用户实现基本操作。</p>
+<p>一般会把获取access_token步骤（包括之后的操作）放到服务器那边，服务器经过一番处理之后，返回用户信息给客户端。</p>
+<h1 id="三、踩坑经验"><a href="#三、踩坑经验" class="headerlink" title="三、踩坑经验"></a>三、踩坑经验</h1><p>在app点击微信图标后，一片空白！！控制台打印错误码为-6。<br>原因：<br>这是因为app的使用的签名跟开放平台的应用签名不一致导致的。</p>
+<p>解决方法：</p>
+<ol>
+<li>使用签名工具得到手机中app的签名</li>
+<li>修改开放平台上的应用签名</li>
+<li>清除手机上微信APP的缓存信息（不知道的可以卸载后重装微信）</li>
+<li>登录微信后，再点击APP的微信登录图标</li>
+</ol>
+<p>参考：<a href="https://juejin.im/entry/58f709b68d6d8100649cade7" target="_blank" rel="noopener">https://juejin.im/entry/58f709b68d6d8100649cade7</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/11/android-微信登陆/" data-id="cjjnmo19k0008s0wd3g99q6ld" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/13/Android-特殊的vp/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Android 特殊viewPager
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/10/tensorFlow记录：/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android-tensorFlowDemo</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/13/Android-特殊的vp/">Android 特殊viewPager</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/11/android-微信登陆/">Android-微信登陆</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/tensorFlow记录：/">Android-tensorFlowDemo</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/03/leetcode-计算各个位数不同的数字个数/">leetcode-计算各个位数不同的数字个数</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/03/Android-查找讯飞输入法下载的离线资源02/">Android-查找讯飞输入法下载的离线资源02</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 kb_jay<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
