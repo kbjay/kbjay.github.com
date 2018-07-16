@@ -5,19 +5,20 @@
   
 
   
-  <title>kb_jay的开发站台</title>
+  <title>leetcode-猜数字大小2 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="title:leetcode-猜数字大小2 tags:leetcode dp我们正在玩一个猜数游戏，游戏规则如下： 我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。 每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。 然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。 示例: 123456789n = 10, 我">
+  <meta name="description" content="我们正在玩一个猜数游戏，游戏规则如下： 我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。 每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。 然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。 示例: 123456789n = 10, 我选择了8.第一轮: 你猜我选择的数字是5，我会告诉你，我的数字更大一些，然后你">
+<meta name="keywords" content="leetcode dp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kb_jay的开发站台">
+<meta property="og:title" content="leetcode-猜数字大小2">
 <meta property="og:url" content="http://yoursite.com/2018/07/16/leetcode-猜数字大小2/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="title:leetcode-猜数字大小2 tags:leetcode dp我们正在玩一个猜数游戏，游戏规则如下： 我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。 每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。 然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。 示例: 123456789n = 10, 我">
+<meta property="og:description" content="我们正在玩一个猜数游戏，游戏规则如下： 我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。 每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。 然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。 示例: 123456789n = 10, 我选择了8.第一轮: 你猜我选择的数字是5，我会告诉你，我的数字更大一些，然后你">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-16T15:39:41.095Z">
+<meta property="og:updated_time" content="2018-07-16T15:40:55.891Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kb_jay的开发站台">
-<meta name="twitter:description" content="title:leetcode-猜数字大小2 tags:leetcode dp我们正在玩一个猜数游戏，游戏规则如下： 我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。 每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。 然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。 示例: 123456789n = 10, 我">
+<meta name="twitter:title" content="leetcode-猜数字大小2">
+<meta name="twitter:description" content="我们正在玩一个猜数游戏，游戏规则如下： 我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。 每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。 然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。 示例: 123456789n = 10, 我选择了8.第一轮: 你猜我选择的数字是5，我会告诉你，我的数字更大一些，然后你">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -74,11 +75,19 @@
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      leetcode-猜数字大小2
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<p>title:leetcode-猜数字大小2</p>
-<h2 id="tags-leetcode-dp"><a href="#tags-leetcode-dp" class="headerlink" title="tags:leetcode dp"></a>tags:leetcode dp</h2><p>我们正在玩一个猜数游戏，游戏规则如下：</p>
+        <p>我们正在玩一个猜数游戏，游戏规则如下：</p>
 <p>我从 <strong>1</strong> 到 <strong>n</strong> 之间选择一个数字，你来猜我选了哪个数字。</p>
 <p>每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。</p>
 <p>然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。</p>
@@ -94,9 +103,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/16/leetcode-猜数字大小2/" data-id="cjjofqcmc000h02uqq3pwq4r8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/16/leetcode-猜数字大小2/" data-id="cjjofru7a000n0guqvrtn894r" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+
     </footer>
   </div>
   
@@ -157,7 +168,7 @@
       <ul>
         
           <li>
-            <a href="/2018/07/16/leetcode-猜数字大小2/">(no title)</a>
+            <a href="/2018/07/16/leetcode-猜数字大小2/">leetcode-猜数字大小2</a>
           </li>
         
           <li>
