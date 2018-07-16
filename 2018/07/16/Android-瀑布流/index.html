@@ -5,20 +5,20 @@
   
 
   
-  <title>Android 特殊viewPager | kb_jay的开发站台</title>
+  <title>Android-瀑布流 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="point1 设置viewPager的clipChildPadding为false，并设置vp的padding； 123456&amp;lt;com.example.kb_jay.kjcusvp.KJCusVp       android:id=&quot;@+id/vp_test&quot;       android:layout_width=&quot;match_parent&quot;       android:layout_hei">
-<meta name="keywords" content="Android">
+  <meta name="description" content="point1 需要服务器返回图片规格 point2 在adapter的onBindViewHolder中根据服务端返回的图片的规格设置layoutParams 12345678910111213@Overridepublic void onBindViewHolder(@NonNull CusHolder holder, int position) &amp;#123;    BitmapFactory.">
+<meta name="keywords" content="Android recycleView 瀑布流">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android 特殊viewPager">
-<meta property="og:url" content="http://yoursite.com/2018/07/13/Android-特殊的vp/index.html">
+<meta property="og:title" content="Android-瀑布流">
+<meta property="og:url" content="http://yoursite.com/2018/07/16/Android-瀑布流/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="point1 设置viewPager的clipChildPadding为false，并设置vp的padding； 123456&amp;lt;com.example.kb_jay.kjcusvp.KJCusVp       android:id=&quot;@+id/vp_test&quot;       android:layout_width=&quot;match_parent&quot;       android:layout_hei">
+<meta property="og:description" content="point1 需要服务器返回图片规格 point2 在adapter的onBindViewHolder中根据服务端返回的图片的规格设置layoutParams 12345678910111213@Overridepublic void onBindViewHolder(@NonNull CusHolder holder, int position) &amp;#123;    BitmapFactory.">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-16T01:53:06.481Z">
+<meta property="og:updated_time" content="2018-07-16T15:51:28.777Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android 特殊viewPager">
-<meta name="twitter:description" content="point1 设置viewPager的clipChildPadding为false，并设置vp的padding； 123456&amp;lt;com.example.kb_jay.kjcusvp.KJCusVp       android:id=&quot;@+id/vp_test&quot;       android:layout_width=&quot;match_parent&quot;       android:layout_hei">
+<meta name="twitter:title" content="Android-瀑布流">
+<meta name="twitter:description" content="point1 需要服务器返回图片规格 point2 在adapter的onBindViewHolder中根据服务端返回的图片的规格设置layoutParams 12345678910111213@Overridepublic void onBindViewHolder(@NonNull CusHolder holder, int position) &amp;#123;    BitmapFactory.">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -65,10 +65,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Android-特殊的vp" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Android-瀑布流" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/07/13/Android-特殊的vp/" class="article-date">
-  <time datetime="2018-07-13T07:06:40.211Z" itemprop="datePublished">2018-07-13</time>
+    <a href="/2018/07/16/Android-瀑布流/" class="article-date">
+  <time datetime="2018-07-16T02:02:50.539Z" itemprop="datePublished">2018-07-16</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Android 特殊viewPager
+      Android-瀑布流
     </h1>
   
 
@@ -88,28 +88,27 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p><strong>point1</strong></p>
-<p>设置viewPager的clipChildPadding为false，并设置vp的padding；</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;com.example.kb_jay.kjcusvp.KJCusVp</span><br><span class="line">       android:id=<span class="string">"@+id/vp_test"</span></span><br><span class="line">       android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">       android:layout_height=<span class="string">"match_parent"</span></span><br><span class="line">       android:padding=<span class="string">"40dp"</span></span><br><span class="line">       android:clipToPadding=<span class="string">"false"</span> /&gt;</span><br></pre></td></tr></table></figure>
+<p>需要服务器返回图片规格</p>
 <p><strong>point2</strong></p>
-<p>自定义PageTransformer；</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">KJTransformer</span> <span class="keyword">implements</span> <span class="title">PageTransformer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> SCALE = <span class="number">0.8f</span>;<span class="comment">//表示放缩的倍数</span></span><br><span class="line">      <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TRANS=<span class="number">50</span>;<span class="comment">//表示平移的px数</span></span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transformPage</span><span class="params">(@NonNull View view, <span class="keyword">float</span> position)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">float</span> temp=Math.abs(position);</span><br><span class="line">          <span class="keyword">float</span> scale = (<span class="number">1</span>-(<span class="number">1</span>- SCALE)*temp);</span><br><span class="line">          view.setScaleX(scale);</span><br><span class="line">          view.setScaleY(scale);</span><br><span class="line">          </span><br><span class="line">          view.setTranslationX(-TRANS*position);</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>其中</p>
-<ul>
-<li>view表示itemView</li>
-<li>position表示itemView的位置（-1，0，1）</li>
-</ul>
+<p>在adapter的onBindViewHolder中根据服务端返回的图片的规格设置layoutParams</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(@NonNull CusHolder holder, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">    BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();</span><br><span class="line">    options.inJustDecodeBounds=<span class="keyword">true</span>;</span><br><span class="line">    BitmapFactory.decodeResource(mContext.getResources(), mData.get(position).score,options);</span><br><span class="line">    <span class="keyword">float</span> f=options.outWidth/(<span class="keyword">float</span>)options.outHeight;</span><br><span class="line">    <span class="keyword">int</span> h= (<span class="keyword">int</span>) (<span class="number">650</span>/f);</span><br><span class="line">    RelativeLayout.LayoutParams lp = <span class="keyword">new</span> RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, h);</span><br><span class="line">    holder.itemView.setLayoutParams(lp);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// holder.mIv.setImageResource(mData.get(position).score);</span></span><br><span class="line">    Glide.with(mContext).load(mData.get(position).score).into(holder.mIv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>point3</strong></p>
-<p>设置viewPager的切换动画</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mVp.setPageTransformer(<span class="keyword">false</span>,<span class="keyword">new</span> KJCusVp.KJTransformer());</span><br></pre></td></tr></table></figure>
-<p>源码地址：<a href="https://github.com/kbjay/KJCustomVp" target="_blank" rel="noopener">https://github.com/kbjay/KJCustomVp</a></p>
+<p>设置rv的manager为StaggeredGridLayoutManager</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mRv.setLayoutManager(<span class="keyword">new</span> StaggeredGridLayoutManager(<span class="number">2</span>,StaggeredGridLayoutManager.VERTICAL));</span><br></pre></td></tr></table></figure>
+<p><strong>point4</strong></p>
+<ul>
+<li>来回滑动的时候item交换位置:在设置layoutManager的时候，多加一句代码防止item位置交换 layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE); </li>
+<li>顶部留空的问题，在onScrollStateChanged里再加一句layoutManager.invalidateSpanAssignments(); </li>
+</ul>
+<p>参考：<a href="https://blog.csdn.net/qq_31390699/article/details/53465671" target="_blank" rel="noopener">https://blog.csdn.net/qq_31390699/article/details/53465671</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/Android-特殊的vp/" data-id="cjjog5g0x00041quq7s9twleh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/16/Android-瀑布流/" data-id="cjjog5g0y00051quq08k29iei" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li></ul>
 
     </footer>
   </div>
@@ -117,19 +116,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/07/16/Android-瀑布流/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/07/16/leetcode-猜数字大小2/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Android-瀑布流
+          leetcode-猜数字大小2
         
       </div>
     </a>
   
   
-    <a href="/2018/07/11/android-微信登陆/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/07/13/Android-特殊的vp/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Android-微信登陆</div>
+      <div class="article-nav-title">Android 特殊viewPager</div>
     </a>
   
 </nav>
