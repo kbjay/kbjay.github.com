@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>kb_jay的开发站台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="title:leetcode-猜数字大小2 tags：leetcode dp我们正在玩一个猜数游戏，游戏规则如下： 我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。 每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。 然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。 示例: 123456789n = 10, 我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kb_jay的开发站台">
+<meta property="og:url" content="http://yoursite.com/2018/07/16/leetcode-猜数字大小2/index.html">
+<meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="title:leetcode-猜数字大小2 tags：leetcode dp我们正在玩一个猜数游戏，游戏规则如下： 我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。 每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。 然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。 示例: 123456789n = 10, 我">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-07-16T15:35:33.159Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kb_jay的开发站台">
+<meta name="twitter:description" content="title:leetcode-猜数字大小2 tags：leetcode dp我们正在玩一个猜数游戏，游戏规则如下： 我从 1 到 n 之间选择一个数字，你来猜我选了哪个数字。 每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。 然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。 示例: 123456789n = 10, 我">
+  
+    <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">kb_jay的开发站台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-leetcode-猜数字大小2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/16/leetcode-猜数字大小2/" class="article-date">
+  <time datetime="2018-07-16T15:35:31.108Z" itemprop="datePublished">2018-07-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>title:leetcode-猜数字大小2</p>
+<h2 id="tags：leetcode-dp"><a href="#tags：leetcode-dp" class="headerlink" title="tags：leetcode dp"></a>tags：leetcode dp</h2><p>我们正在玩一个猜数游戏，游戏规则如下：</p>
+<p>我从 <strong>1</strong> 到 <strong>n</strong> 之间选择一个数字，你来猜我选了哪个数字。</p>
+<p>每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。</p>
+<p>然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。</p>
+<p><strong>示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">n = 10, 我选择了8.</span><br><span class="line"></span><br><span class="line">第一轮: 你猜我选择的数字是5，我会告诉你，我的数字更大一些，然后你需要支付5块。</span><br><span class="line">第二轮: 你猜是7，我告诉你，我的数字更大一些，你支付7块。</span><br><span class="line">第三轮: 你猜是9，我告诉你，我的数字更小一些，你支付9块。</span><br><span class="line"></span><br><span class="line">游戏结束。8 就是我选的数字。</span><br><span class="line"></span><br><span class="line">你最终要支付 5 + 7 + 9 = 21 块钱。</span><br></pre></td></tr></table></figure>
+<p>给定一个 <strong>n ≥ 1，</strong>计算你至少需要拥有多少现金才能确保你能赢得这个游戏。</p>
+<p><strong>思路</strong></p>
+<p>记录a(i,j)表示从i到j的结果，那么有如下公式：</p>
+<p>a(i,j)=min{ x+max{a(i,x-1),a(x+1,j)}} 其中x从i到j；</p>
+<p><strong>代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMoneyAmount</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//a(i,j)=min&#123; x+max&#123;a(i,x-1),a(x+1,j)&#125;&#125;</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> [][]a = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>][n+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">1</span>;j&lt;=n;j++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i =j;i&gt;=<span class="number">1</span>;i--)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i==j)&#123;</span><br><span class="line">                    a[i][j]=<span class="number">0</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(j-i==<span class="number">1</span>)&#123;</span><br><span class="line">                    a[i][j]=i;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">int</span> min=i+a[i+<span class="number">1</span>][j];</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> x=i+<span class="number">1</span>;x&lt;=j;x++)&#123; </span><br><span class="line">                        <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">                        <span class="keyword">if</span>(x-<span class="number">1</span>&gt;i)&#123;</span><br><span class="line">                            left=a[i][x-<span class="number">1</span>];</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">int</span> right= <span class="number">0</span>;</span><br><span class="line">                        <span class="keyword">if</span>(x+<span class="number">1</span>&lt;j)&#123;</span><br><span class="line">                            right=a[x+<span class="number">1</span>][j];</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">int</span> temp = x+(left&gt;right?left:right);</span><br><span class="line">                        min = temp&gt;min?min:temp;</span><br><span class="line">                    &#125;</span><br><span class="line">                    a[i][j]=min;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> a[<span class="number">1</span>][n];   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/16/leetcode-猜数字大小2/" data-id="cjjoflab9000lyuuq6sq8z36z" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/07/13/Android-特殊的vp/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android 特殊viewPager</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/07/16/leetcode-猜数字大小2/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/13/Android-特殊的vp/">Android 特殊viewPager</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/11/android-微信登陆/">Android-微信登陆</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/10/tensorFlow记录：/">Android-tensorFlowDemo</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/03/leetcode-计算各个位数不同的数字个数/">leetcode-计算各个位数不同的数字个数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 kb_jay<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
