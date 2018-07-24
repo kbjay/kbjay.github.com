@@ -62,6 +62,130 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Android-查找讯飞输入法的下载资源的路径01" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" class="article-date">
+  <time datetime="2018-07-02T12:29:20.641Z" itemprop="datePublished">2018-07-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/">Android-查找讯飞输入法的下载资源的路径01</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="查找讯飞输入法的下载资源的路径-间接证据-："><a href="#查找讯飞输入法的下载资源的路径-间接证据-：" class="headerlink" title="查找讯飞输入法的下载资源的路径(间接证据)："></a>查找讯飞输入法的下载资源的路径(间接证据)：</h4><ol>
+<li><p>点击下载之后可以看到sd卡下“./iFlyIME/speech”文件夹下多了如下两个so,删除离线包之后so消失。</p>
+<ul>
+<li><p>libAitalk5_v5_rnn.so</p>
+</li>
+<li><p>libAitalk5_res_cnsms_v5_rnn.so</p>
+</li>
+</ul>
+</li>
+</ol>
+<ol start="2">
+<li>调试smali文件可以看到：点击开启离线功能时，会先调用SpeechHelper的getAitalkChildType方法，在该方法中回去调用isV5RnnExist方法，之后会调用到getV5RnnSo跟getV5RnnRes方法，而这两个方法分别是获取这两个so的。（调试过程中截 取的数据中有这两个路径）。</li>
+</ol>
+<h5 id="SpeechHelper"><a href="#SpeechHelper" class="headerlink" title="SpeechHelper"></a>SpeechHelper</h5><ol>
+<li>getAitalkChildType</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getAitalkChildType</span><span class="params">(Context paramContext)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">   	。。。</span><br><span class="line">    <span class="keyword">if</span> (isV5RnnExist()) &#123;<span class="comment">///////////////////////////////******1*******////////////////////</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    。。。</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>isV5RnnExist </li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isV5RnnExist</span><span class="params">()</span></span></span><br><span class="line"><span class="function"> </span>&#123;</span><br><span class="line">   <span class="keyword">boolean</span> bool2 = <span class="keyword">false</span>;</span><br><span class="line">   removeFilesToHiddenDir();</span><br><span class="line">   File[] arrayOfFile1 = getV5RnnSo();<span class="comment">//////////*******2******////////////////</span></span><br><span class="line">   File[] arrayOfFile2 = getV5RnnRes();<span class="comment">/////////*******3******////////////////</span></span><br><span class="line">   <span class="keyword">boolean</span> bool1 = bool2;</span><br><span class="line">   <span class="keyword">if</span> (arrayOfFile1 != <span class="keyword">null</span>)</span><br><span class="line">   &#123;</span><br><span class="line">     bool1 = bool2;</span><br><span class="line">     <span class="keyword">if</span> (arrayOfFile1.length &gt; <span class="number">0</span>)</span><br><span class="line">     &#123;</span><br><span class="line">       bool1 = bool2;</span><br><span class="line">       <span class="keyword">if</span> (arrayOfFile2 != <span class="keyword">null</span>)</span><br><span class="line">       &#123;</span><br><span class="line">         bool1 = bool2;</span><br><span class="line">         <span class="keyword">if</span> (arrayOfFile2.length &gt; <span class="number">0</span>)</span><br><span class="line">         &#123;</span><br><span class="line">           <span class="keyword">int</span> i;</span><br><span class="line">           String str;</span><br><span class="line">           <span class="keyword">int</span> j;</span><br><span class="line">           <span class="keyword">if</span> (arrayOfFile1.length &gt; arrayOfFile2.length)</span><br><span class="line">           &#123;</span><br><span class="line">             i = <span class="number">0</span>;</span><br><span class="line">             <span class="keyword">if</span> (i &lt; arrayOfFile2.length)</span><br><span class="line">             &#123;</span><br><span class="line">               str = arrayOfFile2[i].getName().substring(DIR_AITALK5_5_RNN_RES_PREFIX.length());</span><br><span class="line">               j = <span class="number">0</span>;</span><br><span class="line">               <span class="keyword">for</span> (;;)</span><br><span class="line">               &#123;</span><br><span class="line">                 <span class="keyword">if</span> (j &lt; arrayOfFile1.length)</span><br><span class="line">                 &#123;</span><br><span class="line">                   <span class="keyword">if</span> (arrayOfFile1[i].getName().endsWith(str)) &#123;</span><br><span class="line">                     mRnnVer = str;</span><br><span class="line">                   &#125;</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">else</span></span><br><span class="line">                 &#123;</span><br><span class="line">                   i += <span class="number">1</span>;</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">                 &#125;</span><br><span class="line">                 j += <span class="number">1</span>;</span><br><span class="line">               &#125;</span><br><span class="line">             &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">else</span></span><br><span class="line">           &#123;</span><br><span class="line">             i = <span class="number">0</span>;</span><br><span class="line">             <span class="keyword">if</span> (i &lt; arrayOfFile1.length)</span><br><span class="line">             &#123;</span><br><span class="line">               str = arrayOfFile1[i].getName().substring(DIR_AITALK5_5_RNN_SO_PREFIX.length());</span><br><span class="line">               j = <span class="number">0</span>;</span><br><span class="line">               <span class="keyword">for</span> (;;)</span><br><span class="line">               &#123;</span><br><span class="line">                 <span class="keyword">if</span> (j &lt; arrayOfFile1.length)</span><br><span class="line">                 &#123;</span><br><span class="line">                   <span class="keyword">if</span> (arrayOfFile2[i].getName().endsWith(str)) &#123;</span><br><span class="line">                     mRnnVer = str;</span><br><span class="line">                   &#125;</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">else</span></span><br><span class="line">                 &#123;</span><br><span class="line">                   i += <span class="number">1</span>;</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">                 &#125;</span><br><span class="line">                 j += <span class="number">1</span>;</span><br><span class="line">               &#125;</span><br><span class="line">             &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (Logging.isDebugLogging()) &#123;</span><br><span class="line">             Logging.d(TAG, <span class="string">"rnn ver: "</span> + mRnnVer);</span><br><span class="line">           &#125;</span><br><span class="line">           bool1 = bool2;</span><br><span class="line">           <span class="keyword">if</span> (!TextUtils.isEmpty(mRnnVer)) &#123;</span><br><span class="line">             bool1 = <span class="keyword">true</span>;</span><br><span class="line">           &#125;</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> bool1;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>getV5RnnSo</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DIR_AITALK5_5_RNN_SO_PREFIX = "libAitalk5_v5_rnn"</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> File[] getV5RnnSo()</span><br><span class="line">  &#123;</span><br><span class="line">    removeFilesToHiddenDir();</span><br><span class="line">    File localFile = <span class="keyword">new</span> File(DIR_AITALK5_5_RNN_ROOT);</span><br><span class="line">    <span class="keyword">if</span> ((localFile.exists()) &amp;&amp; (localFile.isDirectory())) &#123;</span><br><span class="line">      <span class="keyword">return</span> localFile.listFiles(<span class="keyword">new</span> ccf(Pattern.compile(DIR_AITALK5_5_RNN_SO_PREFIX + <span class="string">"(_v)?[0-9]*.so"</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>getV5RnnRes</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DIR_AITALK5_5_RNN_RES_PREFIX = "libAitalk5_res_cnsms_v5_rnn"</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> File[] getV5RnnRes()</span><br><span class="line">  &#123;</span><br><span class="line">    removeFilesToHiddenDir();</span><br><span class="line">    File localFile = <span class="keyword">new</span> File(DIR_AITALK5_5_RNN_ROOT);</span><br><span class="line">    <span class="keyword">if</span> ((localFile.exists()) &amp;&amp; (localFile.isDirectory())) &#123;</span><br><span class="line">      <span class="keyword">return</span> localFile.listFiles(<span class="keyword">new</span> ccg(Pattern.compile(DIR_AITALK5_5_RNN_RES_PREFIX + <span class="string">"(_v)?[0-9]*.so"</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>调试过程截取的常量</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">CPU_ARM_V6 = <span class="string">"(v6"</span></span><br><span class="line">CURRENT_DIR_SPEECH = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">DIR_AITALK5_2_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v2.so"</span></span><br><span class="line">DIR_AITALK5_2_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v2.so"</span></span><br><span class="line">DIR_AITALK5_2_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v2.so"</span></span><br><span class="line">DIR_AITALK5_2_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v2.so"</span></span><br><span class="line">DIR_AITALK5_3_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v3.so"</span></span><br><span class="line">DIR_AITALK5_3_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v3.so"</span></span><br><span class="line">DIR_AITALK5_3_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v3.so"</span></span><br><span class="line">DIR_AITALK5_3_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v3.so"</span></span><br><span class="line">DIR_AITALK5_4_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v4.so"</span></span><br><span class="line">DIR_AITALK5_4_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v4.so"</span></span><br><span class="line">DIR_AITALK5_4_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v4.so"</span></span><br><span class="line">DIR_AITALK5_4_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v4.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_PATTERN = <span class="string">"(_v)?[0-9]*.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_RES_PREFIX = <span class="string">"libAitalk5_res_cnsms_v5_rnn"</span></span><br><span class="line">DIR_AITALK5_5_RNN_ROOT = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">DIR_AITALK5_5_RNN_ROOT_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">DIR_AITALK5_5_RNN_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_SO_PREFIX = <span class="string">"libAitalk5_v5_rnn"</span></span><br><span class="line">DIR_AITALK6_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK6_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK6_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6.so"</span></span><br><span class="line">DIR_AITALK6_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6.so"</span></span><br><span class="line">DIR_AITALK_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5.so"</span></span><br><span class="line">DIR_AITALK_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_2_SO = <span class="string">"/libs/libAitalk5_v2.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_3_SO = <span class="string">"/libs/libAitalk5_v3.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_4_SO = <span class="string">"/libs/libAitalk5_v4.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_5_RNN_ROOT = <span class="string">"/libs/"</span></span><br><span class="line">DIR_LIBS_AITALK5_5_RNN_SO = <span class="string">"/libs/libAitalk5_v5_rnn.so"</span></span><br><span class="line">DIR_LIBS_AITALK6_SO = <span class="string">"/libs/libAitalk6.so"</span></span><br><span class="line">DIR_LIBS_AITALK_SO = <span class="string">"/libs/libAitalk5.so"</span></span><br><span class="line">DIR_SPEECH = <span class="string">"/storage/emulated/0/iFlyIME/speech/"</span></span><br><span class="line">DIR_SPEECH_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">FILE_PATH = <span class="string">"FILE_PATH"</span></span><br><span class="line">MAX_SYNC_CALL_WAIT_TIME = <span class="number">20000</span></span><br><span class="line">MIN_RAM_REQUIRE = <span class="number">50</span></span><br><span class="line">RAM_REQUIRE_1G = <span class="number">1000</span></span><br><span class="line">RAM_REQUIRE_2G = <span class="number">1700</span></span><br><span class="line">TAG = <span class="string">"SpeechHelper"</span></span><br><span class="line">URL_PATH = <span class="string">"URL_PATH"</span></span><br><span class="line">VER_AITALK_5 = <span class="number">1003</span></span><br><span class="line">VER_AITALK_5_2 = <span class="number">1015</span></span><br><span class="line">VER_AITALK_5_3 = <span class="number">1022</span></span><br><span class="line">VER_AITALK_6 = <span class="number">1100</span></span><br><span class="line">mRnnVer = <span class="string">".so"</span></span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>。。。。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="cjjzofcp900003uwdawug5ra2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode-Bit位计数" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/29/leetcode-Bit位计数/" class="article-date">
+  <time datetime="2018-06-29T15:40:39.337Z" itemprop="datePublished">2018-06-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/29/leetcode-Bit位计数/">leetcode-Bit位计数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>给定一个非负整数 <strong>num</strong>。 对于范围 <strong>0 ≤ i ≤ num</strong> 中的每个数字 <strong>i</strong> ，计算其二进制数中的1的数目并将它们作为数组返回。</p>
+<p><strong>示例：</strong><br>比如给定 <code>num = 5</code> ，应该返回 <code>[0,1,1,2,1,2]</code>.</p>
+<p><strong>进阶：</strong></p>
+<ul>
+<li>给出时间复杂度为<strong>O(n * sizeof(integer))</strong> 的解答非常容易。 但是你可以在线性时间<strong>O(n)</strong>内用一次遍历做到吗？</li>
+<li>要求算法的空间复杂度为<strong>O(n)</strong>。</li>
+<li>你能进一步完善解法吗？ 在c ++或任何其他语言中不使用任何内置函数（如c++里的 <strong>__builtin_popcount</strong>）来执行此操作。</li>
+</ul>
+<p><strong>思路</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">考虑<span class="number">5</span> （<span class="number">111</span>） 除以<span class="number">2</span>就相当于把后面的<span class="number">1</span>砍掉剩下<span class="number">11</span>（<span class="number">2</span>）余 <span class="number">1</span> </span><br><span class="line"> 这样a[<span class="number">5</span>]=a[<span class="number">2</span>]+<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">考虑<span class="number">4</span> <span class="number">100</span>除以<span class="number">2</span> 就相当于把<span class="number">0</span>砍掉=<span class="number">2</span> 余 <span class="number">0</span> </span><br><span class="line">  这样a[<span class="number">4</span>]=a[<span class="number">2</span>];</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p><strong>代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] countBits(<span class="keyword">int</span> num) &#123;        </span><br><span class="line">        <span class="keyword">int</span> [] arr= <span class="keyword">new</span> <span class="keyword">int</span>[num+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">if</span>(num==<span class="number">0</span>)&#123;</span><br><span class="line">            arr[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(num==<span class="number">1</span>)&#123;</span><br><span class="line">            arr[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">            arr[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        arr[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">        arr[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">2</span>;i&lt;=num;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp1=i/<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">int</span> temp2=i%<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(temp2==<span class="number">1</span>)&#123;</span><br><span class="line">                arr[i]=<span class="number">1</span>+arr[temp1];</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                arr[i]=arr[temp1];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="cjjzofcq4000g3uwd8deke3vv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android-反编译调试smali文件" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/29/Android-反编译调试smali文件/" class="article-date">
@@ -118,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjjog5g0e00001quq9m24n64q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjjzofcpk00013uwdyjl15pun" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -172,7 +296,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjjog5g1b000g1quq01w1d97s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjjzofcqc000m3uwdu9itt5qb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -220,7 +344,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjjog5g15000c1quqb4kz3gfy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjjzofcqb000k3uwdrp0qesix" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -270,7 +394,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjjog5g1y000u1quqietlfbll" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjjzofcql000v3uwdrgu62ir7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -390,7 +514,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjjog5g1000081quqtq1oera9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjjzofcq2000e3uwd2pil60fb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -435,7 +559,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjjog5g17000e1quqykcy8i9x" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjjzofcq8000i3uwd7wotsbxs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -484,7 +608,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/18/leetcode-解码方法/" data-id="cjjog5g1u000r1quq70ssutxm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/18/leetcode-解码方法/" data-id="cjjzofcqj000t3uwdftisfnaa" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -533,7 +657,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/16/leetcode-爬楼梯/" data-id="cjjog5g1q000n1quq2a1w9nmh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/16/leetcode-爬楼梯/" data-id="cjjzofcqh000r3uwdd093cfq8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -545,113 +669,11 @@
 
 
   
-    <article id="post-leetcode-最大子序列" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/16/leetcode-最大子序列/" class="article-date">
-  <time datetime="2018-06-16T01:57:04.770Z" itemprop="datePublished">2018-06-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/16/leetcode-最大子序列/">leetcode-最大子序列和</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>给定一个整数数组 <code>nums</code> ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
-<p><strong>示例:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [-2,1,-3,4,-1,2,1,-5,4],</span><br><span class="line">输出: 6</span><br><span class="line">解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。</span><br></pre></td></tr></table></figure>
-<p><strong>进阶:</strong></p>
-<p>如果你已经实现复杂度为 O(<em>n</em>) 的解法，尝试使用更为精妙的分治法求解。</p>
-<p><strong>1：动态规划 O(n)</strong></p>
-<p>思路：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">动态式：sum[i]:以i为结尾的最大子序列=Max&#123;sum[i-1]+a[i],a[i]&#125;;</span><br><span class="line"></span><br><span class="line">可以计算出以a[i]为结尾的最大子序列和，从中选出最大的。</span><br></pre></td></tr></table></figure>
-<p>代码示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//sum[i]:以a[i]为结尾的最大子序列和=max&#123;sum[i-1]+a[i],a[i]&#125;</span></span><br><span class="line">        <span class="keyword">if</span>(nums.length==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> nums[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> max=nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> maxPre=nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp= nums[i]&gt;(maxPre+nums[i])?nums[i]:(maxPre+nums[i]);</span><br><span class="line">            maxPre=temp;</span><br><span class="line">            max=max&gt;temp?max:temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>2:分治法O(nLogn)</strong></p>
-<p>思路：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">将数组分成两份，左边跟右边，那么最大的子序列 = Max &#123;left,right,center&#125;</span><br><span class="line">递归结束条件：只有一个元素，<span class="keyword">return</span> 该元素的值；</span><br></pre></td></tr></table></figure>
-<p>代码示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">binarySubArray</span><span class="params">(<span class="keyword">int</span>[] nums,<span class="keyword">int</span> left,<span class="keyword">int</span> right)</span></span>&#123;</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">if</span>(left == right)&#123;</span><br><span class="line">        <span class="keyword">return</span> nums[left];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> center = (right +left )&gt;&gt;<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> leftMaxValue = binarySubArray(nums,left,center);<span class="comment">//左边的最大子序列和</span></span><br><span class="line">    <span class="keyword">int</span> rightMaxValue = binarySubArray(nums,center+<span class="number">1</span>,right);<span class="comment">//右边的最大子序列和</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> centerLeftMaxValue=<span class="number">0</span>;<span class="comment">//从中心往左遍历找到的最大值（必须包含中心点）</span></span><br><span class="line">    <span class="keyword">int</span> centerRightMaxValue=<span class="number">0</span>;<span class="comment">//从中心往右遍历找到的最大值（必须包含中心点）</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> sumLeft=<span class="number">0</span>;<span class="comment">//用于记录遍历左侧的sum值</span></span><br><span class="line">    <span class="keyword">int</span> sumRight=<span class="number">0</span>;<span class="comment">//用于记录遍历右侧的sum值</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=center ;i&gt;=left;i--)&#123;</span><br><span class="line">        <span class="keyword">if</span>(i==center)&#123;</span><br><span class="line">            centerLeftMaxValue=nums[i];</span><br><span class="line">            sumLeft=nums[i];</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        sumLeft+=nums[i];</span><br><span class="line">        centerLeftMaxValue=centerLeftMaxValue&gt;sumLeft?centerLeftMaxValue:sumLeft;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j =center+<span class="number">1</span>;j&lt;=right;j++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(j==center+<span class="number">1</span>)&#123;</span><br><span class="line">            centerRightMaxValue=nums[j];</span><br><span class="line">            sumRight=nums[j];</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        sumRight+=nums[j];</span><br><span class="line">        centerRightMaxValue=</span><br><span class="line">            centerRightMaxValue&gt;sumRight?centerRightMaxValue:sumRight;</span><br><span class="line">    &#125;        </span><br><span class="line">    <span class="comment">//返回Max&#123;left,right,center&#125;</span></span><br><span class="line">    <span class="keyword">int</span> sum = leftMaxValue&gt;rightMaxValue?leftMaxValue:rightMaxValue;</span><br><span class="line">    <span class="keyword">return</span> sum&gt;(centerLeftMaxValue+centerRightMaxValue)?sum:(centerLeftMaxValue+centerRightMaxValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/16/leetcode-最大子序列/" data-id="cjjog5g1l000k1quqc6abik72" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-学习计划" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/15/学习计划/" class="article-date">
-  <time datetime="2018-06-15T02:42:04.550Z" itemprop="datePublished">2018-06-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/15/学习计划/">学习计划表</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><br></p>
-<h3 id="周一到周五，每天一道算法题"><a href="#周一到周五，每天一道算法题" class="headerlink" title="周一到周五，每天一道算法题"></a>周一到周五，每天一道算法题</h3><p>每天在leetcode上学习一道算法题，并记录下解题思路。</p>
-<h3 id="熟悉23种设计模式"><a href="#熟悉23种设计模式" class="headerlink" title="熟悉23种设计模式"></a>熟悉23种设计模式</h3><p>需要熟练的掌握23种基本的设计模式。</p>
-<h3 id="学习数据结构"><a href="#学习数据结构" class="headerlink" title="学习数据结构"></a>学习数据结构</h3><p>熟练掌握链表，栈，队列，树。</p>
-<h3 id="学习Java集合类"><a href="#学习Java集合类" class="headerlink" title="学习Java集合类"></a>学习Java集合类</h3><p>源码分析hashMap<br>…</p>
-<h3 id="学习Java输入输出流"><a href="#学习Java输入输出流" class="headerlink" title="学习Java输入输出流"></a>学习Java输入输出流</h3><p>熟练掌握各种输入输出流。</p>
-<h3 id="学习数据库的基本操作"><a href="#学习数据库的基本操作" class="headerlink" title="学习数据库的基本操作"></a>学习数据库的基本操作</h3><p>需要熟练掌握数据库相关知识。</p>
-<h3 id="复习Android基础"><a href="#复习Android基础" class="headerlink" title="复习Android基础"></a>复习Android基础</h3><p>四大组件，fragment，动画，自定义view，view事件机制。</p>
-<h3 id="Android框架学习"><a href="#Android框架学习" class="headerlink" title="Android框架学习"></a>Android框架学习</h3><p>网络框架：okHttp ，Retrofit<br>异步框架：Rxjava<br>依赖注入框架：Dragger2<br>图片框架：Glide<br>事件总线框架：RxBus（Rxjava）</p>
-<h3 id="Android架构学习"><a href="#Android架构学习" class="headerlink" title="Android架构学习"></a>Android架构学习</h3><p>mvp<br>mvvm<br>谷歌官方架构组件（Room，LiveData，ViewModel，LifeCycle）</p>
-<h3 id="Android-View源码"><a href="#Android-View源码" class="headerlink" title="Android View源码"></a>Android View源码</h3><p>RecycleView<br>TabLayout<br>CardView<br>…</p>
-<h3 id="Android-网络框架封装"><a href="#Android-网络框架封装" class="headerlink" title="Android 网络框架封装"></a>Android 网络框架封装</h3><p>自己封装一个网络请求框架</p>
-<h3 id="Android-性能优化"><a href="#Android-性能优化" class="headerlink" title="Android 性能优化"></a>Android 性能优化</h3><p>布局优化<br>过度渲染<br>内存优化<br>电池优化<br>…</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/15/学习计划/" data-id="cjjog5g22000z1quq2a12atsr" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -665,7 +687,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
     </div>
   </div>
 
@@ -675,7 +697,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
     </div>
   </div>
 
@@ -697,6 +719,14 @@
       <ul>
         
           <li>
+            <a href="/2018/07/24/Android-自定义ItemDecoration/">Android-自定义瀑布流的itemDecoration</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/20/Android-自定义圆角ImageView/">Android-自定义圆角ImageView</a>
+          </li>
+        
+          <li>
             <a href="/2018/07/16/leetcode-猜数字大小2/">leetcode-猜数字大小2</a>
           </li>
         
@@ -706,14 +736,6 @@
         
           <li>
             <a href="/2018/07/13/Android-特殊的vp/">Android 特殊viewPager</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/11/android-微信登陆/">Android-微信登陆</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/10/tensorFlow记录：/">Android-tensorFlowDemo</a>
           </li>
         
       </ul>
