@@ -62,6 +62,77 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Android-查找讯飞输入法下载的离线资源02" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" class="article-date">
+  <time datetime="2018-07-03T11:39:27.586Z" itemprop="datePublished">2018-07-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/03/Android-查找讯飞输入法下载的离线资源02/">Android-查找讯飞输入法下载的离线资源02</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>目标</strong></p>
+<p>找到跟离线包相关的所有下载的文件</p>
+<p><strong>结果</strong></p>
+<ol>
+<li>下载的是个zip，解压之后是两个so。这个就是它下载的所有东西了。</li>
+<li>下面是截取的下载地址：</li>
+</ol>
+<p><a href="http://183.91.33.82/download.voicecloud.cn/ygxt/20161025/c8f798bb-f87d-4860-a6b9-3f64275af70d.zip" target="_blank" rel="noopener">http://183.91.33.82/download.voicecloud.cn/ygxt/20161025/c8f798bb-f87d-4860-a6b9-3f64275af70d.zip</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">07</span>-<span class="number">03</span> <span class="number">19</span>:<span class="number">12</span>:<span class="number">56.533</span> <span class="number">17441</span>-<span class="number">18271</span>/com.iflytek.inputmethod.assist D/iFlyIME_Network: [<span class="number">970</span>] alm.a: HTTP response <span class="keyword">for</span> request=&lt;[ ] http:<span class="comment">//download.voicecloud.cn/ygxt/20161025/c8f798bb-f87d-4860-a6b9-3f64275af70d.zip 0xade53710 NORMAL null&gt; [lifetime=22703], [size=null], [rc=200], [retryCount=0]</span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>下载的zip文件会先放在sd的IflyIme下的download文件夹下面，之后才会放到之前找到的隐藏目录下。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">7</span>-<span class="number">03</span> <span class="number">19</span>:<span class="number">12</span>:<span class="number">56.533</span> <span class="number">17441</span>-<span class="number">17441</span>/com.iflytek.inputmethod.assist D/DownloadHandleManager: onFinish filename : /storage/emulated/<span class="number">0</span>/iFlyIME/Download/c8f798bb-f87d-<span class="number">4860</span>-a6b9-<span class="number">3f</span>64275af70d.zip</span><br></pre></td></tr></table></figure>
+<p><strong>实验成功过程</strong></p>
+<ol>
+<li>修改smali文件（Logging.smali）</li>
+<li>新建一个injectLog.smali文件添加到工程中，通过python脚本给downLoad下所有的smali文件的每个方法添加输出日志。可以看到方法调用的顺序。参考<a href="https://blog.csdn.net/charlessimonyi/article/details/52027563" target="_blank" rel="noopener">https://blog.csdn.net/charlessimonyi/article/details/52027563</a></li>
+<li>重新打包</li>
+<li>重新签名</li>
+<li>安装</li>
+<li>查看<strong>assist进程</strong>下的日志，可以看到下载进度，完成之后可以看到下载路径。且下载的zip包跟提示消耗的流量一致，进一步可以确认下载的只有这两个so文件。</li>
+</ol>
+<p><strong>反编译思路</strong></p>
+<ol>
+<li>利用dex2jar+jd-gui 获取class文件</li>
+<li>利用apkTool获取smali文件跟资源文件</li>
+<li>利用log注入给指定包名下的smali文件中的方法注入log：参考<a href="https://blog.csdn.net/charlessimonyi/article/details/52027563" target="_blank" rel="noopener">https://blog.csdn.net/charlessimonyi/article/details/52027563</a></li>
+<li>触发关注的事件，观察log，找出相关的类，阅读java代码</li>
+<li>在对应的smali文件中加断点调试代码  参考：<a href="https://kbjay.github.io/2018/06/29/Android-%E5%8F%8D%E7%BC%96%E8%AF%91%E8%B0%83%E8%AF%95smali%E6%96%87%E4%BB%B6/" target="_blank" rel="noopener">https://kbjay.github.io/2018/06/29/Android-%E5%8F%8D%E7%BC%96%E8%AF%91%E8%B0%83%E8%AF%95smali%E6%96%87%E4%BB%B6/</a></li>
+</ol>
+<p><strong>ps</strong></p>
+<p>在查找关键词的过程中发现了Aitakl5.class,代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Aitalk5</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	...</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniAddLexiconItem</span><span class="params">(String paramString, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniAddLexiconItemPhoneme</span><span class="params">(String paramString1, String paramString2, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniAppendData</span><span class="params">(<span class="keyword">byte</span>[] paramArrayOfByte, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniBeginLexicon</span><span class="params">(String paramString)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniBuildGrammar</span><span class="params">(<span class="keyword">byte</span>[] paramArrayOfByte, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniCreate</span><span class="params">(String paramString, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniDestroy</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniEndData</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniEndLexicon</span><span class="params">(String paramString)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetConfidence</span><span class="params">(<span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetEngineState</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetItemId</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2, <span class="keyword">int</span> paramInt3)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetItemNumber</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> String <span class="title">JniGetItemText</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2, <span class="keyword">int</span> paramInt3)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetResCount</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetSlotConfidence</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> String <span class="title">JniGetSlotName</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetSlotNumber</span><span class="params">(<span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniLoadNetwork</span><span class="params">(String paramString)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniOnReadResource</span><span class="params">(<span class="keyword">byte</span>[] paramArrayOfByte, <span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniRunTask</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniSetHotWords</span><span class="params">(String paramString, String[] paramArrayOfString, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniSetParam</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">JniStart</span><span class="params">(String paramString)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniStop</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniUnLoadNetwork</span><span class="params">(String paramString)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniUpdateGrammar</span><span class="params">(String paramString)</span></span>;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" data-id="cjkao5n3t0001klwdspyf7wwm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-leetcode-整数拆分" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/02/leetcode-整数拆分/" class="article-date">
@@ -95,7 +166,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/02/leetcode-整数拆分/" data-id="cjk28cak6000ffewd2vslyi8e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/02/leetcode-整数拆分/" data-id="cjkao5n4l000mklwdqkdc1mj6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -169,7 +240,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="cjk28cajs0004fewdwa9la7d8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="cjkao5n3y0003klwd0s7hr225" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li></ul>
@@ -219,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="cjk28cak00009fewd8l5o43ct" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="cjkao5n4c000gklwdozhxjz31" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -287,7 +358,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjk28caj70000fewdiqbwrvj9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjkao5n3i0000klwd3a09qdxe" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -341,7 +412,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjk28caka000hfewdjry1yic2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjkao5n4p000qklwd3mlpieft" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -389,7 +460,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjk28cak1000bfewdfb435sv9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjkao5n4h000iklwd35hslu9f" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -439,7 +510,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjk28calc000sfewdnqkf8m4z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjkao5n4s000tklwd2yi2gu2z" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -559,7 +630,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjk28cajx0008fewdy2vvjjhl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjkao5n48000cklwd8tas3vz4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -604,56 +675,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjk28cak3000dfewdloqc68ai" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-解码方法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/18/leetcode-解码方法/" class="article-date">
-  <time datetime="2018-06-18T06:10:25.134Z" itemprop="datePublished">2018-06-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/18/leetcode-解码方法/">leetcode-解码方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一条包含字母 <code>A-Z</code> 的消息通过以下方式进行了编码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&apos;A&apos; -&gt; 1</span><br><span class="line">&apos;B&apos; -&gt; 2</span><br><span class="line">...</span><br><span class="line">&apos;Z&apos; -&gt; 26</span><br></pre></td></tr></table></figure>
-<p>给定一个只包含数字的<strong>非空</strong>字符串，请计算解码方法的总数。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;12&quot;</span><br><span class="line">输出: 2</span><br><span class="line">解释: 它可以解码为 &quot;AB&quot;（1 2）或者 &quot;L&quot;（12）。</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;226&quot;</span><br><span class="line">输出: 3</span><br><span class="line">解释: 它可以解码为 &quot;BZ&quot; (2 26), &quot;VF&quot; (22 6), 或者 &quot;BBF&quot; (2 2 6) 。</span><br></pre></td></tr></table></figure>
-<p><strong>思路</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">考虑String字符串新加入一个<span class="keyword">char</span>时的<span class="keyword">case</span>；</span><br><span class="line">两个维度：<span class="number">1</span>:新加入的<span class="keyword">char</span>是否为<span class="number">0</span>；<span class="number">2</span>:新加入的跟前一个字符表示的数字是否合法（<span class="number">1</span>-<span class="number">26</span>）</span><br><span class="line"><span class="keyword">if</span>(<span class="number">2</span>)&#123;</span><br><span class="line">	a[n]+=a[n-<span class="number">2</span>];</span><br><span class="line">	<span class="keyword">if</span>(!<span class="number">1</span>)&#123;</span><br><span class="line">		a[n]+=a[n-<span class="number">1</span>];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!<span class="number">1</span>)&#123;</span><br><span class="line">		a[n]+=a[n-<span class="number">1</span>];</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    	<span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//无法解码    </span></span><br><span class="line">    &#125;	</span><br><span class="line">&#125;</span><br><span class="line">该题是爬楼梯问题的升级版，实质是相通的，都属于<span class="string">"斐波纳切"</span>型，由前往后推。</span><br></pre></td></tr></table></figure>
-<p><strong>代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numDecodings</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//1:数字要大于等于1，小于等于26</span></span><br><span class="line">        <span class="comment">//2:新加入的数字是否为0</span></span><br><span class="line">        <span class="keyword">if</span>(s==<span class="keyword">null</span>||<span class="string">""</span>.equals(s)||<span class="string">"0"</span>.equals(s)||s.charAt(<span class="number">0</span>)==<span class="string">'0'</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">char</span>[] ch=s.toCharArray();</span><br><span class="line">        <span class="keyword">int</span>[] in= <span class="keyword">new</span> <span class="keyword">int</span>[ch.length];</span><br><span class="line">        in[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(ch.length&gt;=<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="comment">//计算dp初始值</span></span><br><span class="line">            <span class="keyword">int</span> empty=(ch[<span class="number">0</span>]-<span class="string">'0'</span>)*<span class="number">10</span>+(ch[<span class="number">1</span>]-<span class="string">'0'</span>);</span><br><span class="line">            <span class="keyword">if</span>(empty&gt;<span class="number">9</span>&amp;&amp;empty&lt;<span class="number">27</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(ch[<span class="number">1</span>]==<span class="string">'0'</span>)&#123;</span><br><span class="line">                    in[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    in[<span class="number">1</span>]=<span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(ch[<span class="number">1</span>]==<span class="string">'0'</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    in[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//dp计算出最终值</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">2</span>;i&lt;in.length;i++)&#123;</span><br><span class="line">                <span class="keyword">int</span> temp = (ch[i-<span class="number">1</span>]-<span class="string">'0'</span>)*<span class="number">10</span>+(ch[i]-<span class="string">'0'</span>);</span><br><span class="line">                <span class="keyword">if</span>(temp&gt;<span class="number">9</span>&amp;&amp;temp&lt;<span class="number">27</span>)&#123;</span><br><span class="line">                    in[i]+=in[i-<span class="number">2</span>];</span><br><span class="line">                    <span class="keyword">if</span>(ch[i]!=<span class="string">'0'</span>)&#123;</span><br><span class="line">                        in[i]+=in[i-<span class="number">1</span>];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(ch[i]!=<span class="string">'0'</span>)&#123;</span><br><span class="line">                        in[i]+=in[i-<span class="number">1</span>];</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//无法解码       </span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> in[in.length-<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/18/leetcode-解码方法/" data-id="cjk28cala000qfewda5sh2m2q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjkao5n4m000nklwd167h7cde" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -702,7 +724,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -713,6 +735,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/08/01/leetcode-摆动序列/">leetcode-摆动序列</a>
+          </li>
         
           <li>
             <a href="/2018/07/26/Android-实现上下翻页的recyclerView/">Android-实现上下翻页的recyclerView</a>
@@ -728,10 +754,6 @@
         
           <li>
             <a href="/2018/07/16/leetcode-猜数字大小2/">leetcode-猜数字大小2</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/16/Android-瀑布流/">Android-瀑布流</a>
           </li>
         
       </ul>
