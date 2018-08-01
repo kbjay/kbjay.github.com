@@ -62,6 +62,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-leetcode-计算各个位数不同的数字个数" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/03/leetcode-计算各个位数不同的数字个数/" class="article-date">
+  <time datetime="2018-07-03T15:17:45.799Z" itemprop="datePublished">2018-07-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/03/leetcode-计算各个位数不同的数字个数/">leetcode-计算各个位数不同的数字个数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>给定一个非负整数 n，计算各位数字都不同的数字 x 的个数，其中 0 ≤ x &lt; 10n。</p>
+<p><strong>示例:</strong><br>给定 n = 2，返回 91。（答案应该是除<code>[11,22,33,44,55,66,77,88,99]</code>外，0 ≤ x &lt; 100 间的所有数字）</p>
+<p><strong>致谢:</strong><br>特别感谢 <a href="https://discuss.leetcode.com/user/memoryless" target="_blank" rel="noopener">@memoryless</a> 添加这个题目并创建所有测试用例。</p>
+<p><strong>思路</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//         n 0 :0</span></span><br><span class="line"><span class="comment">//         n 1:0~9</span></span><br><span class="line"><span class="comment">//         n 2:0~9 + 10~99</span></span><br><span class="line"><span class="comment">//         n 3:0~9 + 10~99 + 100~999</span></span><br><span class="line"><span class="comment">//         n 4:0~9 + 10~99 + 100~999 + 1000~9999</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">每一位从<span class="number">0</span>～<span class="number">9</span>有<span class="number">10</span>种选择，注意第一位不能为<span class="number">0</span>。</span><br></pre></td></tr></table></figure>
+<p><strong>代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">countNumbersWithUniqueDigits</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123; </span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> []arr = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">        arr[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">        arr[<span class="number">1</span>]=<span class="number">10</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">2</span>;i&lt;n+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp=<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">0</span>;j&lt;i;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(j==<span class="number">0</span>)&#123;</span><br><span class="line">                    temp*=<span class="number">9</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    temp*=(<span class="number">10</span>-j);</span><br><span class="line">                &#125;</span><br><span class="line">               </span><br><span class="line">            &#125;</span><br><span class="line">            arr[i]= arr[i-<span class="number">1</span>]+temp;</span><br><span class="line">            System.out.println(arr[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/03/leetcode-计算各个位数不同的数字个数/" data-id="cjkav0h6c0013n4wdjnz92fch" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android-查找讯飞输入法下载的离线资源02" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" class="article-date">
@@ -121,7 +166,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" data-id="cjkaprnqj0001ukwdbcuem4pl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" data-id="cjkav0h5d0004n4wdh2xu1i12" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li></ul>
@@ -166,7 +211,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/02/leetcode-整数拆分/" data-id="cjkaprnri000qukwdl3xq3194" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/02/leetcode-整数拆分/" data-id="cjkav0h6a0011n4wdy5fnay9e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -240,7 +285,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="cjkaprnqq0003ukwd42xey3zw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="cjkav0h5b0003n4wdqdcbk3r4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li></ul>
@@ -290,7 +335,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="cjkaprnr6000gukwdql4okv3g" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="cjkav0h5s000in4wdbpv3re0e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -358,7 +403,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjkaprnqa0000ukwdoz3ejccy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjkav0h560001n4wdl5wpl7cr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -412,7 +457,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjkaprnre000mukwdkv8jk45v" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjkav0h5z000nn4wd43y07rhp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -460,7 +505,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjkaprnra000iukwdtr2vfr7z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjkav0h5w000mn4wdpeiyaje1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -510,7 +555,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjkaprnrp000xukwd8mf7i36k" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjkav0h67000xn4wd9ogizijf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -630,55 +675,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjkaprnr2000cukwdg3ksk0wn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjkav0h5m000en4wd4c5nwmt5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-不同的二叉搜索树" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/24/leetcode-不同的二叉搜索树/" class="article-date">
-  <time datetime="2018-06-24T14:35:15.605Z" itemprop="datePublished">2018-06-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/24/leetcode-不同的二叉搜索树/">leetcode-不同的二叉搜索树</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>给定一个整数 <em>n</em>，求以 1 … <em>n</em> 为节点组成的二叉搜索树有多少种？</p>
-<p><strong>示例:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">输入: 3</span><br><span class="line">输出: 5</span><br><span class="line">解释:</span><br><span class="line">给定 n = 3, 一共有 5 种不同结构的二叉搜索树:</span><br><span class="line"></span><br><span class="line">   1         3     3      2      1</span><br><span class="line">    \       /     /      / \      \</span><br><span class="line">     3     2     1      1   3      2</span><br><span class="line">    /     /       \                 \</span><br><span class="line">   2     1         2                 3</span><br></pre></td></tr></table></figure>
-<p><strong>思路:</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">f(n)=</span><br><span class="line">    <span class="number">1</span>:f(<span class="number">0</span>)*f(n-<span class="number">1</span>)       <span class="number">1</span>为根结点</span><br><span class="line">    <span class="number">2</span>:f(<span class="number">1</span>)*f(n-<span class="number">2</span>)		 <span class="number">2</span>为根结点</span><br><span class="line">    <span class="number">3</span>:f(<span class="number">2</span>)*f(n-<span class="number">3</span>)		 <span class="number">3</span>为根结点</span><br><span class="line">    <span class="number">4</span>:f(<span class="number">3</span>)*f(n-<span class="number">4</span>)		 <span class="number">4</span>为根结点</span><br><span class="line">    ...		</span><br><span class="line">    n:f(n-<span class="number">1</span>)*f(<span class="number">0</span>)		 n为根结点</span><br><span class="line"></span><br><span class="line">          </span><br><span class="line">    f(<span class="number">0</span>)=<span class="number">1</span>;f(<span class="number">1</span>)=<span class="number">1</span>;f(<span class="number">2</span>)=<span class="number">2</span>;   <span class="comment">//初始条件</span></span><br><span class="line">               </span><br><span class="line">    f(<span class="number">3</span>)=f(<span class="number">0</span>)*f(<span class="number">2</span>)+f(<span class="number">1</span>)*f(<span class="number">1</span>)+f(<span class="number">2</span>)*f(<span class="number">0</span>)=<span class="number">2</span>+<span class="number">1</span>+<span class="number">2</span>=<span class="number">5</span>;</span><br></pre></td></tr></table></figure>
-<p><strong>代码:</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numTrees</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">           </span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> [] arr= <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">        arr[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">        arr[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">        arr[<span class="number">2</span>]=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">3</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>(temp &lt;=i-<span class="number">1</span>)&#123;</span><br><span class="line">                arr[i]+=arr[temp]*arr[i-temp-<span class="number">1</span>];</span><br><span class="line">                temp++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;    </span><br><span class="line">        <span class="keyword">return</span> arr[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjkaprnrc000kukwdqbmz5ykt" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
 
     </footer>
   </div>
@@ -705,7 +705,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
     </div>
   </div>
 
@@ -715,7 +715,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
     </div>
   </div>
 
@@ -737,6 +737,10 @@
       <ul>
         
           <li>
+            <a href="/2018/08/01/Android-反编译详细流程/">Android-反编译详细流程</a>
+          </li>
+        
+          <li>
             <a href="/2018/08/01/leetcode-摆动序列/">leetcode-摆动序列</a>
           </li>
         
@@ -750,10 +754,6 @@
         
           <li>
             <a href="/2018/07/20/Android-自定义圆角ImageView/">Android-自定义圆角ImageView</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/16/leetcode-猜数字大小2/">leetcode-猜数字大小2</a>
           </li>
         
       </ul>

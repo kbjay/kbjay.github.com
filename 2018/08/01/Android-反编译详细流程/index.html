@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Android-反编译详细流程 | kb_jay的开发站台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="总体流程：  拿到需要破解的apk包，解压获取dex文件 使用dex2jar工具获取jar文件 使用jd-gui打开jar文件 Android studio 安装可以将java转换成smali的插件:java2smali 编写InjectLog.class文件，将该文件转为smali文件备用（生成好的smali文件参见tip2） 使用apktool工具“解压”apk文件，获取smali文件 修改m">
+<meta name="keywords" content="Android 反编译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android-反编译详细流程">
+<meta property="og:url" content="http://yoursite.com/2018/08/01/Android-反编译详细流程/index.html">
+<meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="总体流程：  拿到需要破解的apk包，解压获取dex文件 使用dex2jar工具获取jar文件 使用jd-gui打开jar文件 Android studio 安装可以将java转换成smali的插件:java2smali 编写InjectLog.class文件，将该文件转为smali文件备用（生成好的smali文件参见tip2） 使用apktool工具“解压”apk文件，获取smali文件 修改m">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-01T08:18:30.809Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android-反编译详细流程">
+<meta name="twitter:description" content="总体流程：  拿到需要破解的apk包，解压获取dex文件 使用dex2jar工具获取jar文件 使用jd-gui打开jar文件 Android studio 安装可以将java转换成smali的插件:java2smali 编写InjectLog.class文件，将该文件转为smali文件备用（生成好的smali文件参见tip2） 使用apktool工具“解压”apk文件，获取smali文件 修改m">
+  
+    <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">kb_jay的开发站台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android-反编译详细流程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/01/Android-反编译详细流程/" class="article-date">
+  <time datetime="2018-08-01T08:17:26.966Z" itemprop="datePublished">2018-08-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android-反编译详细流程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>总体流程：</strong></p>
+<ol>
+<li>拿到需要破解的apk包，解压获取dex文件</li>
+<li>使用dex2jar工具获取jar文件</li>
+<li>使用jd-gui打开jar文件</li>
+<li>Android studio 安装可以将java转换成smali的插件:java2smali</li>
+<li>编写InjectLog.class文件，将该文件转为smali文件备用（生成好的smali文件参见tip2）</li>
+<li>使用apktool工具“解压”apk文件，获取smali文件</li>
+<li>修改manifest文件，application下添加 andriod:debugger=true;</li>
+<li>将InjectLog.smali根据包名（“com/hook/testsmali/InjectLog”）放入指定位置</li>
+<li>使用python文件（参见tip1）给smali文件注入日志，修改walker=os.walk(“/Users/kb_jay/Documents/injectLog4/msc/smali/com”)中的参数可以指定那些smali文件需要注入日志</li>
+<li>使用apktool生成签名文件</li>
+<li>使用apktool将注入完日志的smali文件重新打包签名生成apk文件</li>
+<li>安装运行apk，触发关注的事件，根据Tag（InjectLog）获取方法调用栈的日志</li>
+<li>将日志保存备用</li>
+<li>Android Studio安装smalidea插件</li>
+<li>将smali文件夹导入到Android Studio中</li>
+<li>将smali文件夹设置为source root</li>
+<li>设置project的jdk</li>
+<li>在as中创建remote调试，记住设置的端口号</li>
+<li>在as终端输入<strong>adb shell am start -D -n com.xxx.xxx/com.xxx.xxx.xxx </strong>以debug方式打开apk</li>
+<li>查看该apk所有进程的Pid：<strong>adb shell ps | grep com.xxx.xxx </strong></li>
+<li>连接debug的remote端口（电脑）跟apk的进程（手机）：<strong>adb forward tcp:remote调试的端口号  jdwp:查找到的pid</strong>    eg：<strong>adb forward tcp:5005 jdwp:12000</strong></li>
+<li>根据保存好的日志文件在smali文件中加入断点</li>
+<li>run-&gt;debug  （done）</li>
+</ol>
+<p><strong>参考：</strong></p>
+<p><a href="https://my.oschina.net/zhibuji/blog/410993" target="_blank" rel="noopener">https://my.oschina.net/zhibuji/blog/410993</a></p>
+<p><a href="https://www.cnblogs.com/gordon0918/p/5570811.html" target="_blank" rel="noopener">https://www.cnblogs.com/gordon0918/p/5570811.html</a></p>
+<p><a href="http://www.cnblogs.com/goodhacker/p/5592313.html" target="_blank" rel="noopener">http://www.cnblogs.com/goodhacker/p/5592313.html</a></p>
+<p><strong>tip</strong></p>
+<ol>
+<li>注入日志的python文件</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># encoding: utf-8</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ParserError</span><span class="params">(Exception)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 注入代码到一个函数块中</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inject_code_to_method_section</span><span class="params">(method_section)</span>:</span></span><br><span class="line">    <span class="comment"># 静态构造函数，无需处理</span></span><br><span class="line">    <span class="keyword">if</span> method_section[<span class="number">0</span>].find(<span class="string">"static constructor"</span>) != <span class="number">-1</span>:</span><br><span class="line">        <span class="keyword">return</span> method_section</span><br><span class="line">    <span class="comment"># synthetic函数，无需处理</span></span><br><span class="line">    <span class="keyword">if</span> method_section[<span class="number">0</span>].find(<span class="string">"synthetic"</span>) != <span class="number">-1</span>:</span><br><span class="line">        <span class="keyword">return</span> method_section</span><br><span class="line">    <span class="comment"># 抽象方法，无需处理</span></span><br><span class="line">    <span class="keyword">if</span> method_section[<span class="number">0</span>].find(<span class="string">"abstract"</span>) != <span class="number">-1</span>:</span><br><span class="line">        <span class="keyword">return</span> method_section</span><br><span class="line">    <span class="comment"># 生成待插入代码行</span></span><br><span class="line">    inject_code = [</span><br><span class="line">        <span class="string">'\n'</span>,</span><br><span class="line">        <span class="string">'    invoke-static &#123;&#125;, Lcom/hook/testsmali/InjectLog;-&gt;PrintFunc()V\n'</span>,</span><br><span class="line">        <span class="string">'\n'</span></span><br><span class="line">    ]</span><br><span class="line">    <span class="comment">#插入到.prologue的下一行</span></span><br><span class="line">    is_inject = <span class="keyword">False</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(method_section)):</span><br><span class="line">        <span class="keyword">if</span> method_section[i].find(<span class="string">".prologue"</span>) != <span class="number">-1</span>:</span><br><span class="line">            is_inject = <span class="keyword">True</span></span><br><span class="line">            method_section[i + <span class="number">1</span>: i + <span class="number">1</span>] = inject_code</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> method_section</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inject_log_code</span><span class="params">(content)</span>:</span></span><br><span class="line">    new_content = []</span><br><span class="line">    method_section = []</span><br><span class="line">    is_method_begin = <span class="keyword">False</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> content:</span><br><span class="line">        <span class="keyword">if</span> line[:<span class="number">7</span>] == <span class="string">".method"</span>:</span><br><span class="line">            is_method_begin = <span class="keyword">True</span></span><br><span class="line">            method_section.append(line)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> is_method_begin:</span><br><span class="line">            method_section.append(line)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            new_content.append(line)</span><br><span class="line">        <span class="keyword">if</span> line[:<span class="number">11</span>] == <span class="string">".end method"</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> is_method_begin:</span><br><span class="line">                <span class="keyword">raise</span> ParserError(<span class="string">".method不对称"</span>)</span><br><span class="line">            is_method_begin = <span class="keyword">False</span></span><br><span class="line">            new_method_section = inject_code_to_method_section(method_section)</span><br><span class="line">            new_content.extend(new_method_section)</span><br><span class="line">            <span class="keyword">del</span> method_section[:]</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">return</span> new_content</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    walker = os.walk(<span class="string">"/Users/kb_jay/Documents/injectLog4/msc/smali/com"</span>)</span><br><span class="line">    <span class="keyword">for</span> root, directory, files <span class="keyword">in</span> walker:</span><br><span class="line">        <span class="keyword">for</span> file_name <span class="keyword">in</span> files:</span><br><span class="line">            <span class="keyword">if</span> file_name[<span class="number">-6</span>:] != <span class="string">".smali"</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            file_path = root + <span class="string">"/"</span> + file_name</span><br><span class="line">            print(file_path)</span><br><span class="line">            file = open(file_path)</span><br><span class="line">            lines = file.readlines()</span><br><span class="line">            file.close()</span><br><span class="line">            new_code = inject_log_code(lines)</span><br><span class="line">            file = open(file_path, <span class="string">"w"</span>)</span><br><span class="line">            file.writelines(new_code)</span><br><span class="line">            file.close()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>注入日志的smali文件，<strong>注意包名</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">.class <span class="keyword">public</span> Lcom/hook/testsmali/InjectLog;</span><br><span class="line">.<span class="keyword">super</span> Ljava/lang/Object;</span><br><span class="line">.source <span class="string">"InjectLog.java"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># direct methods</span><br><span class="line">.method <span class="keyword">public</span> constructor &lt;init&gt;()V</span><br><span class="line">    .registers <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    .prologue</span><br><span class="line"></span><br><span class="line">    .line <span class="number">3</span></span><br><span class="line">    invoke-direct &#123;p0&#125;, Ljava/lang/Object;-&gt;&lt;init&gt;()V</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>-<span class="keyword">void</span></span><br><span class="line">.end method</span><br><span class="line"></span><br><span class="line">.<span class="function">method <span class="keyword">public</span> <span class="keyword">static</span> <span class="title">PrintFunc</span><span class="params">()</span>V</span></span><br><span class="line"><span class="function">    .registers 6</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    .prologue</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    .line 7</span></span><br><span class="line"><span class="function">    invoke-<span class="keyword">static</span> </span>&#123;&#125;, Ljava/lang/Thread;-&gt;currentThread()Ljava/lang/Thread;</span><br><span class="line"></span><br><span class="line">    move-result-object v0</span><br><span class="line"></span><br><span class="line">    .line <span class="number">8</span></span><br><span class="line">    .local v0, <span class="string">"cur_thread"</span>:Ljava/lang/Thread;</span><br><span class="line">    invoke-virtual &#123;v0&#125;, Ljava/lang/Thread;-&gt;getStackTrace()[Ljava/lang/StackTraceElement;</span><br><span class="line"></span><br><span class="line">    move-result-object v1</span><br><span class="line"></span><br><span class="line">    .line <span class="number">9</span></span><br><span class="line">    .local v1, <span class="string">"stack"</span>:[Ljava/lang/StackTraceElement;</span><br><span class="line">    <span class="keyword">const</span>-string v2, <span class="string">"InjectLog"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span>-instance v3, Ljava/lang/StringBuilder;</span><br><span class="line"></span><br><span class="line">    invoke-direct &#123;v3&#125;, Ljava/lang/StringBuilder;-&gt;&lt;init&gt;()V</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span>/<span class="number">4</span> v4, <span class="number">0x3</span></span><br><span class="line"></span><br><span class="line">    aget-object v4, v1, v4</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v4&#125;, Ljava/lang/StackTraceElement;-&gt;toString()Ljava/lang/String;</span><br><span class="line"></span><br><span class="line">    move-result-object v4</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v3, v4&#125;, Ljava/lang/StringBuilder;-&gt;append(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line"></span><br><span class="line">    move-result-object v3</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span>-string v4, <span class="string">"["</span></span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v3, v4&#125;, Ljava/lang/StringBuilder;-&gt;append(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line"></span><br><span class="line">    move-result-object v3</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v0&#125;, Ljava/lang/Thread;-&gt;getId()J</span><br><span class="line"></span><br><span class="line">    move-result-wide v4</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v3, v4, v5&#125;, Ljava/lang/StringBuilder;-&gt;append(J)Ljava/lang/StringBuilder;</span><br><span class="line"></span><br><span class="line">    move-result-object v3</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span>-string v4, <span class="string">"]"</span></span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v3, v4&#125;, Ljava/lang/StringBuilder;-&gt;append(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line"></span><br><span class="line">    move-result-object v3</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v3&#125;, Ljava/lang/StringBuilder;-&gt;toString()Ljava/lang/String;</span><br><span class="line"></span><br><span class="line">    move-result-object v3</span><br><span class="line"></span><br><span class="line">    invoke-<span class="keyword">static</span> &#123;v2, v3&#125;, Landroid/util/Log;-&gt;d(Ljava/lang/String;Ljava/lang/String;)I</span><br><span class="line"></span><br><span class="line">    .line <span class="number">10</span></span><br><span class="line">    <span class="keyword">return</span>-<span class="keyword">void</span></span><br><span class="line">.end method</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>关于smali语法</li>
+</ol>
+<p>参考：<a href="https://my.oschina.net/zhibuji/blog/410993" target="_blank" rel="noopener">https://my.oschina.net/zhibuji/blog/410993</a></p>
+<ol start="4">
+<li>打开apk自带的log：找到对应的logging类，修改smali文件，重新打包签名运行即可。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/08/01/Android-反编译详细流程/" data-id="cjkav0h4x0000n4wd5m8rql9n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/08/01/leetcode-摆动序列/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode-摆动序列</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/01/Android-反编译详细流程/">Android-反编译详细流程</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/01/leetcode-摆动序列/">leetcode-摆动序列</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/26/Android-实现上下翻页的recyclerView/">Android-实现上下翻页的recyclerView</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/24/Android-自定义ItemDecoration/">Android-自定义瀑布流的itemDecoration</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/20/Android-自定义圆角ImageView/">Android-自定义圆角ImageView</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 kb_jay<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
