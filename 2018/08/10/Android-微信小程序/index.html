@@ -5,20 +5,20 @@
   
 
   
-  <title>Android-反编译调试smali文件 | kb_jay的开发站台</title>
+  <title>Android-微信小程序 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中，将smali文件夹设置为source root  在as中创建remote调试（注意">
-<meta name="keywords" content="Android">
+  <meta name="description" content="https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html">
+<meta name="keywords" content="Android 微信小程序">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android-反编译调试smali文件">
-<meta property="og:url" content="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/index.html">
+<meta property="og:title" content="Android-微信小程序">
+<meta property="og:url" content="http://yoursite.com/2018/08/10/Android-微信小程序/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中，将smali文件夹设置为source root  在as中创建remote调试（注意">
+<meta property="og:description" content="https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-03T15:31:23.325Z">
+<meta property="og:updated_time" content="2018-08-13T04:21:53.101Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android-反编译调试smali文件">
-<meta name="twitter:description" content="工具 apktool  smalidea插件（需要安装到as）   步骤 使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）  使用apktool回编生成新的apk  给新的apk签名  安装新的apk  将smali文件导入as中，将smali文件夹设置为source root  在as中创建remote调试（注意">
+<meta name="twitter:title" content="Android-微信小程序">
+<meta name="twitter:description" content="https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -65,10 +65,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Android-反编译调试smali文件" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Android-微信小程序" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/06/29/Android-反编译调试smali文件/" class="article-date">
-  <time datetime="2018-06-29T11:01:20.239Z" itemprop="datePublished">2018-06-29</time>
+    <a href="/2018/08/10/Android-微信小程序/" class="article-date">
+  <time datetime="2018-08-10T06:16:07.800Z" itemprop="datePublished">2018-08-10</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Android-反编译调试smali文件
+      Android-微信小程序
     </h1>
   
 
@@ -87,44 +87,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><ol>
-<li><p>apktool</p>
-</li>
-<li><p>smalidea插件（需要安装到as）</p>
-</li>
-</ol>
-<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ol>
-<li><p>使用apktool反编译apk，修改manifest（在application下添加android:debuggable=true）</p>
-</li>
-<li><p>使用apktool回编生成新的apk</p>
-</li>
-<li><p>给新的apk签名</p>
-</li>
-<li><p>安装新的apk</p>
-</li>
-<li><p>将smali文件导入as中，将smali文件夹设置为source root</p>
-</li>
-<li><p>在as中创建remote调试（注意设置填写端口号为8800：将as的remote调试跟本机的8800端口“打通”）run-&gt;edit xxx</p>
-</li>
-<li><p>设置project的jdk</p>
-</li>
-<li><p>在as终端输入</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell am start -D -n com.xxx.xxx/com.xxx.xxx.xxx</span><br></pre></td></tr></table></figure>
-<p>以调试模式开启安装的apk</p>
-</li>
-<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb shell ps | grep com.xxx.xxx     </span><br><span class="line"><span class="comment">//查看手机中该apk程序的pid</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb forward tcp:<span class="number">8800</span> jdwp:查找到的pid</span><br><span class="line"><span class="comment">//将本机的8800端口跟该apk进程“打通”</span></span><br><span class="line"><span class="comment">//记得设置remote调试的时候将本机的8800端口跟as的remote调试“打通”了，那么remote调试就跟手机的apk进程“打通”了；</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">10. 在smali文件中打好断点</span><br><span class="line"></span><br><span class="line">11. as-》run-〉debug</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">参考https://www.cnblogs.com/gordon0918/p/5570811.html</span><br><span class="line"></span><br><span class="line">http://www.cnblogs.com/goodhacker/p/5592313.html</span><br></pre></td></tr></table></figure></li>
-</ol>
+        <p><a href="https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html" target="_blank" rel="noopener">https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjktvksgo0001zruq0iikjuss" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/10/Android-微信小程序/" data-id="cjktvksgs0003zruq2tkglqos" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li></ul>
 
     </footer>
   </div>
@@ -132,19 +103,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/06/29/leetcode-Bit位计数/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/08/10/HMAC-sha1-加密算法/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          leetcode-Bit位计数
+          HMAC-sha1 加密算法
         
       </div>
     </a>
   
   
-    <a href="/2018/06/28/leetcode-单词拆分/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/08/01/Android-反编译详细流程/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">leetcode-单词拆分</div>
+      <div class="article-nav-title">Android-反编译详细流程</div>
     </a>
   
 </nav>
