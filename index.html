@@ -62,6 +62,94 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Android-sdk签名验证" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/15/Android-sdk签名验证/" class="article-date">
+  <time datetime="2018-08-15T12:40:02.551Z" itemprop="datePublished">2018-08-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="为什么要有签名验证"><a href="#为什么要有签名验证" class="headerlink" title="为什么要有签名验证"></a>为什么要有签名验证</h4><p>假设“人民日报”接入了我们开发的sdk，“今日头条”没有接入我们的sdk，那么对于我们来说，当然不希望“今日头条”可以使用我们暴漏的接口，此时就有了“签名验证”。</p>
+<h4 id="如何实现"><a href="#如何实现" class="headerlink" title="如何实现"></a>如何实现</h4><ol>
+<li>我们拿到“人民日报”的apk，通过  JarFile 拿到该apk的签名信息。</li>
+<li>将该信息打入我们的aar包中</li>
+<li>当“人民日报”访问我们暴漏的接口的时候要求传入Context，我们可以通过Context获取packageInfo中的signature。</li>
+<li>比对aar中的签名信息跟获取到的packageinfo中的签名信息，如果匹配，才允许访问。</li>
+</ol>
+<h4 id="如何通过jarFile获取apk签名信息"><a href="#如何通过jarFile获取apk签名信息" class="headerlink" title="如何通过jarFile获取apk签名信息"></a>如何通过jarFile获取apk签名信息</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.security.cert.Certificate;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.jar.JarEntry;</span><br><span class="line"><span class="keyword">import</span> java.util.jar.JarFile;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">getApkSign</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        String path = <span class="string">"F:/myapk/test.apk"</span>;<span class="comment">//apk的路径</span></span><br><span class="line"></span><br><span class="line">        List&lt;String&gt; list = getSignaturesFromApk(path);</span><br><span class="line">        <span class="comment">// for (String s : list) &#123;</span></span><br><span class="line">        <span class="comment">// System.out.println(s);</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line">        System.out.println(list.get(<span class="number">0</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 从APK中读取签名</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> file</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">getSignaturesFromApk</span><span class="params">(String strFile)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        File file = <span class="keyword">new</span> File(strFile);</span><br><span class="line">        List&lt;String&gt; signatures = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">        JarFile jarFile = <span class="keyword">new</span> JarFile(file);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            JarEntry je = jarFile.getJarEntry(<span class="string">"AndroidManifest.xml"</span>);</span><br><span class="line">            <span class="keyword">byte</span>[] readBuffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">8192</span>];</span><br><span class="line">            Certificate[] certs = loadCertificates(jarFile, je, readBuffer);</span><br><span class="line">            <span class="keyword">if</span> (certs != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (Certificate c : certs) &#123;</span><br><span class="line">                    String sig = toCharsString(c.getEncoded());</span><br><span class="line">                    signatures.add(sig);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> signatures;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 加载签名</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> jarFile</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> je</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> readBuffer</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Certificate[] loadCertificates(JarFile jarFile, JarEntry je,</span><br><span class="line">            <span class="keyword">byte</span>[] readBuffer) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStream is = jarFile.getInputStream(je);</span><br><span class="line">            <span class="keyword">while</span> (is.read(readBuffer, <span class="number">0</span>, readBuffer.length) != -<span class="number">1</span>) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">            is.close();</span><br><span class="line">            <span class="keyword">return</span> je != <span class="keyword">null</span> ? je.getCertificates() : <span class="keyword">null</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将签名转成转成可见字符串</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> sigBytes</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">toCharsString</span><span class="params">(<span class="keyword">byte</span>[] sigBytes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">byte</span>[] sig = sigBytes;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> N = sig.length;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> N2 = N * <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">char</span>[] text = <span class="keyword">new</span> <span class="keyword">char</span>[N2];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; N; j++) &#123;</span><br><span class="line">            <span class="keyword">byte</span> v = sig[j];</span><br><span class="line">            <span class="keyword">int</span> d = (v &gt;&gt; <span class="number">4</span>) &amp; <span class="number">0xf</span>;</span><br><span class="line">            text[j * <span class="number">2</span>] = (<span class="keyword">char</span>) (d &gt;= <span class="number">10</span> ? (<span class="string">'a'</span> + d - <span class="number">10</span>) : (<span class="string">'0'</span> + d));</span><br><span class="line">            d = v &amp; <span class="number">0xf</span>;</span><br><span class="line">            text[j * <span class="number">2</span> + <span class="number">1</span>] = (<span class="keyword">char</span>) (d &gt;= <span class="number">10</span> ? (<span class="string">'a'</span> + d - <span class="number">10</span>) : (<span class="string">'0'</span> + d));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> String(text);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="如何将签名信息打入aar"><a href="#如何将签名信息打入aar" class="headerlink" title="如何将签名信息打入aar"></a>如何将签名信息打入aar</h4><p>可以在build.gradle中新建task，该task有两个任务：</p>
+<ol>
+<li>通过JarFile获取签名string（参考以上代码）</li>
+<li>将该信息copy到jni层（假设coreLib.cpp中）出于安全考虑</li>
+</ol>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">task(<span class="string">'writeApkSignature'</span>) &lt;&lt; &#123;</span><br><span class="line"><span class="comment">//    1,获取签名信息</span></span><br><span class="line">    <span class="keyword">def</span> signatures = []</span><br><span class="line">    JarFile jarFile = <span class="keyword">new</span> JarFile(file(apkPath))</span><br><span class="line">    JarEntry je = jarFile.getJarEntry(<span class="string">"AndroidManifest.xml"</span>)</span><br><span class="line">    <span class="keyword">byte</span>[] readBuffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">8192</span>]</span><br><span class="line">    InputStream is = jarFile.getInputStream(je)</span><br><span class="line">    <span class="keyword">while</span> (is.read(readBuffer, <span class="number">0</span>, readBuffer.length) != <span class="number">-1</span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    is.close()</span><br><span class="line">    Certificate[] certs = je.getCertificates()</span><br><span class="line">    <span class="keyword">if</span> (certs != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (Certificate <span class="string">c :</span> certs) &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] sig = c.getEncoded()</span><br><span class="line">            println <span class="keyword">new</span> String(sig)</span><br><span class="line">            <span class="keyword">int</span> N = sig.length</span><br><span class="line">            <span class="keyword">int</span> N2 = N * <span class="number">2</span></span><br><span class="line">            <span class="keyword">char</span>[] text = <span class="keyword">new</span> <span class="keyword">char</span>[N2]</span><br><span class="line"></span><br><span class="line">            <span class="keyword">char</span> charA = <span class="string">'a'</span></span><br><span class="line">            <span class="keyword">char</span> char0 = <span class="string">'0'</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; N; j++) &#123;</span><br><span class="line">                <span class="keyword">byte</span> v = sig[j]</span><br><span class="line">                <span class="keyword">byte</span> d = (v &gt;&gt; <span class="number">4</span>) &amp; <span class="number">0xf</span></span><br><span class="line">                text[j * <span class="number">2</span>] = (<span class="keyword">char</span>) (d &gt;= <span class="number">10</span> ? (charA + d - 10) : (char0 + d));</span><br><span class="line">                d = v &amp; <span class="number">0xf</span></span><br><span class="line">                text[j * <span class="number">2</span> + <span class="number">1</span>] = (<span class="keyword">char</span>) (d &gt;= <span class="number">10</span> ? (charA + d - 10) : (char0 + d))</span><br><span class="line">            &#125;</span><br><span class="line">            String sigStr = <span class="keyword">new</span> String(text)</span><br><span class="line">            signatures.add(sigStr)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">def</span> signature =  signatures.get(<span class="number">0</span>)</span><br><span class="line">    println signature</span><br><span class="line"><span class="comment">//    2，拷贝</span></span><br><span class="line">    <span class="keyword">def</span> cppFile = file(<span class="string">"src/main/cpp/common-corelib.cpp"</span>)</span><br><span class="line">    <span class="keyword">def</span> cppFileText = cppFile.getText()</span><br><span class="line">    StringBuilder sb = <span class="keyword">new</span> StringBuilder(cppFileText)</span><br><span class="line">    <span class="keyword">int</span> start = sb.indexOf(<span class="string">"RELEASE_SIGN"</span>)</span><br><span class="line">    <span class="keyword">int</span> end = sb.indexOf(<span class="string">"\";"</span>, start) + <span class="number">1</span></span><br><span class="line">    sb.replace(start, end, <span class="string">"RELEASE_SIGN = \""</span>+ signature +<span class="string">"\""</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    cppFile.write(sb.toString())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="如何通过context获取签名信息-jni的方式"><a href="#如何通过context获取签名信息-jni的方式" class="headerlink" title="如何通过context获取签名信息(jni的方式)"></a>如何通过context获取签名信息(jni的方式)</h4><ol>
+<li><p>java方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), <span class="number">64</span>);</span><br><span class="line">           Signature[] signatures = packageInfo.signatures;</span><br><span class="line">           String s = signatures[<span class="number">0</span>].toCharsString();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>jni方式</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getSignature</span><span class="params">(JNIEnv *env, jclass clazz, jobject contextObject)</span> </span>&#123;</span><br><span class="line">    jclass native_class = env-&gt;GetObjectClass(contextObject);</span><br><span class="line">    <span class="comment">//getPackageManager方法id</span></span><br><span class="line">    jmethodID pm_id = env-&gt;GetMethodID(native_class, <span class="string">"getPackageManager"</span>,</span><br><span class="line">                                       <span class="string">"()Landroid/content/pm/PackageManager;"</span>);</span><br><span class="line">    <span class="comment">//context.getPackageManager()-&gt;packageManager</span></span><br><span class="line">    jobject pm_obj = env-&gt;CallObjectMethod(contextObject, pm_id);</span><br><span class="line">    jclass pm_clazz = env-&gt;GetObjectClass(pm_obj);</span><br><span class="line">    <span class="comment">//获取pm.getpackageInfo的方法id</span></span><br><span class="line">    jmethodID package_info_id = env-&gt;GetMethodID(pm_clazz, <span class="string">"getPackageInfo"</span>,</span><br><span class="line">                                                 <span class="string">"(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;"</span>);</span><br><span class="line">    jclass native_classs = env-&gt;GetObjectClass(contextObject);</span><br><span class="line">    <span class="comment">//context.getPackageName方法id</span></span><br><span class="line">    jmethodID mId = env-&gt;GetMethodID(native_classs, <span class="string">"getPackageName"</span>, <span class="string">"()Ljava/lang/String;"</span>);</span><br><span class="line">    <span class="comment">//返回packageName</span></span><br><span class="line">    jstring pkg_str = <span class="keyword">static_cast</span>&lt;jstring&gt;(env-&gt;CallObjectMethod(contextObject, mId));</span><br><span class="line">    <span class="comment">//获取packageInfo</span></span><br><span class="line">    jobject pi_obj = env-&gt;CallObjectMethod(pm_obj, package_info_id, pkg_str, <span class="number">64</span>);</span><br><span class="line"></span><br><span class="line">    jclass pi_clazz = env-&gt;GetObjectClass(pi_obj);</span><br><span class="line">    <span class="comment">//获取packageInfo的成员变量signature的id</span></span><br><span class="line">    jfieldID signatures_fieldId = env-&gt;GetFieldID(pi_clazz, <span class="string">"signatures"</span>,</span><br><span class="line">                                                  <span class="string">"[Landroid/content/pm/Signature;"</span>);</span><br><span class="line">    <span class="comment">//获取packageInfo的signature</span></span><br><span class="line">    jobject signatures_obj = env-&gt;GetObjectField(pi_obj, signatures_fieldId);</span><br><span class="line">    jobjectArray signaturesArray = (jobjectArray) signatures_obj;</span><br><span class="line">    <span class="comment">//获取signatures[0]</span></span><br><span class="line">    jobject signature_obj = env-&gt;GetObjectArrayElement(signaturesArray, <span class="number">0</span>);</span><br><span class="line">    jclass signature_clazz = env-&gt;GetObjectClass(signature_obj);</span><br><span class="line">    jmethodID string_id = env-&gt;GetMethodID(signature_clazz, <span class="string">"toCharsString"</span>,</span><br><span class="line">                                           <span class="string">"()Ljava/lang/String;"</span>);</span><br><span class="line">    <span class="comment">//调用signatures[0]的toCharsString方法返回string串</span></span><br><span class="line">    jstring str = <span class="keyword">static_cast</span>&lt;jstring&gt;(env-&gt;CallObjectMethod(signature_obj, string_id));</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">char</span> *) env-&gt;GetStringUTFChars(str, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/08/15/Android-sdk签名验证/" data-id="cjkv4j6ie000106wd0qenqf2y" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Andriod-jni开发" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/15/Andriod-jni开发/" class="article-date">
+  <time datetime="2018-08-15T02:20:24.249Z" itemprop="datePublished">2018-08-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/15/Andriod-jni开发/">Andriod-jni开发</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/08/15/Andriod-jni开发/" data-id="cjkv4j6i4000006wd913repjr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-jni/">Android jni</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Andriod-线程间通信二线程池" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/08/14/Andriod-线程间通信二线程池/" class="article-date">
@@ -156,7 +244,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/14/Andriod-线程间通信二线程池/" data-id="cjktvksil001zzruqn9f2sqy0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/14/Andriod-线程间通信二线程池/" data-id="cjkv4j6jd000f06wdgtkmpa87" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-基础/">Android 基础</a></li></ul>
@@ -230,7 +318,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/10/HMAC-sha1-加密算法/" data-id="cjktvksip0022zruqznnbkbn7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/10/HMAC-sha1-加密算法/" data-id="cjkv4j6lo002b06wd3qz6puu3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-安全/">Android 安全</a></li></ul>
@@ -264,12 +352,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href="https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html" target="_blank" rel="noopener">https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html</a></p>
+        <h4 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h4><ul>
+<li>phpStorm</li>
+<li>官方工具</li>
+</ul>
+<p>phpstorm设置：</p>
+<p>1.首先FileType下Cascading Style Sheet 添加*.wxss</p>
+<p>2.FileType下HTML 添加*.wxml</p>
+<p>3.将其中的<a href="https://link.jianshu.com?t=https://github.com/miaozhang9/wecharCodejar" target="_blank" rel="noopener">wecharCode.jar</a>下载下来，然后在webStorm 的 File -&gt; import settings 中导入即可</p>
+<p>jar包地址：<a href="https://github.com/miaozhang9/wecharCodejar" target="_blank" rel="noopener">https://github.com/miaozhang9/wecharCodejar</a></p>
+<p>参考：<a href="https://www.jianshu.com/p/00724ab30c89" target="_blank" rel="noopener">https://www.jianshu.com/p/00724ab30c89</a></p>
+<p>参考：<a href="https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html" target="_blank" rel="noopener">https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/10/Android-微信小程序/" data-id="cjktvksgs0003zruq2tkglqos" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/10/Android-微信小程序/" data-id="cjkv4j6im000506wdovvo15uu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li></ul>
@@ -353,7 +451,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/01/Android-反编译详细流程/" data-id="cjktvksgb0000zruqo38tni3p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/01/Android-反编译详细流程/" data-id="cjkv4j6ij000306wdn092e2ly" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li></ul>
@@ -402,7 +500,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/01/leetcode-摆动序列/" data-id="cjktvkshp000vzruqaj4xd0k5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/01/leetcode-摆动序列/" data-id="cjkv4j6kg001506wdugaxgupe" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -450,7 +548,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/26/Android-实现上下翻页的recyclerView/" data-id="cjktvksin0020zruqy5hi31os" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/26/Android-实现上下翻页的recyclerView/" data-id="cjkv4j6jh000g06wdej9gywmw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li></ul>
@@ -505,7 +603,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/24/Android-自定义ItemDecoration/" data-id="cjktvksh4000bzruq2m5knj2p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/24/Android-自定义ItemDecoration/" data-id="cjkv4j6k4000r06wdkqe8y6qj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li></ul>
@@ -545,112 +643,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/20/Android-自定义圆角ImageView/" data-id="cjktvksh5000dzruqlg2lerrr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/20/Android-自定义圆角ImageView/" data-id="cjkv4j6k3000p06wdzcs79ecx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-猜数字大小2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/16/leetcode-猜数字大小2/" class="article-date">
-  <time datetime="2018-07-16T15:35:31.108Z" itemprop="datePublished">2018-07-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/16/leetcode-猜数字大小2/">leetcode-猜数字大小2</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>我们正在玩一个猜数游戏，游戏规则如下：</p>
-<p>我从 <strong>1</strong> 到 <strong>n</strong> 之间选择一个数字，你来猜我选了哪个数字。</p>
-<p>每次你猜错了，我都会告诉你，我选的数字比你的大了或者小了。</p>
-<p>然而，当你猜了数字 x 并且猜错了的时候，你需要支付金额为 x 的现金。直到你猜到我选的数字，你才算赢得了这个游戏。</p>
-<p><strong>示例:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">n = 10, 我选择了8.</span><br><span class="line"></span><br><span class="line">第一轮: 你猜我选择的数字是5，我会告诉你，我的数字更大一些，然后你需要支付5块。</span><br><span class="line">第二轮: 你猜是7，我告诉你，我的数字更大一些，你支付7块。</span><br><span class="line">第三轮: 你猜是9，我告诉你，我的数字更小一些，你支付9块。</span><br><span class="line"></span><br><span class="line">游戏结束。8 就是我选的数字。</span><br><span class="line"></span><br><span class="line">你最终要支付 5 + 7 + 9 = 21 块钱。</span><br></pre></td></tr></table></figure>
-<p>给定一个 <strong>n ≥ 1，</strong>计算你至少需要拥有多少现金才能确保你能赢得这个游戏。</p>
-<p><strong>思路</strong></p>
-<p>记录a(i,j)表示从i到j的结果，那么有如下公式：</p>
-<p>a(i,j)=min{ x+max{a(i,x-1),a(x+1,j)}} 其中x从i到j；</p>
-<p><strong>代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMoneyAmount</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//a(i,j)=min&#123; x+max&#123;a(i,x-1),a(x+1,j)&#125;&#125;</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> [][]a = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>][n+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">1</span>;j&lt;=n;j++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i =j;i&gt;=<span class="number">1</span>;i--)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i==j)&#123;</span><br><span class="line">                    a[i][j]=<span class="number">0</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(j-i==<span class="number">1</span>)&#123;</span><br><span class="line">                    a[i][j]=i;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">int</span> min=i+a[i+<span class="number">1</span>][j];</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> x=i+<span class="number">1</span>;x&lt;=j;x++)&#123; </span><br><span class="line">                        <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">                        <span class="keyword">if</span>(x-<span class="number">1</span>&gt;i)&#123;</span><br><span class="line">                            left=a[i][x-<span class="number">1</span>];</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">int</span> right= <span class="number">0</span>;</span><br><span class="line">                        <span class="keyword">if</span>(x+<span class="number">1</span>&lt;j)&#123;</span><br><span class="line">                            right=a[x+<span class="number">1</span>][j];</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">int</span> temp = x+(left&gt;right?left:right);</span><br><span class="line">                        min = temp&gt;min?min:temp;</span><br><span class="line">                    &#125;</span><br><span class="line">                    a[i][j]=min;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> a[<span class="number">1</span>][n];   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/16/leetcode-猜数字大小2/" data-id="cjktvkshu0013zruqn9lmpu60" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-瀑布流" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/16/Android-瀑布流/" class="article-date">
-  <time datetime="2018-07-16T02:02:50.539Z" itemprop="datePublished">2018-07-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/16/Android-瀑布流/">Android-瀑布流</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>point1</strong></p>
-<p>需要服务器返回图片规格</p>
-<p><strong>point2</strong></p>
-<p>在adapter的onBindViewHolder中根据服务端返回的图片的规格设置layoutParams</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(@NonNull CusHolder holder, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">    BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();</span><br><span class="line">    options.inJustDecodeBounds=<span class="keyword">true</span>;</span><br><span class="line">    BitmapFactory.decodeResource(mContext.getResources(), mData.get(position).score,options);</span><br><span class="line">    <span class="keyword">float</span> f=options.outWidth/(<span class="keyword">float</span>)options.outHeight;</span><br><span class="line">    <span class="keyword">int</span> h= (<span class="keyword">int</span>) (<span class="number">650</span>/f);</span><br><span class="line">    RelativeLayout.LayoutParams lp = <span class="keyword">new</span> RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, h);</span><br><span class="line">    holder.itemView.setLayoutParams(lp);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// holder.mIv.setImageResource(mData.get(position).score);</span></span><br><span class="line">    Glide.with(mContext).load(mData.get(position).score).into(holder.mIv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>point3</strong></p>
-<p>设置rv的manager为StaggeredGridLayoutManager</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mRv.setLayoutManager(<span class="keyword">new</span> StaggeredGridLayoutManager(<span class="number">2</span>,StaggeredGridLayoutManager.VERTICAL));</span><br></pre></td></tr></table></figure>
-<p><strong>point4</strong>（不用设置）</p>
-<ul>
-<li>来回滑动的时候item交换位置:在设置layoutManager的时候，多加一句代码防止item位置交换 layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE); </li>
-<li>顶部留空的问题，在onScrollStateChanged里再加一句layoutManager.invalidateSpanAssignments(); </li>
-</ul>
-<p>参考：<a href="https://blog.csdn.net/qq_31390699/article/details/53465671" target="_blank" rel="noopener">https://blog.csdn.net/qq_31390699/article/details/53465671</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/16/Android-瀑布流/" data-id="cjktvksgz0008zruqtchcquvc" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li></ul>
 
     </footer>
   </div>
@@ -677,7 +673,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-jni/">Android jni</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
     </div>
   </div>
 
@@ -687,7 +683,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-jni/" style="font-size: 10px;">Android jni</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a>
     </div>
   </div>
 
@@ -709,6 +705,14 @@
       <ul>
         
           <li>
+            <a href="/2018/08/15/Android-sdk签名验证/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/15/Andriod-jni开发/">Andriod-jni开发</a>
+          </li>
+        
+          <li>
             <a href="/2018/08/14/Andriod-线程间通信二线程池/">Andriod 线程间通信二:线程池</a>
           </li>
         
@@ -718,14 +722,6 @@
         
           <li>
             <a href="/2018/08/10/Android-微信小程序/">Android-微信小程序</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/01/Android-反编译详细流程/">Android-反编译详细流程</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/01/leetcode-摆动序列/">leetcode-摆动序列</a>
           </li>
         
       </ul>
