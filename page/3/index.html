@@ -62,6 +62,173 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-tensorFlow记录：" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/10/tensorFlow记录：/" class="article-date">
+  <time datetime="2018-07-10T04:38:33.696Z" itemprop="datePublished">2018-07-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/10/tensorFlow记录：/">Android-tensorFlowDemo</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://github.com/kbjay/tensorflowDemo" target="_blank" rel="noopener">https://github.com/kbjay/tensorflowDemo</a></p>
+<ol>
+<li>tensorFlow使用</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TensorFlowImageClassifier</span> <span class="keyword">implements</span> <span class="title">Classifier</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">TensorFlowImageClassifier</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Classifier <span class="title">create</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            String modelPath,</span></span></span><br><span class="line"><span class="function"><span class="params">            String modelFilename,</span></span></span><br><span class="line"><span class="function"><span class="params">            String modelScoreFileName,</span></span></span><br><span class="line"><span class="function"><span class="params">            String[] labels,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">int</span> inputSize,</span></span></span><br><span class="line"><span class="function"><span class="params">            String inputName,</span></span></span><br><span class="line"><span class="function"><span class="params">            String outputName)</span> </span>&#123;</span><br><span class="line">        TensorFlowImageClassifier c = <span class="keyword">new</span> TensorFlowImageClassifier();</span><br><span class="line">         <span class="comment">/********************声明input跟output的name*********************/</span></span><br><span class="line">        c.inputName = inputName;</span><br><span class="line">        c.outputName = outputName;</span><br><span class="line">         <span class="comment">/*************************************************************/</span></span><br><span class="line">        c.tags = labels;</span><br><span class="line">        String path = Environment.getExternalStorageDirectory()+modelPath + modelFilename;</span><br><span class="line">        String pathScore = Environment.getExternalStorageDirectory()+modelPath + modelScoreFileName;</span><br><span class="line">        <span class="comment">/********************初始化TensorFlowInferenceInterface****************/</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            c.inferenceInterface = <span class="keyword">new</span> TensorFlowInferenceInterface(<span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(path)));</span><br><span class="line">            c.inferenceInterfaceScore = <span class="keyword">new</span> TensorFlowInferenceInterface(<span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(pathScore)));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/*************************************************************/</span></span><br><span class="line">        c.inputSize = inputSize;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/******************声明outPutsName***************************/</span></span><br><span class="line">        c.outputNames = <span class="keyword">new</span> String[]&#123;outputName&#125;;</span><br><span class="line">        <span class="comment">/****************************************/</span></span><br><span class="line">        </span><br><span class="line">        c.intValues = <span class="keyword">new</span> <span class="keyword">int</span>[inputSize * inputSize];</span><br><span class="line">        c.floatValues = <span class="keyword">new</span> <span class="keyword">float</span>[inputSize * inputSize * <span class="number">3</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/******************初始化outPuts用来接受结果*************/</span></span><br><span class="line">        c.outputs = <span class="keyword">new</span> <span class="keyword">float</span>[labels.length];</span><br><span class="line">        c.outputScore= <span class="keyword">new</span> <span class="keyword">float</span>[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">        <span class="comment">/***********************************************/</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Recognition&gt; <span class="title">recognizeImage</span><span class="params">(<span class="keyword">final</span> Bitmap bitmap)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> ArrayList&lt;Recognition&gt; recognitions = <span class="keyword">new</span> ArrayList&lt;Recognition&gt;();</span><br><span class="line"></span><br><span class="line">        bitmap.getPixels(intValues, <span class="number">0</span>, bitmap.getWidth(), <span class="number">0</span>, <span class="number">0</span>, bitmap.getWidth(), bitmap.getHeight());</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; intValues.length; ++i) &#123;</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> val = intValues[i];</span><br><span class="line">            floatValues[i * <span class="number">3</span> + <span class="number">0</span>] = (((val &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>)) / <span class="number">128f</span> - <span class="number">1.0f</span>;</span><br><span class="line">            floatValues[i * <span class="number">3</span> + <span class="number">1</span>] = (((val &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>)) / <span class="number">128f</span> - <span class="number">1.0f</span>;</span><br><span class="line">            floatValues[i * <span class="number">3</span> + <span class="number">2</span>] = ((val &amp; <span class="number">0xFF</span>)) / <span class="number">128f</span> - <span class="number">1.0f</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/*********************分别对应输入，运行，输出****************************/</span></span><br><span class="line">        inferenceInterface.feed(inputName, floatValues, <span class="number">1</span>, inputSize, inputSize, <span class="number">3</span>);</span><br><span class="line">        inferenceInterface.run(outputNames, logStats);</span><br><span class="line">        inferenceInterface.fetch(outputName, outputs);</span><br><span class="line">        <span class="comment">/***********************************************************/</span></span><br><span class="line">        <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">float</span> maxPercent = <span class="number">0f</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; outputs.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (maxPercent &lt; outputs[i]) &#123;</span><br><span class="line">                maxPercent = outputs[i];</span><br><span class="line">                index = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        recognitions.add(<span class="keyword">new</span> Recognition( <span class="string">"LABEL"</span>, tags[index], maxPercent, <span class="keyword">null</span>));</span><br><span class="line"></span><br><span class="line">        inferenceInterfaceScore.feed(inputName,floatValues,<span class="number">1</span>,inputSize,inputSize,<span class="number">3</span>);</span><br><span class="line">        inferenceInterfaceScore.run(outputNames,logStats);</span><br><span class="line">        inferenceInterfaceScore.fetch(outputName,outputScore);</span><br><span class="line">        recognitions.add(<span class="keyword">new</span> Recognition(<span class="string">"SCORE"</span>,<span class="string">"GOOD="</span>+outputScore[<span class="number">0</span>]+<span class="string">" POOR="</span>+outputScore[<span class="number">1</span>],<span class="keyword">null</span>,<span class="keyword">null</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> recognitions;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enableStatLogging</span><span class="params">(<span class="keyword">boolean</span> logStats)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.logStats = logStats;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getStatString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> inferenceInterface.getStatString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        inferenceInterface.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><p>截取bitmap之后缩放</p>
+<p>参考：<a href="https://www.jianshu.com/p/da10fcc9d0c4" target="_blank" rel="noopener">https://www.jianshu.com/p/da10fcc9d0c4</a></p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Bitmap <span class="title">getScaleBitmap</span><span class="params">(Bitmap bitmap, <span class="keyword">int</span> size)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">int</span> width = bitmap.getWidth();</span><br><span class="line">       <span class="keyword">int</span> height = bitmap.getHeight();</span><br><span class="line">       <span class="keyword">int</span> startx = width&gt;height?(width-height)/<span class="number">2</span>:<span class="number">0</span>;</span><br><span class="line">       <span class="keyword">int</span> starty = width&gt;height?<span class="number">0</span>:(height-width)/<span class="number">2</span>;</span><br><span class="line">       <span class="keyword">int</span> cropSize=width&gt;height?height:width;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">float</span> scaleSize = ((<span class="keyword">float</span>) size) / cropSize;</span><br><span class="line">       Matrix matrix = <span class="keyword">new</span> Matrix();</span><br><span class="line">       matrix.postScale(scaleSize, scaleSize);</span><br><span class="line">           <span class="keyword">return</span> Bitmap.createBitmap(bitmap, startx, starty, cropSize, cropSize, matrix, <span class="keyword">true</span>);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>​    createBitmap：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* @param source 需要裁剪的bitmap</span></span><br><span class="line"><span class="comment">* @param x 裁剪x点起始坐标</span></span><br><span class="line"><span class="comment">* @param y 裁剪y点起始坐标</span></span><br><span class="line"><span class="comment">* @param width 裁剪bitmap的宽度</span></span><br><span class="line"><span class="comment">* @param height 裁剪bitmap的高度</span></span><br><span class="line"><span class="comment">* @param m 针对裁剪后的bitmap进行矩阵缩放(可选)</span></span><br><span class="line"><span class="comment">* @param filter true(对原bitmap进行裁剪操作)</span></span><br><span class="line"><span class="comment">* @return A 返回一个裁剪过的bitmap 或者为操作过的(原)bitmap</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Bitmap <span class="title">createBitmap</span><span class="params">(Bitmap source, <span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> width, <span class="keyword">int</span> height,</span></span></span><br><span class="line"><span class="function"><span class="params">Matrix m, <span class="keyword">boolean</span> filter)</span></span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/10/tensorFlow记录：/" data-id="cjm7ohnzt001damwd0yb7he3z" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode-计算各个位数不同的数字个数" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/03/leetcode-计算各个位数不同的数字个数/" class="article-date">
+  <time datetime="2018-07-03T15:17:45.799Z" itemprop="datePublished">2018-07-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/03/leetcode-计算各个位数不同的数字个数/">leetcode-计算各个位数不同的数字个数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>给定一个非负整数 n，计算各位数字都不同的数字 x 的个数，其中 0 ≤ x &lt; 10n。</p>
+<p><strong>示例:</strong><br>给定 n = 2，返回 91。（答案应该是除<code>[11,22,33,44,55,66,77,88,99]</code>外，0 ≤ x &lt; 100 间的所有数字）</p>
+<p><strong>致谢:</strong><br>特别感谢 <a href="https://discuss.leetcode.com/user/memoryless" target="_blank" rel="noopener">@memoryless</a> 添加这个题目并创建所有测试用例。</p>
+<p><strong>思路</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//         n 0 :0</span></span><br><span class="line"><span class="comment">//         n 1:0~9</span></span><br><span class="line"><span class="comment">//         n 2:0~9 + 10~99</span></span><br><span class="line"><span class="comment">//         n 3:0~9 + 10~99 + 100~999</span></span><br><span class="line"><span class="comment">//         n 4:0~9 + 10~99 + 100~999 + 1000~9999</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">每一位从<span class="number">0</span>～<span class="number">9</span>有<span class="number">10</span>种选择，注意第一位不能为<span class="number">0</span>。</span><br></pre></td></tr></table></figure>
+<p><strong>代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">countNumbersWithUniqueDigits</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123; </span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> []arr = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">        arr[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">        arr[<span class="number">1</span>]=<span class="number">10</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">2</span>;i&lt;n+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp=<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">0</span>;j&lt;i;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(j==<span class="number">0</span>)&#123;</span><br><span class="line">                    temp*=<span class="number">9</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    temp*=(<span class="number">10</span>-j);</span><br><span class="line">                &#125;</span><br><span class="line">               </span><br><span class="line">            &#125;</span><br><span class="line">            arr[i]= arr[i-<span class="number">1</span>]+temp;</span><br><span class="line">            System.out.println(arr[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/03/leetcode-计算各个位数不同的数字个数/" data-id="cjm7oho03001lamwdlg8b9p2n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android-查找讯飞输入法下载的离线资源02" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" class="article-date">
+  <time datetime="2018-07-03T11:39:27.586Z" itemprop="datePublished">2018-07-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/03/Android-查找讯飞输入法下载的离线资源02/">Android-查找讯飞输入法下载的离线资源02</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>目标</strong></p>
+<p>找到跟离线包相关的所有下载的文件</p>
+<p><strong>结果</strong></p>
+<ol>
+<li>下载的是个zip，解压之后是两个so。这个就是它下载的所有东西了。</li>
+<li>下面是截取的下载地址：</li>
+</ol>
+<p><a href="http://183.91.33.82/download.voicecloud.cn/ygxt/20161025/c8f798bb-f87d-4860-a6b9-3f64275af70d.zip" target="_blank" rel="noopener">http://183.91.33.82/download.voicecloud.cn/ygxt/20161025/c8f798bb-f87d-4860-a6b9-3f64275af70d.zip</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">07</span>-<span class="number">03</span> <span class="number">19</span>:<span class="number">12</span>:<span class="number">56.533</span> <span class="number">17441</span>-<span class="number">18271</span>/com.iflytek.inputmethod.assist D/iFlyIME_Network: [<span class="number">970</span>] alm.a: HTTP response <span class="keyword">for</span> request=&lt;[ ] http:<span class="comment">//download.voicecloud.cn/ygxt/20161025/c8f798bb-f87d-4860-a6b9-3f64275af70d.zip 0xade53710 NORMAL null&gt; [lifetime=22703], [size=null], [rc=200], [retryCount=0]</span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>下载的zip文件会先放在sd的IflyIme下的download文件夹下面，之后才会放到之前找到的隐藏目录下。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">7</span>-<span class="number">03</span> <span class="number">19</span>:<span class="number">12</span>:<span class="number">56.533</span> <span class="number">17441</span>-<span class="number">17441</span>/com.iflytek.inputmethod.assist D/DownloadHandleManager: onFinish filename : /storage/emulated/<span class="number">0</span>/iFlyIME/Download/c8f798bb-f87d-<span class="number">4860</span>-a6b9-<span class="number">3f</span>64275af70d.zip</span><br></pre></td></tr></table></figure>
+<p><strong>实验成功过程</strong></p>
+<ol>
+<li>修改smali文件（Logging.smali）</li>
+<li>新建一个injectLog.smali文件添加到工程中，通过python脚本给downLoad下所有的smali文件的每个方法添加输出日志。可以看到方法调用的顺序。参考<a href="https://blog.csdn.net/charlessimonyi/article/details/52027563" target="_blank" rel="noopener">https://blog.csdn.net/charlessimonyi/article/details/52027563</a></li>
+<li>重新打包</li>
+<li>重新签名</li>
+<li>安装</li>
+<li>查看<strong>assist进程</strong>下的日志，可以看到下载进度，完成之后可以看到下载路径。且下载的zip包跟提示消耗的流量一致，进一步可以确认下载的只有这两个so文件。</li>
+</ol>
+<p><strong>反编译思路</strong></p>
+<ol>
+<li>利用dex2jar+jd-gui 获取class文件</li>
+<li>利用apkTool获取smali文件跟资源文件</li>
+<li>利用log注入给指定包名下的smali文件中的方法注入log：参考<a href="https://blog.csdn.net/charlessimonyi/article/details/52027563" target="_blank" rel="noopener">https://blog.csdn.net/charlessimonyi/article/details/52027563</a></li>
+<li>触发关注的事件，观察log，找出相关的类，阅读java代码</li>
+<li>在对应的smali文件中加断点调试代码  参考：<a href="https://kbjay.github.io/2018/06/29/Android-%E5%8F%8D%E7%BC%96%E8%AF%91%E8%B0%83%E8%AF%95smali%E6%96%87%E4%BB%B6/" target="_blank" rel="noopener">https://kbjay.github.io/2018/06/29/Android-%E5%8F%8D%E7%BC%96%E8%AF%91%E8%B0%83%E8%AF%95smali%E6%96%87%E4%BB%B6/</a></li>
+</ol>
+<p><strong>ps</strong></p>
+<p>在查找关键词的过程中发现了Aitakl5.class,代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Aitalk5</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	...</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniAddLexiconItem</span><span class="params">(String paramString, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniAddLexiconItemPhoneme</span><span class="params">(String paramString1, String paramString2, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniAppendData</span><span class="params">(<span class="keyword">byte</span>[] paramArrayOfByte, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniBeginLexicon</span><span class="params">(String paramString)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniBuildGrammar</span><span class="params">(<span class="keyword">byte</span>[] paramArrayOfByte, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniCreate</span><span class="params">(String paramString, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniDestroy</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniEndData</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniEndLexicon</span><span class="params">(String paramString)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetConfidence</span><span class="params">(<span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetEngineState</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetItemId</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2, <span class="keyword">int</span> paramInt3)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetItemNumber</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> String <span class="title">JniGetItemText</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2, <span class="keyword">int</span> paramInt3)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetResCount</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetSlotConfidence</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> String <span class="title">JniGetSlotName</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniGetSlotNumber</span><span class="params">(<span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniLoadNetwork</span><span class="params">(String paramString)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniOnReadResource</span><span class="params">(<span class="keyword">byte</span>[] paramArrayOfByte, <span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniRunTask</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniSetHotWords</span><span class="params">(String paramString, String[] paramArrayOfString, <span class="keyword">int</span> paramInt)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniSetParam</span><span class="params">(<span class="keyword">int</span> paramInt1, <span class="keyword">int</span> paramInt2)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">JniStart</span><span class="params">(String paramString)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniStop</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniUnLoadNetwork</span><span class="params">(String paramString)</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">JniUpdateGrammar</span><span class="params">(String paramString)</span></span>;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" data-id="cjm7ohnyf000eamwd8349pywt" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-leetcode-整数拆分" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/02/leetcode-整数拆分/" class="article-date">
@@ -95,7 +262,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/02/leetcode-整数拆分/" data-id="cjl6kgd90000ujpwd0d3i9g9u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/02/leetcode-整数拆分/" data-id="cjm7ohnz2000tamwdnscw9hf1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -169,7 +336,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="cjl6kgd8c0009jpwd5nown4vz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="cjm7ohnyi000famwdpvrdjfgb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li></ul>
@@ -219,7 +386,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="cjl6kgd8t000mjpwdyxtujq5w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="cjm7ohnyx000namwdfzmhwb3q" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -287,7 +454,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjl6kgd880005jpwdp0tbaf7y" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="cjm7ohny50009amwde3bml3s4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -341,7 +508,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjl6kgd92000wjpwd508axzzb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="cjm7ohnzj0013amwdcu847xtq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -389,7 +556,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjl6kgd8v000pjpwdcz2kkyor" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-三角形最小路径/" data-id="cjm7ohnzc000wamwdm2bpd7h5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -439,221 +606,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjl6kgd9b0014jpwdme41dard" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-MSC-Android开发文档" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/25/MSC-Android开发文档/" class="article-date">
-  <time datetime="2018-06-25T11:03:39.931Z" itemprop="datePublished">2018-06-25</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/25/MSC-Android开发文档/">MSC-Android开发文档</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="MscSdk引擎"><a href="#MscSdk引擎" class="headerlink" title="MscSdk引擎"></a>MscSdk引擎</h3><p>####在线</p>
-<ul>
-<li><p>需要网络；</p>
-</li>
-<li><p>速度慢（通过会话模式（边录边传）跟音频压缩的优化，在讯飞输入法的实际速度并不比离线的慢）；</p>
-</li>
-</ul>
-<p>####离线：</p>
-<ul>
-<li>不需要网络；</li>
-<li>识别速度快；</li>
-<li>需要付费；</li>
-<li>需要下载离线包；</li>
-</ul>
-<h3 id="语音识别相关"><a href="#语音识别相关" class="headerlink" title="语音识别相关"></a>语音识别相关</h3><p>####语音听写</p>
-<ul>
-<li>语音转文本；</li>
-<li>可以提取语音中的文字信息，可以识别个性化数据；</li>
-<li>不需要构建语法；</li>
-<li>可以通过上传词典的方式提高匹配率；</li>
-<li>离线的只支持普通话转文本，且暂未开放购买；</li>
-<li>在线的可以支持多种语言；</li>
-</ul>
-<p>####语法识别</p>
-<ul>
-<li><p>语音转文本；</p>
-</li>
-<li><p>识别的匹配率高（因为上传了语法规则）；</p>
-</li>
-<li><p>识别结果有置信度，可以根据这个值判断该识别结果是否有效；</p>
-</li>
-<li><p>使用场景多是需要准确结果并且结果有限的语音控制（比如语音控制空调）；</p>
-</li>
-<li><p>需要构建语法；</p>
-</li>
-<li><p>在线语法识别已经下线，新用户无法使用；</p>
-</li>
-</ul>
-<p>####构建语法</p>
-<ul>
-<li>abnf（在线语法规则）：需要指定引擎类型为在线引擎；需要指定语法格式为abnf;构建成功之后会在回调里返回一个id，在识别时会用到；</li>
-<li>bnf（离线语法规则）:需要指定引擎为本地引擎；需要指定语法格式为bnf；需要指定本地语法构建结果文件的路径；需要下载对应的离线sdk；</li>
-</ul>
-<p>####更新词典</p>
-<p>实质是个性化热词上传。</p>
-<p>有以下两种方式指定词典：</p>
-<ul>
-<li>在线听写词典：考虑这种情况：发音是‘zhangsan’,习惯上出现概率最高的应该是”张三”，但实际我们想要的是”张散”（假如有个手机联系人是张散），此时我们可以通过上传个性化热词的方式告诉语音云服务器优先匹配”张散”。</li>
-<li>离线语法词典：用于更新已经构建的语法文件中某个规则的内容。</li>
-</ul>
-<p>####识别对话框</p>
-<p>这个是讯飞提供的语音输入ui。</p>
-<ul>
-<li>在显示对话框后，录音自动开始；</li>
-<li>点击对话框内任意地方，可结束录音，点击对话框外，则取消会话；</li>
-<li>出现错误后，再点击对话框内，可启动下一次会话。</li>
-</ul>
-<p>####翻译</p>
-<p>将语音翻译成目标语种文本，涉及到如下参数：</p>
-<ul>
-<li>SpeechConstant.ASR_SCH 启用翻译</li>
-<li>SpeechConstant.ADD_CAP 翻译通道</li>
-<li>SpeechConstant.ORI_LANG 原始语种</li>
-<li>SpeechConstant.TRANS_LANG 目标语种</li>
-<li>SpeechConstant.TRS_SRC 结果格式</li>
-</ul>
-<h3 id="语音合成相关"><a href="#语音合成相关" class="headerlink" title="语音合成相关"></a>语音合成相关</h3><p>文字转为语言：可以设置转换结果的语言，方言，发音人的特征语速等；</p>
-<p>###语义理解相关</p>
-<ul>
-<li>将语言内容转换为一定结构的文本数据，之后抓取重点信息，理解用户意图，进行下一步处里。</li>
-<li>分为两种：文本语义跟语音语义（先转为文本之后再进行文本语义理解）；</li>
-<li>仅有在线模式；</li>
-<li>默认不开通，需要再aiui开放平台开通；</li>
-<li>aiui:主要用于人机交互</li>
-</ul>
-<h3 id="目前支持的离线在线服务："><a href="#目前支持的离线在线服务：" class="headerlink" title="目前支持的离线在线服务："></a>目前支持的离线在线服务：</h3><ul>
-<li>离线服务（离线命令词、离线合成、唤醒），体验期均为35天，装机量3台，体验期结束后，点击控制台-》我的应用-》立即购买按钮</li>
-<li>在线服务（听写、合成）：免费500次/天-》免费提额通过后2w次/天-》超过2w/天-》联系商务<a href="/var/folders/c6/m_jcqqv17s5_50fj49sdq4q80000gn/T/abnerworks.Typora/05F1C73B-61FA-47F5-98CF-A3037B0BE982/mailto:msp_business@iflytek.com">msp_business@iflytek.com</a></li>
-<li>在线服务（人脸、声纹）：免费500次/天-》超过500次/天-》联系商务<a href="/var/folders/c6/m_jcqqv17s5_50fj49sdq4q80000gn/T/abnerworks.Typora/05F1C73B-61FA-47F5-98CF-A3037B0BE982/mailto:msp_business@iflytek.com">msp_business@iflytek.com</a></li>
-</ul>
-<p>ps:具体接入及使用代码示例参见<a href="https://doc.xfyun.cn/msc_android" target="_blank" rel="noopener">https://doc.xfyun.cn/msc_android</a></p>
-<p>参考文档：<a href="https://doc.xfyun.cn/msc_android" target="_blank" rel="noopener">https://doc.xfyun.cn/msc_android</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/25/MSC-Android开发文档/" data-id="cjl6kgd8s000ljpwdjumxnxsg" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-不同的二叉搜索树" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/24/leetcode-不同的二叉搜索树/" class="article-date">
-  <time datetime="2018-06-24T14:35:15.605Z" itemprop="datePublished">2018-06-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/24/leetcode-不同的二叉搜索树/">leetcode-不同的二叉搜索树</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>给定一个整数 <em>n</em>，求以 1 … <em>n</em> 为节点组成的二叉搜索树有多少种？</p>
-<p><strong>示例:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">输入: 3</span><br><span class="line">输出: 5</span><br><span class="line">解释:</span><br><span class="line">给定 n = 3, 一共有 5 种不同结构的二叉搜索树:</span><br><span class="line"></span><br><span class="line">   1         3     3      2      1</span><br><span class="line">    \       /     /      / \      \</span><br><span class="line">     3     2     1      1   3      2</span><br><span class="line">    /     /       \                 \</span><br><span class="line">   2     1         2                 3</span><br></pre></td></tr></table></figure>
-<p><strong>思路:</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">f(n)=</span><br><span class="line">    <span class="number">1</span>:f(<span class="number">0</span>)*f(n-<span class="number">1</span>)       <span class="number">1</span>为根结点</span><br><span class="line">    <span class="number">2</span>:f(<span class="number">1</span>)*f(n-<span class="number">2</span>)		 <span class="number">2</span>为根结点</span><br><span class="line">    <span class="number">3</span>:f(<span class="number">2</span>)*f(n-<span class="number">3</span>)		 <span class="number">3</span>为根结点</span><br><span class="line">    <span class="number">4</span>:f(<span class="number">3</span>)*f(n-<span class="number">4</span>)		 <span class="number">4</span>为根结点</span><br><span class="line">    ...		</span><br><span class="line">    n:f(n-<span class="number">1</span>)*f(<span class="number">0</span>)		 n为根结点</span><br><span class="line"></span><br><span class="line">          </span><br><span class="line">    f(<span class="number">0</span>)=<span class="number">1</span>;f(<span class="number">1</span>)=<span class="number">1</span>;f(<span class="number">2</span>)=<span class="number">2</span>;   <span class="comment">//初始条件</span></span><br><span class="line">               </span><br><span class="line">    f(<span class="number">3</span>)=f(<span class="number">0</span>)*f(<span class="number">2</span>)+f(<span class="number">1</span>)*f(<span class="number">1</span>)+f(<span class="number">2</span>)*f(<span class="number">0</span>)=<span class="number">2</span>+<span class="number">1</span>+<span class="number">2</span>=<span class="number">5</span>;</span><br></pre></td></tr></table></figure>
-<p><strong>代码:</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numTrees</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">           </span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n==<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> [] arr= <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">        arr[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">        arr[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">        arr[<span class="number">2</span>]=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">3</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>(temp &lt;=i-<span class="number">1</span>)&#123;</span><br><span class="line">                arr[i]+=arr[temp]*arr[i-temp-<span class="number">1</span>];</span><br><span class="line">                temp++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;    </span><br><span class="line">        <span class="keyword">return</span> arr[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/24/leetcode-不同的二叉搜索树/" data-id="cjl6kgd8w000qjpwdj6lruke8" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-解码方法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/18/leetcode-解码方法/" class="article-date">
-  <time datetime="2018-06-18T06:10:25.134Z" itemprop="datePublished">2018-06-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/18/leetcode-解码方法/">leetcode-解码方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>一条包含字母 <code>A-Z</code> 的消息通过以下方式进行了编码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&apos;A&apos; -&gt; 1</span><br><span class="line">&apos;B&apos; -&gt; 2</span><br><span class="line">...</span><br><span class="line">&apos;Z&apos; -&gt; 26</span><br></pre></td></tr></table></figure>
-<p>给定一个只包含数字的<strong>非空</strong>字符串，请计算解码方法的总数。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;12&quot;</span><br><span class="line">输出: 2</span><br><span class="line">解释: 它可以解码为 &quot;AB&quot;（1 2）或者 &quot;L&quot;（12）。</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;226&quot;</span><br><span class="line">输出: 3</span><br><span class="line">解释: 它可以解码为 &quot;BZ&quot; (2 26), &quot;VF&quot; (22 6), 或者 &quot;BBF&quot; (2 2 6) 。</span><br></pre></td></tr></table></figure>
-<p><strong>思路</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">考虑String字符串新加入一个<span class="keyword">char</span>时的<span class="keyword">case</span>；</span><br><span class="line">两个维度：<span class="number">1</span>:新加入的<span class="keyword">char</span>是否为<span class="number">0</span>；<span class="number">2</span>:新加入的跟前一个字符表示的数字是否合法（<span class="number">1</span>-<span class="number">26</span>）</span><br><span class="line"><span class="keyword">if</span>(<span class="number">2</span>)&#123;</span><br><span class="line">	a[n]+=a[n-<span class="number">2</span>];</span><br><span class="line">	<span class="keyword">if</span>(!<span class="number">1</span>)&#123;</span><br><span class="line">		a[n]+=a[n-<span class="number">1</span>];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!<span class="number">1</span>)&#123;</span><br><span class="line">		a[n]+=a[n-<span class="number">1</span>];</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    	<span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//无法解码    </span></span><br><span class="line">    &#125;	</span><br><span class="line">&#125;</span><br><span class="line">该题是爬楼梯问题的升级版，实质是相通的，都属于<span class="string">"斐波纳切"</span>型，由前往后推。</span><br></pre></td></tr></table></figure>
-<p><strong>代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numDecodings</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//1:数字要大于等于1，小于等于26</span></span><br><span class="line">        <span class="comment">//2:新加入的数字是否为0</span></span><br><span class="line">        <span class="keyword">if</span>(s==<span class="keyword">null</span>||<span class="string">""</span>.equals(s)||<span class="string">"0"</span>.equals(s)||s.charAt(<span class="number">0</span>)==<span class="string">'0'</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">char</span>[] ch=s.toCharArray();</span><br><span class="line">        <span class="keyword">int</span>[] in= <span class="keyword">new</span> <span class="keyword">int</span>[ch.length];</span><br><span class="line">        in[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(ch.length&gt;=<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="comment">//计算dp初始值</span></span><br><span class="line">            <span class="keyword">int</span> empty=(ch[<span class="number">0</span>]-<span class="string">'0'</span>)*<span class="number">10</span>+(ch[<span class="number">1</span>]-<span class="string">'0'</span>);</span><br><span class="line">            <span class="keyword">if</span>(empty&gt;<span class="number">9</span>&amp;&amp;empty&lt;<span class="number">27</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(ch[<span class="number">1</span>]==<span class="string">'0'</span>)&#123;</span><br><span class="line">                    in[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    in[<span class="number">1</span>]=<span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(ch[<span class="number">1</span>]==<span class="string">'0'</span>)&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    in[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//dp计算出最终值</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">2</span>;i&lt;in.length;i++)&#123;</span><br><span class="line">                <span class="keyword">int</span> temp = (ch[i-<span class="number">1</span>]-<span class="string">'0'</span>)*<span class="number">10</span>+(ch[i]-<span class="string">'0'</span>);</span><br><span class="line">                <span class="keyword">if</span>(temp&gt;<span class="number">9</span>&amp;&amp;temp&lt;<span class="number">27</span>)&#123;</span><br><span class="line">                    in[i]+=in[i-<span class="number">2</span>];</span><br><span class="line">                    <span class="keyword">if</span>(ch[i]!=<span class="string">'0'</span>)&#123;</span><br><span class="line">                        in[i]+=in[i-<span class="number">1</span>];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(ch[i]!=<span class="string">'0'</span>)&#123;</span><br><span class="line">                        in[i]+=in[i-<span class="number">1</span>];</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//无法解码       </span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> in[in.length-<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/18/leetcode-解码方法/" data-id="cjl6kgd9e0017jpwdtox7clgj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/27/leetcode-股票最大收益/" data-id="cjm7ohnzp0019amwd9z9sny8l" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -683,7 +636,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-jni/">Android jni</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-jni/">Android jni</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-net/">Android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -693,7 +646,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-jni/" style="font-size: 10px;">Android jni</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-jni/" style="font-size: 10px;">Android jni</a> <a href="/tags/Android-net/" style="font-size: 10px;">Android net</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
     </div>
   </div>
 
@@ -702,7 +655,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -715,23 +668,23 @@
       <ul>
         
           <li>
+            <a href="/2018/09/17/Android源码解析-EventBus/">Android源码解析-EventBus</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/28/Android-WebSocket/">Android-WebSocket</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/28/leetcode-组合总和-Ⅳ/">leetcode-组合总和 Ⅳ</a>
+          </li>
+        
+          <li>
             <a href="/2018/08/23/设计模式-适配器模式/">设计模式-适配器模式</a>
           </li>
         
           <li>
             <a href="/2018/08/22/Android---greenDao/">Android - greenDao</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/16/Android-手办故事机/">Android-音频相关开发</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/15/Android-sdk签名验证/">Android-sdk签名验证</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/15/Andriod-jni开发/">Andriod-jni开发</a>
           </li>
         
       </ul>
