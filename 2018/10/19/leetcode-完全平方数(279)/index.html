@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>leetcode-完全平方数(279) | kb_jay的开发站台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。 示例 1: 123输入: n = 12输出: 3 解释: 12 = 4 + 4 + 4. 示例 2: 123输入: n = 13输出: 2解释: 13 = 4 + 9. 思路 假设dp[i]表示i对应的完全平方数，考虑dp[12]; 那么 Case1 : dp">
+<meta name="keywords" content="leetcode dp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode-完全平方数(279)">
+<meta property="og:url" content="http://yoursite.com/2018/10/19/leetcode-完全平方数(279)/index.html">
+<meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。 示例 1: 123输入: n = 12输出: 3 解释: 12 = 4 + 4 + 4. 示例 2: 123输入: n = 13输出: 2解释: 13 = 4 + 9. 思路 假设dp[i]表示i对应的完全平方数，考虑dp[12]; 那么 Case1 : dp">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-10-19T05:21:38.100Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="leetcode-完全平方数(279)">
+<meta name="twitter:description" content="给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。 示例 1: 123输入: n = 12输出: 3 解释: 12 = 4 + 4 + 4. 示例 2: 123输入: n = 13输出: 2解释: 13 = 4 + 9. 思路 假设dp[i]表示i对应的完全平方数，考虑dp[12]; 那么 Case1 : dp">
+  
+    <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">kb_jay的开发站台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-leetcode-完全平方数(279)" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/19/leetcode-完全平方数(279)/" class="article-date">
+  <time datetime="2018-10-19T05:21:38.100Z" itemprop="datePublished">2018-10-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      leetcode-完全平方数(279)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>给定正整数 <em>n</em>，找到若干个完全平方数（比如 <code>1, 4, 9, 16, ...</code>）使得它们的和等于 <em>n</em>。你需要让组成和的完全平方数的个数最少。</p>
+<p><strong>示例 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: n = 12</span><br><span class="line">输出: 3 </span><br><span class="line">解释: 12 = 4 + 4 + 4.</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: n = 13</span><br><span class="line">输出: 2</span><br><span class="line">解释: 13 = 4 + 9.</span><br></pre></td></tr></table></figure>
+<p><strong>思路</strong></p>
+<p>假设dp[i]表示i对应的完全平方数，考虑dp[12];</p>
+<p>那么</p>
+<p>Case1 : dp[12] = dp[12-1]+1;</p>
+<p>Case2 : dp[12]= dp[12-4]+1;</p>
+<p>Case3 : dp[12]= dp[12-9]+1;</p>
+<p>最终dp[12]= 3种case的最小值。</p>
+<p><strong>代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numSquares</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        ArrayList&lt;Integer&gt; al= <span class="keyword">new</span> ArrayList();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>;i*i&lt;=n;i++)&#123;</span><br><span class="line">            al.add(i*i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> [] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">        dp[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            dp[i]=Integer.MAX_VALUE;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">0</span>;j&lt;al.size();j++)&#123;</span><br><span class="line">                <span class="keyword">int</span> temp =al.get(j);</span><br><span class="line">                <span class="keyword">if</span>(temp&gt;i)&#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(dp[i-temp]+<span class="number">1</span>&lt;dp[i])&#123;</span><br><span class="line">                    dp[i]=dp[i-temp]+<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dp[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/19/leetcode-完全平方数(279)/" data-id="cjnfl706s001mrtwdtcj9cp0g" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/10/19/leetcode-判断子序列（392）/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode-判断子序列（392）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-jni/">Android jni</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-net/">Android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义view/">Android 自定义view</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-jni/" style="font-size: 10px;">Android jni</a> <a href="/tags/Android-net/" style="font-size: 10px;">Android net</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-自定义view/" style="font-size: 10px;">Android 自定义view</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/leetcode/" style="font-size: 15px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/10/19/leetcode-完全平方数(279)/">leetcode-完全平方数(279)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/19/leetcode-判断子序列（392）/">leetcode-判断子序列（392）</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/17/android-缓存/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/17/Android---自定义View/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/15/Android---https/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 kb_jay<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
