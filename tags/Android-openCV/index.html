@@ -5,20 +5,15 @@
   
 
   
-  <title>leetcode-完全平方数(279) | kb_jay的开发站台</title>
+  <title>Tag: Android openCV | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。 示例 1: 123输入: n = 12输出: 3 解释: 12 = 4 + 4 + 4. 示例 2: 123输入: n = 13输出: 2解释: 13 = 4 + 9. 思路 假设dp[i]表示i对应的完全平方数，考虑dp[12]; 那么 Case1 : dp">
-<meta name="keywords" content="leetcode dp">
-<meta property="og:type" content="article">
-<meta property="og:title" content="leetcode-完全平方数(279)">
-<meta property="og:url" content="http://yoursite.com/2018/10/19/leetcode-完全平方数(279)/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="kb_jay的开发站台">
+<meta property="og:url" content="http://yoursite.com/tags/Android-openCV/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。 示例 1: 123输入: n = 12输出: 3 解释: 12 = 4 + 4 + 4. 示例 2: 123输入: n = 13输出: 2解释: 13 = 4 + 9. 思路 假设dp[i]表示i对应的完全平方数，考虑dp[12]; 那么 Case1 : dp">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-19T05:21:38.100Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="leetcode-完全平方数(279)">
-<meta name="twitter:description" content="给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。 示例 1: 123输入: n = 12输出: 3 解释: 12 = 4 + 4 + 4. 示例 2: 123输入: n = 13输出: 2解释: 13 = 4 + 9. 思路 假设dp[i]表示i对应的完全平方数，考虑dp[12]; 那么 Case1 : dp">
+<meta name="twitter:title" content="kb_jay的开发站台">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -65,76 +60,40 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-leetcode-完全平方数(279)" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/19/leetcode-完全平方数(279)/" class="article-date">
-  <time datetime="2018-10-19T05:21:38.100Z" itemprop="datePublished">2018-10-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      leetcode-完全平方数(279)
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2018/11/08/Android-图片实现类似素描的效果/" class="archive-article-date">
+  <time datetime="2018-11-08T04:34:30.346Z" itemprop="datePublished">Nov 8</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/11/08/Android-图片实现类似素描的效果/">Android-图片实现类似素描的效果</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>给定正整数 <em>n</em>，找到若干个完全平方数（比如 <code>1, 4, 9, 16, ...</code>）使得它们的和等于 <em>n</em>。你需要让组成和的完全平方数的个数最少。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: n = 12</span><br><span class="line">输出: 3 </span><br><span class="line">解释: 12 = 4 + 4 + 4.</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: n = 13</span><br><span class="line">输出: 2</span><br><span class="line">解释: 13 = 4 + 9.</span><br></pre></td></tr></table></figure>
-<p><strong>思路</strong></p>
-<p>假设dp[i]表示i对应的完全平方数，考虑dp[12];</p>
-<p>那么</p>
-<p>Case1 : dp[12] = dp[12-1]+1;</p>
-<p>Case2 : dp[12]= dp[12-4]+1;</p>
-<p>Case3 : dp[12]= dp[12-9]+1;</p>
-<p>最终dp[12]= 3种case的最小值。</p>
-<p><strong>代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numSquares</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        ArrayList&lt;Integer&gt; al= <span class="keyword">new</span> ArrayList();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>;i*i&lt;=n;i++)&#123;</span><br><span class="line">            al.add(i*i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> [] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">        dp[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            dp[i]=Integer.MAX_VALUE;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">0</span>;j&lt;al.size();j++)&#123;</span><br><span class="line">                <span class="keyword">int</span> temp =al.get(j);</span><br><span class="line">                <span class="keyword">if</span>(temp&gt;i)&#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(dp[i-temp]+<span class="number">1</span>&lt;dp[i])&#123;</span><br><span class="line">                    dp[i]=dp[i-temp]+<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dp[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/19/leetcode-完全平方数(279)/" data-id="cjo893whh001cmnuqmyd90e8y" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2018/10/19/leetcode-最长上升子序列(300)/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          leetcode-最长上升子序列(300)
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2018/10/19/leetcode-判断子序列（392）/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">leetcode-判断子序列（392）</div>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
+
 
 </section>
         
