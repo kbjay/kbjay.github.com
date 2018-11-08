@@ -7,21 +7,21 @@
   
   <title>Android-图片实现类似素描的效果 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="#####核心思路  使用openCV获取灰度图像：0（黑）～255（白）  将该图像按照灰度值分层，每一层是一个0，1二维数组：1表示绘制，0表示不绘制，之后绘制每一层  先绘制颜色最深的那一层。 在二维数组中找一个随机点，从该点出发依次向上下左右四个方向探测，如果找到需要绘制的点，那么再去找该点所在的区域中所有的跟该点绘制次数相同的点，之后按照随机的mask去绘制找到的点（注意点的颜色由该位置">
+  <meta name="description" content="核心思路 使用openCV获取灰度图像：0（黑）～255（白）  将该图像按照灰度值分层，每一层是一个0，1二维数组：1表示绘制，0表示不绘制，之后绘制每一层  先绘制颜色最深的那一层。 在二维数组中找一个随机点，从该点出发依次向上下左右四个方向探测，如果找到需要绘制的点，那么再去找该点所在的区域中所有的跟该点绘制次数相同的点，之后按照随机的mask去绘制找到的点（注意点的颜色由该位置的已经绘制的">
 <meta name="keywords" content="Android openCV">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android-图片实现类似素描的效果">
 <meta property="og:url" content="http://yoursite.com/2018/11/08/Android-图片实现类似素描的效果/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="#####核心思路  使用openCV获取灰度图像：0（黑）～255（白）  将该图像按照灰度值分层，每一层是一个0，1二维数组：1表示绘制，0表示不绘制，之后绘制每一层  先绘制颜色最深的那一层。 在二维数组中找一个随机点，从该点出发依次向上下左右四个方向探测，如果找到需要绘制的点，那么再去找该点所在的区域中所有的跟该点绘制次数相同的点，之后按照随机的mask去绘制找到的点（注意点的颜色由该位置">
+<meta property="og:description" content="核心思路 使用openCV获取灰度图像：0（黑）～255（白）  将该图像按照灰度值分层，每一层是一个0，1二维数组：1表示绘制，0表示不绘制，之后绘制每一层  先绘制颜色最深的那一层。 在二维数组中找一个随机点，从该点出发依次向上下左右四个方向探测，如果找到需要绘制的点，那么再去找该点所在的区域中所有的跟该点绘制次数相同的点，之后按照随机的mask去绘制找到的点（注意点的颜色由该位置的已经绘制的">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://github.com/kbjay/KJ_Sketch/blob/master/app/src/main/raw/kj_sketch.gif">
-<meta property="og:image" content="https://github.com/kbjay/KJ_Sketch/blob/master/app/src/main/raw/sketch.png">
-<meta property="og:updated_time" content="2018-11-08T07:07:58.552Z">
+<meta property="og:image" content="http://yoursite.com/Users/kb_jay/Downloads/sumiao.gif">
+<meta property="og:image" content="http://yoursite.com/Users/kb_jay/Desktop/sketch.png">
+<meta property="og:updated_time" content="2018-11-08T07:31:24.605Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android-图片实现类似素描的效果">
-<meta name="twitter:description" content="#####核心思路  使用openCV获取灰度图像：0（黑）～255（白）  将该图像按照灰度值分层，每一层是一个0，1二维数组：1表示绘制，0表示不绘制，之后绘制每一层  先绘制颜色最深的那一层。 在二维数组中找一个随机点，从该点出发依次向上下左右四个方向探测，如果找到需要绘制的点，那么再去找该点所在的区域中所有的跟该点绘制次数相同的点，之后按照随机的mask去绘制找到的点（注意点的颜色由该位置">
-<meta name="twitter:image" content="https://github.com/kbjay/KJ_Sketch/blob/master/app/src/main/raw/kj_sketch.gif">
+<meta name="twitter:description" content="核心思路 使用openCV获取灰度图像：0（黑）～255（白）  将该图像按照灰度值分层，每一层是一个0，1二维数组：1表示绘制，0表示不绘制，之后绘制每一层  先绘制颜色最深的那一层。 在二维数组中找一个随机点，从该点出发依次向上下左右四个方向探测，如果找到需要绘制的点，那么再去找该点所在的区域中所有的跟该点绘制次数相同的点，之后按照随机的mask去绘制找到的点（注意点的颜色由该位置的已经绘制的">
+<meta name="twitter:image" content="http://yoursite.com/Users/kb_jay/Downloads/sumiao.gif">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -90,8 +90,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#####核心思路</p>
-<ol>
+        <h5 id="核心思路"><a href="#核心思路" class="headerlink" title="核心思路"></a>核心思路</h5><ol>
 <li><p>使用openCV获取灰度图像：0（黑）～255（白）</p>
 </li>
 <li><p>将该图像按照灰度值分层，每一层是一个0，1二维数组：1表示绘制，0表示不绘制，之后绘制每一层</p>
@@ -103,14 +102,14 @@
 <li><p>上面提到的mask是预先生成的蒙板。具体可以去看源代码，非常简单。</p>
 </li>
 </ol>
-<h5 id="效果gif："><a href="#效果gif：" class="headerlink" title="效果gif："></a>效果gif：</h5><p><img src="https://github.com/kbjay/KJ_Sketch/blob/master/app/src/main/raw/kj_sketch.gif" alt="sumiao"></p>
-<h5 id="最终效果图"><a href="#最终效果图" class="headerlink" title="最终效果图"></a>最终效果图</h5><p><img src="https://github.com/kbjay/KJ_Sketch/blob/master/app/src/main/raw/sketch.png" alt="image"></p>
+<h5 id="效果gif："><a href="#效果gif：" class="headerlink" title="效果gif："></a>效果gif：</h5><p><img src="/Users/kb_jay/Downloads/sumiao.gif" alt="sumiao"></p>
+<h5 id="最终效果图"><a href="#最终效果图" class="headerlink" title="最终效果图"></a>最终效果图</h5><p><img src="/Users/kb_jay/Desktop/sketch.png" alt="sketch"></p>
 <h5 id="代码地址"><a href="#代码地址" class="headerlink" title="代码地址"></a>代码地址</h5><p><a href="https://github.com/kbjay/KJ_Sketch" target="_blank" rel="noopener">https://github.com/kbjay/KJ_Sketch</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/08/Android-图片实现类似素描的效果/" data-id="cjo893wg90006mnuqqaxc1w2f" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/08/Android-图片实现类似素描的效果/" data-id="cjo89xbds0003uruqvun327b0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li></ul>
