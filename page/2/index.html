@@ -62,6 +62,105 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-leetcode-等差数列划分(413)" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/11/leetcode-等差数列划分(413)/" class="article-date">
+  <time datetime="2018-10-11T05:51:19.444Z" itemprop="datePublished">2018-10-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/11/leetcode-等差数列划分(413)/">leetcode-等差数列划分(413)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如果一个数列至少有三个元素，并且任意两个相邻元素之差相同，则称该数列为等差数列。</p>
+<p>例如，以下数列为等差数列:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1, 3, 5, 7, 9</span><br><span class="line">7, 7, 7, 7</span><br><span class="line">3, -1, -5, -9</span><br></pre></td></tr></table></figure>
+<p>以下数列不是等差数列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1, 1, 2, 5, 7</span><br></pre></td></tr></table></figure>
+<p>数组 A 包含 N 个数，且索引从0开始。数组 A 的一个子数组划分为数组 (P, Q)，P 与 Q 是整数且满足 0&lt;=P&lt;Q&lt;N 。</p>
+<p>如果满足以下条件，则称子数组(P, Q)为等差数组：</p>
+<p>元素 A[P], A[p + 1], …, A[Q - 1], A[Q] 是等差的。并且 P + 1 &lt; Q 。</p>
+<p>函数要返回数组 A 中所有为等差数组的子数组个数。</p>
+<p><strong>示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A = [1, 2, 3, 4]</span><br><span class="line"></span><br><span class="line">返回: 3, A 中有三个子等差数组: [1, 2, 3], [2, 3, 4] 以及自身 [1, 2, 3, 4]。</span><br></pre></td></tr></table></figure>
+<p><strong>思路：</strong></p>
+<p>动态规划：假设已经知道了（a[0]~a[i+1]）的等差数组个数为re[i]，并且知道了以第i个数结尾的等差数组长度（beforeNumber）,计算(a[0]~a[i+2]))数组的等差数组个数，一共4种情况，具体看代码。</p>
+<p><strong>代码</strong>:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numberOfArithmeticSlices</span><span class="params">(<span class="keyword">int</span>[] A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> length =A.length;</span><br><span class="line">        <span class="keyword">if</span>(length&lt;<span class="number">3</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[] re=<span class="keyword">new</span> <span class="keyword">int</span>[length+<span class="number">1</span>];</span><br><span class="line">        re[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">        re[<span class="number">1</span>]=<span class="number">0</span>;</span><br><span class="line">        re[<span class="number">2</span>]=<span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> beforeNumber=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">3</span>;i&lt;length+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">boolean</span> isCurrentTrue=isTrue(A[i-<span class="number">1</span>],A[i-<span class="number">2</span>],A[i-<span class="number">3</span>]);</span><br><span class="line">            <span class="keyword">if</span>(beforeNumber==<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(isCurrentTrue)&#123;</span><br><span class="line">                    re[i]=re[i-<span class="number">1</span>]+<span class="number">1</span>;</span><br><span class="line">                    beforeNumber=<span class="number">3</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    re[i]=re[i-<span class="number">1</span>];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(isCurrentTrue)&#123;</span><br><span class="line">                    re[i]=re[i-<span class="number">1</span>]+(beforeNumber-<span class="number">1</span>);</span><br><span class="line">                    beforeNumber++;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    re[i]=re[i-<span class="number">1</span>];</span><br><span class="line">                    beforeNumber=<span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> re[length];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isTrue</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b ,<span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (b-a)==(c-b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/11/leetcode-等差数列划分(413)/" data-id="cjoocclt2001lt3uqosskijfx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android-Arouter（调整人民日报结构）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/11/Android-Arouter（调整人民日报结构）/" class="article-date">
+  <time datetime="2018-10-11T03:18:08.590Z" itemprop="datePublished">2018-10-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/11/Android-Arouter（调整人民日报结构）/">Android-Arouter（调整人民日报结构）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>项目要求解耦各个模块，每个大模块可以作为一个单独的module。那么就需要解决如下问题：</p>
+<ol>
+<li>跨模块跳转（A模块的act要跳转到B模块的act）</li>
+<li>跨模块调用（A模块要使用B模块的数据）</li>
+</ol>
+<p>最终选择了利用Arouter来解决如上问题。</p>
+<p>ps（另外为了编译速度，是否每个module都可以单独运行？？？？？）</p>
+<h4 id="Arouter"><a href="#Arouter" class="headerlink" title="Arouter"></a>Arouter</h4><p>官方文档：<a href="https://github.com/alibaba/ARouter/blob/master/README_CN.md" target="_blank" rel="noopener">https://github.com/alibaba/ARouter/blob/master/README_CN.md</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/11/Android-Arouter（调整人民日报结构）/" data-id="cjoocclr60001t3uqtu9iwwom" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-架构/">Android 架构</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android--viewPager-+fragment-实现懒加载" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/09/28/Android--viewPager-+fragment-实现懒加载/" class="article-date">
@@ -89,7 +188,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/28/Android--viewPager-+fragment-实现懒加载/" data-id="cjo89xbdo0001uruq9qwr4wmb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/28/Android--viewPager-+fragment-实现懒加载/" data-id="cjoocclrk0009t3uq18fvyhsy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li></ul>
@@ -242,7 +341,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/17/Android源码解析-EventBus/" data-id="cjo89xbho003duruq37688aur" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/09/17/Android源码解析-EventBus/" data-id="cjoocclv9003ot3uq8hsm0kxb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li></ul>
@@ -290,7 +389,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/28/leetcode-组合总和-Ⅳ/" data-id="cjo89xbgl0030uruqr4dq24xn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/28/leetcode-组合总和-Ⅳ/" data-id="cjoocclt4001ot3uq9kei3j7g" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -382,7 +481,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/22/Android---greenDao/" data-id="cjo89xbgg002uuruqi78f57fu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/22/Android---greenDao/" data-id="cjooccluh0037t3uqdowwabey" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li></ul>
@@ -463,7 +562,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/16/Android-手办故事机/" data-id="cjo89xbgi002wuruq93qbj6ea" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/16/Android-手办故事机/" data-id="cjoocclum003at3uqy5xbiron" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-音频/">Android 音频</a></li></ul>
@@ -523,7 +622,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/15/Android-sdk签名验证/" data-id="cjo89xbdu0004uruq4iwo0d0g" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/15/Android-sdk签名验证/" data-id="cjoocclrg0005t3uqe56jp8y6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li></ul>
@@ -629,7 +728,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/14/Andriod-线程间通信二线程池/" data-id="cjo89xbge002suruqzwnhrmqy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/14/Andriod-线程间通信二线程池/" data-id="cjooccluc0036t3uq80ul32ce" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-基础/">Android 基础</a></li></ul>
@@ -703,143 +802,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/10/HMAC-sha1-加密算法/" data-id="cjo89xbgk002zuruqdh7mkrty" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/08/10/HMAC-sha1-加密算法/" data-id="cjoocclun003bt3uq7v01ic2b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-安全/">Android 安全</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-微信小程序" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/10/Android-微信小程序/" class="article-date">
-  <time datetime="2018-08-10T06:16:07.800Z" itemprop="datePublished">2018-08-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/10/Android-微信小程序/">Android-微信小程序</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h4><ul>
-<li>phpStorm</li>
-<li>官方工具</li>
-</ul>
-<p>phpstorm设置：</p>
-<p>1.首先FileType下Cascading Style Sheet 添加*.wxss</p>
-<p>2.FileType下HTML 添加*.wxml</p>
-<p>3.将其中的<a href="https://link.jianshu.com?t=https://github.com/miaozhang9/wecharCodejar" target="_blank" rel="noopener">wecharCode.jar</a>下载下来，然后在webStorm 的 File -&gt; import settings 中导入即可</p>
-<p>jar包地址：<a href="https://github.com/miaozhang9/wecharCodejar" target="_blank" rel="noopener">https://github.com/miaozhang9/wecharCodejar</a></p>
-<p>参考：<a href="https://www.jianshu.com/p/00724ab30c89" target="_blank" rel="noopener">https://www.jianshu.com/p/00724ab30c89</a></p>
-<p>参考：<a href="https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html" target="_blank" rel="noopener">https://developers.weixin.qq.com/miniprogram/dev/quickstart/basic/file.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/10/Android-微信小程序/" data-id="cjo89xbe9000furuq89lj5m4i" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-反编译详细流程" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/01/Android-反编译详细流程/" class="article-date">
-  <time datetime="2018-08-01T08:17:26.966Z" itemprop="datePublished">2018-08-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/01/Android-反编译详细流程/">Android-反编译详细流程</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>总体流程：</strong></p>
-<ol>
-<li>拿到需要破解的apk包，解压获取dex文件</li>
-<li>使用dex2jar工具获取jar文件</li>
-<li>使用jd-gui打开jar文件</li>
-<li>Android studio 安装可以将java转换成smali的插件:java2smali</li>
-<li>编写InjectLog.class文件，将该文件转为smali文件备用（生成好的smali文件参见tip2）</li>
-<li>使用apktool工具“解压”apk文件，获取smali文件</li>
-<li>修改manifest文件，application下添加 andriod:debuggable=true;</li>
-<li>将InjectLog.smali根据包名（“com/hook/testsmali/InjectLog”）放入指定位置</li>
-<li>使用python文件（参见tip1）给smali文件注入日志，修改walker=os.walk(“/Users/kb_jay/Documents/injectLog4/msc/smali/com”)中的参数可以指定那些smali文件需要注入日志</li>
-<li>使用apktool生成签名文件</li>
-<li>使用apktool将注入完日志的smali文件重新打包签名生成apk文件; jarsigner -verbose -keystore mykeystore -signedjar android_signed.apk(目标名字) TestSMSDemo.apk(要签名的apk) linlin</li>
-<li>安装运行apk，触发关注的事件，根据Tag（InjectLog）获取方法调用栈的日志</li>
-<li>将日志保存备用</li>
-<li>Android Studio安装smalidea插件</li>
-<li>将smali文件夹导入到Android Studio中</li>
-<li>将smali文件夹设置为source root</li>
-<li>设置project的jdk</li>
-<li>在as中创建remote调试，记住设置的端口号</li>
-<li>在as终端输入<strong>adb shell am start -D -n com.xxx.xxx/com.xxx.xxx.xxx </strong>以debug方式打开apk</li>
-<li>查看该apk所有进程的Pid：<strong>adb shell ps | grep com.xxx.xxx </strong></li>
-<li>连接debug的remote端口（电脑）跟apk的进程（手机）：<strong>adb forward tcp:remote调试的端口号  jdwp:查找到的pid</strong>    eg：<strong>adb forward tcp:5005 jdwp:12000</strong></li>
-<li>根据保存好的日志文件在smali文件中加入断点</li>
-<li>run-&gt;debug  （done）</li>
-</ol>
-<p><strong>参考：</strong></p>
-<p><a href="https://my.oschina.net/zhibuji/blog/410993" target="_blank" rel="noopener">https://my.oschina.net/zhibuji/blog/410993</a></p>
-<p><a href="https://www.cnblogs.com/gordon0918/p/5570811.html" target="_blank" rel="noopener">https://www.cnblogs.com/gordon0918/p/5570811.html</a></p>
-<p><a href="http://www.cnblogs.com/goodhacker/p/5592313.html" target="_blank" rel="noopener">http://www.cnblogs.com/goodhacker/p/5592313.html</a></p>
-<p><strong>tip</strong></p>
-<ol>
-<li>注入日志的python文件</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># encoding: utf-8</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ParserError</span><span class="params">(Exception)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 注入代码到一个函数块中</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inject_code_to_method_section</span><span class="params">(method_section)</span>:</span></span><br><span class="line">    <span class="comment"># 静态构造函数，无需处理</span></span><br><span class="line">    <span class="keyword">if</span> method_section[<span class="number">0</span>].find(<span class="string">"static constructor"</span>) != <span class="number">-1</span>:</span><br><span class="line">        <span class="keyword">return</span> method_section</span><br><span class="line">    <span class="comment"># synthetic函数，无需处理</span></span><br><span class="line">    <span class="keyword">if</span> method_section[<span class="number">0</span>].find(<span class="string">"synthetic"</span>) != <span class="number">-1</span>:</span><br><span class="line">        <span class="keyword">return</span> method_section</span><br><span class="line">    <span class="comment"># 抽象方法，无需处理</span></span><br><span class="line">    <span class="keyword">if</span> method_section[<span class="number">0</span>].find(<span class="string">"abstract"</span>) != <span class="number">-1</span>:</span><br><span class="line">        <span class="keyword">return</span> method_section</span><br><span class="line">    <span class="comment"># 生成待插入代码行</span></span><br><span class="line">    inject_code = [</span><br><span class="line">        <span class="string">'\n'</span>,</span><br><span class="line">        <span class="string">'    invoke-static &#123;&#125;, Lcom/hook/testsmali/InjectLog;-&gt;PrintFunc()V\n'</span>,</span><br><span class="line">        <span class="string">'\n'</span></span><br><span class="line">    ]</span><br><span class="line">    <span class="comment">#插入到.prologue的下一行</span></span><br><span class="line">    is_inject = <span class="keyword">False</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(method_section)):</span><br><span class="line">        <span class="keyword">if</span> method_section[i].find(<span class="string">".prologue"</span>) != <span class="number">-1</span>:</span><br><span class="line">            is_inject = <span class="keyword">True</span></span><br><span class="line">            method_section[i + <span class="number">1</span>: i + <span class="number">1</span>] = inject_code</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> method_section</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inject_log_code</span><span class="params">(content)</span>:</span></span><br><span class="line">    new_content = []</span><br><span class="line">    method_section = []</span><br><span class="line">    is_method_begin = <span class="keyword">False</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> content:</span><br><span class="line">        <span class="keyword">if</span> line[:<span class="number">7</span>] == <span class="string">".method"</span>:</span><br><span class="line">            is_method_begin = <span class="keyword">True</span></span><br><span class="line">            method_section.append(line)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> is_method_begin:</span><br><span class="line">            method_section.append(line)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            new_content.append(line)</span><br><span class="line">        <span class="keyword">if</span> line[:<span class="number">11</span>] == <span class="string">".end method"</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> is_method_begin:</span><br><span class="line">                <span class="keyword">raise</span> ParserError(<span class="string">".method不对称"</span>)</span><br><span class="line">            is_method_begin = <span class="keyword">False</span></span><br><span class="line">            new_method_section = inject_code_to_method_section(method_section)</span><br><span class="line">            new_content.extend(new_method_section)</span><br><span class="line">            <span class="keyword">del</span> method_section[:]</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">return</span> new_content</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    walker = os.walk(<span class="string">"/Users/kb_jay/Documents/injectLog4/msc/smali/com"</span>)</span><br><span class="line">    <span class="keyword">for</span> root, directory, files <span class="keyword">in</span> walker:</span><br><span class="line">        <span class="keyword">for</span> file_name <span class="keyword">in</span> files:</span><br><span class="line">            <span class="keyword">if</span> file_name[<span class="number">-6</span>:] != <span class="string">".smali"</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            file_path = root + <span class="string">"/"</span> + file_name</span><br><span class="line">            print(file_path)</span><br><span class="line">            file = open(file_path)</span><br><span class="line">            lines = file.readlines()</span><br><span class="line">            file.close()</span><br><span class="line">            new_code = inject_log_code(lines)</span><br><span class="line">            file = open(file_path, <span class="string">"w"</span>)</span><br><span class="line">            file.writelines(new_code)</span><br><span class="line">            file.close()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>注入日志的smali文件，<strong>注意包名</strong></li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">.class <span class="keyword">public</span> Lcom/hook/testsmali/InjectLog;</span><br><span class="line">.<span class="keyword">super</span> Ljava/lang/Object;</span><br><span class="line">.source <span class="string">"InjectLog.java"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># direct methods</span><br><span class="line">.method <span class="keyword">public</span> constructor &lt;init&gt;()V</span><br><span class="line">    .registers <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    .prologue</span><br><span class="line"></span><br><span class="line">    .line <span class="number">3</span></span><br><span class="line">    invoke-direct &#123;p0&#125;, Ljava/lang/Object;-&gt;&lt;init&gt;()V</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>-<span class="keyword">void</span></span><br><span class="line">.end method</span><br><span class="line"></span><br><span class="line">.<span class="function">method <span class="keyword">public</span> <span class="keyword">static</span> <span class="title">PrintFunc</span><span class="params">()</span>V</span></span><br><span class="line"><span class="function">    .registers 6</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    .prologue</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    .line 7</span></span><br><span class="line"><span class="function">    invoke-<span class="keyword">static</span> </span>&#123;&#125;, Ljava/lang/Thread;-&gt;currentThread()Ljava/lang/Thread;</span><br><span class="line"></span><br><span class="line">    move-result-object v0</span><br><span class="line"></span><br><span class="line">    .line <span class="number">8</span></span><br><span class="line">    .local v0, <span class="string">"cur_thread"</span>:Ljava/lang/Thread;</span><br><span class="line">    invoke-virtual &#123;v0&#125;, Ljava/lang/Thread;-&gt;getStackTrace()[Ljava/lang/StackTraceElement;</span><br><span class="line"></span><br><span class="line">    move-result-object v1</span><br><span class="line"></span><br><span class="line">    .line <span class="number">9</span></span><br><span class="line">    .local v1, <span class="string">"stack"</span>:[Ljava/lang/StackTraceElement;</span><br><span class="line">    <span class="keyword">const</span>-string v2, <span class="string">"InjectLog"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span>-instance v3, Ljava/lang/StringBuilder;</span><br><span class="line"></span><br><span class="line">    invoke-direct &#123;v3&#125;, Ljava/lang/StringBuilder;-&gt;&lt;init&gt;()V</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span>/<span class="number">4</span> v4, <span class="number">0x3</span></span><br><span class="line"></span><br><span class="line">    aget-object v4, v1, v4</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v4&#125;, Ljava/lang/StackTraceElement;-&gt;toString()Ljava/lang/String;</span><br><span class="line"></span><br><span class="line">    move-result-object v4</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v3, v4&#125;, Ljava/lang/StringBuilder;-&gt;append(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line"></span><br><span class="line">    move-result-object v3</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span>-string v4, <span class="string">"["</span></span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v3, v4&#125;, Ljava/lang/StringBuilder;-&gt;append(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line"></span><br><span class="line">    move-result-object v3</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v0&#125;, Ljava/lang/Thread;-&gt;getId()J</span><br><span class="line"></span><br><span class="line">    move-result-wide v4</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v3, v4, v5&#125;, Ljava/lang/StringBuilder;-&gt;append(J)Ljava/lang/StringBuilder;</span><br><span class="line"></span><br><span class="line">    move-result-object v3</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span>-string v4, <span class="string">"]"</span></span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v3, v4&#125;, Ljava/lang/StringBuilder;-&gt;append(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line"></span><br><span class="line">    move-result-object v3</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;v3&#125;, Ljava/lang/StringBuilder;-&gt;toString()Ljava/lang/String;</span><br><span class="line"></span><br><span class="line">    move-result-object v3</span><br><span class="line"></span><br><span class="line">    invoke-<span class="keyword">static</span> &#123;v2, v3&#125;, Landroid/util/Log;-&gt;d(Ljava/lang/String;Ljava/lang/String;)I</span><br><span class="line"></span><br><span class="line">    .line <span class="number">10</span></span><br><span class="line">    <span class="keyword">return</span>-<span class="keyword">void</span></span><br><span class="line">.end method</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>关于smali语法</li>
-</ol>
-<p>参考：<a href="https://www.jianshu.com/p/ba9b374346dd" target="_blank" rel="noopener">https://www.jianshu.com/p/ba9b374346dd</a></p>
-<ol start="4">
-<li>打开apk自带的log：找到对应的logging类，修改smali文件，重新打包签名运行即可。</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/08/01/Android-反编译详细流程/" data-id="cjo89xbe30009uruqctv9e390" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li></ul>
 
     </footer>
   </div>
@@ -866,7 +832,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li></ul>
     </div>
   </div>
 
@@ -876,7 +842,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/leetcode/" style="font-size: 15px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/leetcode/" style="font-size: 15px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 10px;">leetcode stack</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a>
     </div>
   </div>
 
@@ -898,6 +864,14 @@
       <ul>
         
           <li>
+            <a href="/2018/11/19/leetcode-84.-柱状图中最大的矩形/">leetcode-84. 柱状图中最大的矩形</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/14/SVG图像处理/">SVG图像处理</a>
+          </li>
+        
+          <li>
             <a href="/2018/11/08/Android-图片实现类似素描的效果/">Android-图片实现类似素描的效果</a>
           </li>
         
@@ -907,14 +881,6 @@
         
           <li>
             <a href="/2018/10/22/leetcode-分割等和子集(416)/">leetcode-分割等和子集(416)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/19/leetcode-最长上升子序列(300)/">leetcode-最长上升子序列(300)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/19/leetcode-完全平方数(279)/">leetcode-完全平方数(279)</a>
           </li>
         
       </ul>
