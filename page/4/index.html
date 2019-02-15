@@ -62,6 +62,101 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Android-自定义ItemDecoration" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/24/Android-自定义ItemDecoration/" class="article-date">
+  <time datetime="2018-07-24T02:56:10.121Z" itemprop="datePublished">2018-07-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/24/Android-自定义ItemDecoration/">Android-自定义瀑布流的itemDecoration</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>point1</strong></p>
+<p>继承RecyclerView.ItemDecoration主要有以下三个方法：</p>
+<ol>
+<li>getItemOffsets(rect ,view ,recyclerView,state);</li>
+</ol>
+<p>​    设置绘制区域rect.set(x,x,x,x)。</p>
+<ol start="2">
+<li>ondraw(cavas,recyclerview,state)</li>
+</ol>
+<p>​    找好可以绘制的区域，用cavas绘制。先于itemView的ondraw方法。</p>
+<ol start="3">
+<li>ondrawover(cavas,recyclerview,state);</li>
+</ol>
+<p>​    这个跟ondraw差不多，后于itemView的ondraw方法。</p>
+<p><strong>point2 瀑布流的decoration</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">StaggeredGridLayoutManager.LayoutParams lp = (StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams();</span><br><span class="line">       <span class="keyword">int</span> spanIndex = lp.getSpanIndex();</span><br><span class="line">       Logger.d(<span class="string">"test&gt;&gt;&gt;"</span>,position+<span class="string">"======"</span>+spanIndex);</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span>(spanIndex%<span class="number">2</span>==<span class="number">0</span>)&#123;<span class="comment">//left</span></span><br><span class="line">           outRect.set(<span class="number">0</span>,<span class="number">0</span>,mVerticalSpan,mVerticalSpan);</span><br><span class="line">       &#125;<span class="keyword">else</span>&#123;<span class="comment">//right</span></span><br><span class="line">           outRect.set(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,mVerticalSpan);</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p>两列的时候，spanIndex要么为0，要么为1，0表示在左边，1表示在右边。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/24/Android-自定义ItemDecoration/" data-id="cjs5oeu2g000pbwuqr3fb5w6f" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android-自定义圆角ImageView" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/20/Android-自定义圆角ImageView/" class="article-date">
+  <time datetime="2018-07-19T17:30:35.015Z" itemprop="datePublished">2018-07-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/20/Android-自定义圆角ImageView/">Android-自定义圆角ImageView</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>继承ImageView，重写onDraw方法，获取长跟宽之后使用clip方法裁剪圆角，之后调用super的onDraw。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KJCornerImageView</span> <span class="keyword">extends</span> <span class="title">android</span>.<span class="title">support</span>.<span class="title">v7</span>.<span class="title">widget</span>.<span class="title">AppCompatImageView</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span>[] radiusArray = &#123; <span class="number">0f</span>, <span class="number">0f</span>, <span class="number">0f</span>, <span class="number">0f</span>, <span class="number">0f</span>, <span class="number">0f</span>, <span class="number">0f</span>, <span class="number">0f</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">KJCornerImageView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context,<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">KJCornerImageView</span><span class="params">(Context context, @Nullable AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, attrs,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">KJCornerImageView</span><span class="params">(Context context, @Nullable AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr);</span><br><span class="line">        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.KJCornerImageView);</span><br><span class="line">        <span class="keyword">int</span> leftBottom = typedArray.getDimensionPixelSize(R.styleable.KJCornerImageView_leftBottomCorner, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> leftTop = typedArray.getDimensionPixelSize(R.styleable.KJCornerImageView_leftTopCorner, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> rightBottom = typedArray.getDimensionPixelSize(R.styleable.KJCornerImageView_rightBottomCorner, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> rightTop = typedArray.getDimensionPixelSize(R.styleable.KJCornerImageView_rightTopCorner, <span class="number">0</span>);</span><br><span class="line">        radiusArray[<span class="number">1</span>] = leftTop;</span><br><span class="line">        radiusArray[<span class="number">2</span>] = rightTop;</span><br><span class="line">        radiusArray[<span class="number">3</span>] = rightTop;</span><br><span class="line">        radiusArray[<span class="number">4</span>] = rightBottom;</span><br><span class="line">        radiusArray[<span class="number">5</span>] = rightBottom;</span><br><span class="line">        radiusArray[<span class="number">6</span>] = leftBottom;</span><br><span class="line">        radiusArray[<span class="number">7</span>] = leftBottom;</span><br><span class="line">        typedArray.recycle();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setRadius</span><span class="params">(<span class="keyword">float</span> leftTop, <span class="keyword">float</span> rightTop, <span class="keyword">float</span> rightBottom, <span class="keyword">float</span> leftBottom)</span> </span>&#123;</span><br><span class="line">        radiusArray[<span class="number">0</span>] = leftTop;</span><br><span class="line">        radiusArray[<span class="number">1</span>] = leftTop;</span><br><span class="line">        radiusArray[<span class="number">2</span>] = rightTop;</span><br><span class="line">        radiusArray[<span class="number">3</span>] = rightTop;</span><br><span class="line">        radiusArray[<span class="number">4</span>] = rightBottom;</span><br><span class="line">        radiusArray[<span class="number">5</span>] = rightBottom;</span><br><span class="line">        radiusArray[<span class="number">6</span>] = leftBottom;</span><br><span class="line">        radiusArray[<span class="number">7</span>] = leftBottom;</span><br><span class="line"></span><br><span class="line">        invalidate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        Path path = <span class="keyword">new</span> Path();</span><br><span class="line">        path.addRoundRect(<span class="keyword">new</span> RectF(<span class="number">0</span>, <span class="number">0</span>, getWidth(), getHeight()), radiusArray, Path.Direction.CW);</span><br><span class="line">        canvas.clipPath(path);</span><br><span class="line">        <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/20/Android-自定义圆角ImageView/" data-id="cjs5oeu2e000mbwuqec38ruwh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-leetcode-猜数字大小2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/16/leetcode-猜数字大小2/" class="article-date">
@@ -100,7 +195,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/16/leetcode-猜数字大小2/" data-id="cjr8nalpz001lo9uqo2tvdyvi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/16/leetcode-猜数字大小2/" data-id="cjs5oeu48001obwuq1s9e7pxp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -152,7 +247,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/16/Android-瀑布流/" data-id="cjr8nalny0008o9uqohammb31" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/16/Android-瀑布流/" data-id="cjs5oeu28000jbwuq2l17elw6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li></ul>
@@ -205,7 +300,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/Android-特殊的vp/" data-id="cjr8nalod000jo9uqqea974hl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/13/Android-特殊的vp/" data-id="cjs5oeu2c000lbwuq1dl2rbcs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -292,7 +387,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/11/android-微信登陆/" data-id="cjr8naloq000qo9uqao7lu22u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/11/android-微信登陆/" data-id="cjs5oeu2p000ubwuqfwzkdm5j" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li></ul>
@@ -343,7 +438,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/10/tensorFlow记录：/" data-id="cjr8nalqj0025o9uq9xqx0642" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/10/tensorFlow记录：/" data-id="cjs5oeu4v0024bwuqg4boibcu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li></ul>
@@ -388,7 +483,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/03/leetcode-计算各个位数不同的数字个数/" data-id="cjr8nalqb001uo9uqwpqseqth" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/03/leetcode-计算各个位数不同的数字个数/" data-id="cjs5oeu4m001ybwuqe1wfiuy3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -459,7 +554,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" data-id="cjr8nalo4000do9uqj0e5v68q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" data-id="cjs5oeu23000hbwuq027v7tik" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li></ul>
@@ -504,131 +599,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/02/leetcode-整数拆分/" data-id="cjr8nalpq001ho9uq9aw57qnz" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-查找讯飞输入法的下载资源的路径01" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" class="article-date">
-  <time datetime="2018-07-02T12:29:20.641Z" itemprop="datePublished">2018-07-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/">Android-查找讯飞输入法的下载资源的路径01</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="查找讯飞输入法的下载资源的路径-间接证据-："><a href="#查找讯飞输入法的下载资源的路径-间接证据-：" class="headerlink" title="查找讯飞输入法的下载资源的路径(间接证据)："></a>查找讯飞输入法的下载资源的路径(间接证据)：</h4><ol>
-<li><p>点击下载之后可以看到sd卡下“./iFlyIME/speech”文件夹下多了如下两个so,删除离线包之后so消失。</p>
-<ul>
-<li><p>libAitalk5_v5_rnn.so</p>
-</li>
-<li><p>libAitalk5_res_cnsms_v5_rnn.so</p>
-</li>
-</ul>
-</li>
-</ol>
-<ol start="2">
-<li>调试smali文件可以看到：点击开启离线功能时，会先调用SpeechHelper的getAitalkChildType方法，在该方法中回去调用isV5RnnExist方法，之后会调用到getV5RnnSo跟getV5RnnRes方法，而这两个方法分别是获取这两个so的。（调试过程中截 取的数据中有这两个路径）。</li>
-</ol>
-<h5 id="SpeechHelper"><a href="#SpeechHelper" class="headerlink" title="SpeechHelper"></a>SpeechHelper</h5><ol>
-<li>getAitalkChildType</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getAitalkChildType</span><span class="params">(Context paramContext)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">   	。。。</span><br><span class="line">    <span class="keyword">if</span> (isV5RnnExist()) &#123;<span class="comment">///////////////////////////////******1*******////////////////////</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    。。。</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>isV5RnnExist </li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isV5RnnExist</span><span class="params">()</span></span></span><br><span class="line"><span class="function"> </span>&#123;</span><br><span class="line">   <span class="keyword">boolean</span> bool2 = <span class="keyword">false</span>;</span><br><span class="line">   removeFilesToHiddenDir();</span><br><span class="line">   File[] arrayOfFile1 = getV5RnnSo();<span class="comment">//////////*******2******////////////////</span></span><br><span class="line">   File[] arrayOfFile2 = getV5RnnRes();<span class="comment">/////////*******3******////////////////</span></span><br><span class="line">   <span class="keyword">boolean</span> bool1 = bool2;</span><br><span class="line">   <span class="keyword">if</span> (arrayOfFile1 != <span class="keyword">null</span>)</span><br><span class="line">   &#123;</span><br><span class="line">     bool1 = bool2;</span><br><span class="line">     <span class="keyword">if</span> (arrayOfFile1.length &gt; <span class="number">0</span>)</span><br><span class="line">     &#123;</span><br><span class="line">       bool1 = bool2;</span><br><span class="line">       <span class="keyword">if</span> (arrayOfFile2 != <span class="keyword">null</span>)</span><br><span class="line">       &#123;</span><br><span class="line">         bool1 = bool2;</span><br><span class="line">         <span class="keyword">if</span> (arrayOfFile2.length &gt; <span class="number">0</span>)</span><br><span class="line">         &#123;</span><br><span class="line">           <span class="keyword">int</span> i;</span><br><span class="line">           String str;</span><br><span class="line">           <span class="keyword">int</span> j;</span><br><span class="line">           <span class="keyword">if</span> (arrayOfFile1.length &gt; arrayOfFile2.length)</span><br><span class="line">           &#123;</span><br><span class="line">             i = <span class="number">0</span>;</span><br><span class="line">             <span class="keyword">if</span> (i &lt; arrayOfFile2.length)</span><br><span class="line">             &#123;</span><br><span class="line">               str = arrayOfFile2[i].getName().substring(DIR_AITALK5_5_RNN_RES_PREFIX.length());</span><br><span class="line">               j = <span class="number">0</span>;</span><br><span class="line">               <span class="keyword">for</span> (;;)</span><br><span class="line">               &#123;</span><br><span class="line">                 <span class="keyword">if</span> (j &lt; arrayOfFile1.length)</span><br><span class="line">                 &#123;</span><br><span class="line">                   <span class="keyword">if</span> (arrayOfFile1[i].getName().endsWith(str)) &#123;</span><br><span class="line">                     mRnnVer = str;</span><br><span class="line">                   &#125;</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">else</span></span><br><span class="line">                 &#123;</span><br><span class="line">                   i += <span class="number">1</span>;</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">                 &#125;</span><br><span class="line">                 j += <span class="number">1</span>;</span><br><span class="line">               &#125;</span><br><span class="line">             &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">else</span></span><br><span class="line">           &#123;</span><br><span class="line">             i = <span class="number">0</span>;</span><br><span class="line">             <span class="keyword">if</span> (i &lt; arrayOfFile1.length)</span><br><span class="line">             &#123;</span><br><span class="line">               str = arrayOfFile1[i].getName().substring(DIR_AITALK5_5_RNN_SO_PREFIX.length());</span><br><span class="line">               j = <span class="number">0</span>;</span><br><span class="line">               <span class="keyword">for</span> (;;)</span><br><span class="line">               &#123;</span><br><span class="line">                 <span class="keyword">if</span> (j &lt; arrayOfFile1.length)</span><br><span class="line">                 &#123;</span><br><span class="line">                   <span class="keyword">if</span> (arrayOfFile2[i].getName().endsWith(str)) &#123;</span><br><span class="line">                     mRnnVer = str;</span><br><span class="line">                   &#125;</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">else</span></span><br><span class="line">                 &#123;</span><br><span class="line">                   i += <span class="number">1</span>;</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">                 &#125;</span><br><span class="line">                 j += <span class="number">1</span>;</span><br><span class="line">               &#125;</span><br><span class="line">             &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (Logging.isDebugLogging()) &#123;</span><br><span class="line">             Logging.d(TAG, <span class="string">"rnn ver: "</span> + mRnnVer);</span><br><span class="line">           &#125;</span><br><span class="line">           bool1 = bool2;</span><br><span class="line">           <span class="keyword">if</span> (!TextUtils.isEmpty(mRnnVer)) &#123;</span><br><span class="line">             bool1 = <span class="keyword">true</span>;</span><br><span class="line">           &#125;</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> bool1;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>getV5RnnSo</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DIR_AITALK5_5_RNN_SO_PREFIX = "libAitalk5_v5_rnn"</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> File[] getV5RnnSo()</span><br><span class="line">  &#123;</span><br><span class="line">    removeFilesToHiddenDir();</span><br><span class="line">    File localFile = <span class="keyword">new</span> File(DIR_AITALK5_5_RNN_ROOT);</span><br><span class="line">    <span class="keyword">if</span> ((localFile.exists()) &amp;&amp; (localFile.isDirectory())) &#123;</span><br><span class="line">      <span class="keyword">return</span> localFile.listFiles(<span class="keyword">new</span> ccf(Pattern.compile(DIR_AITALK5_5_RNN_SO_PREFIX + <span class="string">"(_v)?[0-9]*.so"</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li>getV5RnnRes</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DIR_AITALK5_5_RNN_RES_PREFIX = "libAitalk5_res_cnsms_v5_rnn"</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> File[] getV5RnnRes()</span><br><span class="line">  &#123;</span><br><span class="line">    removeFilesToHiddenDir();</span><br><span class="line">    File localFile = <span class="keyword">new</span> File(DIR_AITALK5_5_RNN_ROOT);</span><br><span class="line">    <span class="keyword">if</span> ((localFile.exists()) &amp;&amp; (localFile.isDirectory())) &#123;</span><br><span class="line">      <span class="keyword">return</span> localFile.listFiles(<span class="keyword">new</span> ccg(Pattern.compile(DIR_AITALK5_5_RNN_RES_PREFIX + <span class="string">"(_v)?[0-9]*.so"</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<ol start="5">
-<li>调试过程截取的常量</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">CPU_ARM_V6 = <span class="string">"(v6"</span></span><br><span class="line">CURRENT_DIR_SPEECH = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">DIR_AITALK5_2_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v2.so"</span></span><br><span class="line">DIR_AITALK5_2_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v2.so"</span></span><br><span class="line">DIR_AITALK5_2_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v2.so"</span></span><br><span class="line">DIR_AITALK5_2_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v2.so"</span></span><br><span class="line">DIR_AITALK5_3_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v3.so"</span></span><br><span class="line">DIR_AITALK5_3_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v3.so"</span></span><br><span class="line">DIR_AITALK5_3_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v3.so"</span></span><br><span class="line">DIR_AITALK5_3_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v3.so"</span></span><br><span class="line">DIR_AITALK5_4_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v4.so"</span></span><br><span class="line">DIR_AITALK5_4_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v4.so"</span></span><br><span class="line">DIR_AITALK5_4_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v4.so"</span></span><br><span class="line">DIR_AITALK5_4_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v4.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_PATTERN = <span class="string">"(_v)?[0-9]*.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_RES_PREFIX = <span class="string">"libAitalk5_res_cnsms_v5_rnn"</span></span><br><span class="line">DIR_AITALK5_5_RNN_ROOT = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">DIR_AITALK5_5_RNN_ROOT_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">DIR_AITALK5_5_RNN_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_v5_rnn.so"</span></span><br><span class="line">DIR_AITALK5_5_RNN_SO_PREFIX = <span class="string">"libAitalk5_v5_rnn"</span></span><br><span class="line">DIR_AITALK6_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK6_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK6_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6.so"</span></span><br><span class="line">DIR_AITALK6_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk6.so"</span></span><br><span class="line">DIR_AITALK_RES = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK_RES_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5_res_cnsms.so"</span></span><br><span class="line">DIR_AITALK_SO = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5.so"</span></span><br><span class="line">DIR_AITALK_SO_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/libAitalk5.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_2_SO = <span class="string">"/libs/libAitalk5_v2.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_3_SO = <span class="string">"/libs/libAitalk5_v3.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_4_SO = <span class="string">"/libs/libAitalk5_v4.so"</span></span><br><span class="line">DIR_LIBS_AITALK5_5_RNN_ROOT = <span class="string">"/libs/"</span></span><br><span class="line">DIR_LIBS_AITALK5_5_RNN_SO = <span class="string">"/libs/libAitalk5_v5_rnn.so"</span></span><br><span class="line">DIR_LIBS_AITALK6_SO = <span class="string">"/libs/libAitalk6.so"</span></span><br><span class="line">DIR_LIBS_AITALK_SO = <span class="string">"/libs/libAitalk5.so"</span></span><br><span class="line">DIR_SPEECH = <span class="string">"/storage/emulated/0/iFlyIME/speech/"</span></span><br><span class="line">DIR_SPEECH_HIDDEN = <span class="string">"/storage/emulated/0/.iFlyIME/speech/"</span></span><br><span class="line">FILE_PATH = <span class="string">"FILE_PATH"</span></span><br><span class="line">MAX_SYNC_CALL_WAIT_TIME = <span class="number">20000</span></span><br><span class="line">MIN_RAM_REQUIRE = <span class="number">50</span></span><br><span class="line">RAM_REQUIRE_1G = <span class="number">1000</span></span><br><span class="line">RAM_REQUIRE_2G = <span class="number">1700</span></span><br><span class="line">TAG = <span class="string">"SpeechHelper"</span></span><br><span class="line">URL_PATH = <span class="string">"URL_PATH"</span></span><br><span class="line">VER_AITALK_5 = <span class="number">1003</span></span><br><span class="line">VER_AITALK_5_2 = <span class="number">1015</span></span><br><span class="line">VER_AITALK_5_3 = <span class="number">1022</span></span><br><span class="line">VER_AITALK_6 = <span class="number">1100</span></span><br><span class="line">mRnnVer = <span class="string">".so"</span></span><br></pre></td></tr></table></figure>
-<ol start="6">
-<li>。。。。</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="cjr8nalo8000fo9uqpf6fqb2o" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-Bit位计数" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/29/leetcode-Bit位计数/" class="article-date">
-  <time datetime="2018-06-29T15:40:39.337Z" itemprop="datePublished">2018-06-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/29/leetcode-Bit位计数/">leetcode-Bit位计数</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>给定一个非负整数 <strong>num</strong>。 对于范围 <strong>0 ≤ i ≤ num</strong> 中的每个数字 <strong>i</strong> ，计算其二进制数中的1的数目并将它们作为数组返回。</p>
-<p><strong>示例：</strong><br>比如给定 <code>num = 5</code> ，应该返回 <code>[0,1,1,2,1,2]</code>.</p>
-<p><strong>进阶：</strong></p>
-<ul>
-<li>给出时间复杂度为<strong>O(n * sizeof(integer))</strong> 的解答非常容易。 但是你可以在线性时间<strong>O(n)</strong>内用一次遍历做到吗？</li>
-<li>要求算法的空间复杂度为<strong>O(n)</strong>。</li>
-<li>你能进一步完善解法吗？ 在c ++或任何其他语言中不使用任何内置函数（如c++里的 <strong>__builtin_popcount</strong>）来执行此操作。</li>
-</ul>
-<p><strong>思路</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">考虑<span class="number">5</span> （<span class="number">111</span>） 除以<span class="number">2</span>就相当于把后面的<span class="number">1</span>砍掉剩下<span class="number">11</span>（<span class="number">2</span>）余 <span class="number">1</span> </span><br><span class="line"> 这样a[<span class="number">5</span>]=a[<span class="number">2</span>]+<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">考虑<span class="number">4</span> <span class="number">100</span>除以<span class="number">2</span> 就相当于把<span class="number">0</span>砍掉=<span class="number">2</span> 余 <span class="number">0</span> </span><br><span class="line">  这样a[<span class="number">4</span>]=a[<span class="number">2</span>];</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<p><strong>代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] countBits(<span class="keyword">int</span> num) &#123;        </span><br><span class="line">        <span class="keyword">int</span> [] arr= <span class="keyword">new</span> <span class="keyword">int</span>[num+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">if</span>(num==<span class="number">0</span>)&#123;</span><br><span class="line">            arr[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(num==<span class="number">1</span>)&#123;</span><br><span class="line">            arr[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">            arr[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> arr;</span><br><span class="line">        &#125;</span><br><span class="line">        arr[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">        arr[<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">2</span>;i&lt;=num;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp1=i/<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">int</span> temp2=i%<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(temp2==<span class="number">1</span>)&#123;</span><br><span class="line">                arr[i]=<span class="number">1</span>+arr[temp1];</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                arr[i]=arr[temp1];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="cjr8nalp6000so9uq1nn2qsau" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/02/leetcode-整数拆分/" data-id="cjs5oeu3p001fbwuqukdlql6t" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -644,7 +615,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -658,7 +629,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
     </div>
   </div>
 
@@ -668,7 +639,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/leetcode/" style="font-size: 15px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 15px;">leetcode stack</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/leetcode/" style="font-size: 15px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 15px;">leetcode stack</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a>
     </div>
   </div>
 
@@ -677,7 +648,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -690,6 +661,14 @@
       <ul>
         
           <li>
+            <a href="/2019/02/15/Android-webView加载h5（vue框架）/">webView加载h5</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/30/okhttp拦截器/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2019/01/14/spring-boot---添加日志/">spring boot - 添加日志</a>
           </li>
         
@@ -699,14 +678,6 @@
         
           <li>
             <a href="/2018/11/20/python-爬虫图片/">python-爬虫图片</a>
-          </li>
-        
-          <li>
-            <a href="/2018/11/20/leetcode-85.-最大矩形/">leetcode-85. 最大矩形</a>
-          </li>
-        
-          <li>
-            <a href="/2018/11/19/leetcode-84.-柱状图中最大的矩形/">leetcode-84. 柱状图中最大的矩形</a>
           </li>
         
       </ul>
