@@ -62,9 +62,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-前端-js" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-android-TextureView" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/02/15/前端-js/" class="article-date">
+    <a href="/2019/02/15/android-TextureView/" class="article-date">
   <time datetime="2019-02-15T09:57:03.403Z" itemprop="datePublished">2019-02-15</time>
 </a>
     
@@ -76,7 +76,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/15/前端-js/">前端-js</a>
+      <a class="article-title" href="/2019/02/15/android-TextureView/">android-TextureView</a>
     </h1>
   
 
@@ -84,14 +84,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h5 id="为什么要都有TextView"><a href="#为什么要都有TextView" class="headerlink" title="为什么要都有TextView"></a>为什么要都有TextView</h5><p>它是在4.0之后出现的用于替代surfaceView。</p>
+<p>surfaceView的工作方式是创建一个自己的窗口，跟应用窗口是平级的，也就是说它不像Button之类的可以放在Relativelayout里面，这样surfaceView就有了一个自己的优势，它自己刷新的时候不需要重回应用窗口。</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/15/前端-js/" data-id="cjs9td6060029m6uqaz7bjyli" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/15/android-TextureView/" data-id="cjsbjyfwd000ssuuqcsq839w6" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/前端-js/">前端 js</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-音视频/">android 音视频</a></li></ul>
 
     </footer>
   </div>
@@ -100,9 +102,9 @@
 
 
   
-    <article id="post-Android-webView加载静态h5（vue框架）" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Android-一次技术选型（webView跟h5（vue框架））" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/02/15/Android-webView加载静态h5（vue框架）/" class="article-date">
+    <a href="/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/" class="article-date">
   <time datetime="2019-02-15T05:12:24.534Z" itemprop="datePublished">2019-02-15</time>
 </a>
     
@@ -114,7 +116,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/15/Android-webView加载静态h5（vue框架）/">webView加载h5</a>
+      <a class="article-title" href="/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/">一次技术选型（webView加载h5）</a>
     </h1>
   
 
@@ -147,12 +149,14 @@
 <p>NanoHttpd不支持ttf以及woff等格式，最终使用了AndroidAsync跑通了demo。</p>
 <p>具体可以参考demo中的代码或者google 百度。</p>
 <h5 id="五：跨域问题备选方案"><a href="#五：跨域问题备选方案" class="headerlink" title="五：跨域问题备选方案"></a>五：跨域问题备选方案</h5><p>要求提供pb格式的model，之后使用tensorflowLite（tensorFlow对android的解决方案）去跟model交互，交互完成之后再去跟前端h5交互。</p>
-<h5 id="六：demo地址"><a href="#六：demo地址" class="headerlink" title="六：demo地址"></a>六：demo地址</h5><p><a href="https://github.com/kbjay/AndroidAsyncDemo" target="_blank" rel="noopener">https://github.com/kbjay/AndroidAsyncDemo</a></p>
+<h5 id="六：webView跟js交互"><a href="#六：webView跟js交互" class="headerlink" title="六：webView跟js交互"></a>六：webView跟js交互</h5><p>dist放在本地之后webview直接load一直担心vue build之后生成的dist中的js文件加了类似android的混淆，可能h5跟android交互会有问题，测试证明我的担心是多余的😓。交互跟直接load服务器中的h5是一样的。可以参考下：</p>
+<p><a href="https://juejin.im/post/5b7d30dfe51d4538b2046d63" target="_blank" rel="noopener">https://juejin.im/post/5b7d30dfe51d4538b2046d63</a></p>
+<h5 id="七：demo地址"><a href="#七：demo地址" class="headerlink" title="七：demo地址"></a>七：demo地址</h5><p><a href="https://github.com/kbjay/AndroidAsyncDemo" target="_blank" rel="noopener">https://github.com/kbjay/AndroidAsyncDemo</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/15/Android-webView加载静态h5（vue框架）/" data-id="cjs9td5y20001m6uq0kn2d8sx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/" data-id="cjsbjyfv80000suuqz9bed9tm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li></ul>
@@ -214,7 +218,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/30/okhttp拦截器/" data-id="cjs9td6020024m6uqvbghoz6i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/30/okhttp拦截器/" data-id="cjsbjyfxf0025suuqznbna0kf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -254,7 +258,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/14/spring-boot---添加日志/" data-id="cjs9td6040025m6uq3bs6o72f" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/14/spring-boot---添加日志/" data-id="cjsbjyfxe0024suuqxzmqze4m" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li></ul>
@@ -292,7 +296,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/14/算法-回溯/" data-id="cjs9td608002bm6uqneyvadhc" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/14/算法-回溯/" data-id="cjsbjyfxh0028suuq1tu9ot9u" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
@@ -330,7 +334,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/20/python-爬虫图片/" data-id="cjs9td6000020m6uqzbp5vx34" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/20/python-爬虫图片/" data-id="cjsbjyfxd0022suuqk4npt1kc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li></ul>
@@ -374,7 +378,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/20/leetcode-85.-最大矩形/" data-id="cjs9td5z5000ym6uqvbc6gr5q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/20/leetcode-85.-最大矩形/" data-id="cjsbjyfwj000ysuuqt5lw5ahh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li></ul>
@@ -424,7 +428,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/19/leetcode-84.-柱状图中最大的矩形/" data-id="cjs9td5z4000wm6uq1dqc52f3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/19/leetcode-84.-柱状图中最大的矩形/" data-id="cjsbjyfwh000wsuuq6bmve6l1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li></ul>
@@ -470,7 +474,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/14/SVG图像处理/" data-id="cjs9td5z1000sm6uqpt5mlagw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/14/SVG图像处理/" data-id="cjsbjyfwf000usuuqpjuy4rbp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/svg-java/">svg java</a></li></ul>
@@ -523,7 +527,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/08/Android-图片实现类似素描的效果/" data-id="cjs9td5yf000bm6uqx2nvxnsw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/08/Android-图片实现类似素描的效果/" data-id="cjsbjyfvv000bsuuq8jjqrnyg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li></ul>
@@ -553,7 +557,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端-js/">前端 js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
     </div>
   </div>
 
@@ -563,7 +567,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/leetcode/" style="font-size: 15px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 15px;">leetcode stack</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/前端-js/" style="font-size: 10px;">前端 js</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/leetcode/" style="font-size: 15px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 15px;">leetcode stack</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a>
     </div>
   </div>
 
@@ -585,11 +589,11 @@
       <ul>
         
           <li>
-            <a href="/2019/02/15/前端-js/">前端-js</a>
+            <a href="/2019/02/15/android-TextureView/">android-TextureView</a>
           </li>
         
           <li>
-            <a href="/2019/02/15/Android-webView加载静态h5（vue框架）/">webView加载h5</a>
+            <a href="/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/">一次技术选型（webView加载h5）</a>
           </li>
         
           <li>
