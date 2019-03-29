@@ -62,6 +62,52 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-SVG图像处理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/14/SVG图像处理/" class="article-date">
+  <time datetime="2018-11-14T06:53:08.445Z" itemprop="datePublished">2018-11-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/14/SVG图像处理/">SVG图像处理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h5><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial</a></p>
+<p><a href="https://brucewar.gitbooks.io/svg-tutorial/33.SVG%E5%8F%98%E6%8D%A2.html" target="_blank" rel="noopener">https://brucewar.gitbooks.io/svg-tutorial/33.SVG%E5%8F%98%E6%8D%A2.html</a></p>
+<h5 id="解析xml（dom4j）"><a href="#解析xml（dom4j）" class="headerlink" title="解析xml（dom4j）"></a>解析xml（dom4j）</h5><p><a href="https://dom4j.github.io/" target="_blank" rel="noopener">https://dom4j.github.io/</a></p>
+<p>接口：</p>
+<p>单一元素：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 单一元素双行旋转平铺(元素随机)</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> source</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> itemWidth</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> width</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> height</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> fromColor</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> toColor</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Document <span class="title">getDestDocumentSingle</span><span class="params">(Document[] source, <span class="keyword">int</span> itemWidth, <span class="keyword">int</span> width, <span class="keyword">int</span> height, String[] fromColor, String[] toColor)</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 单一元素双行旋转平铺(元素不随机)</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> source</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> itemWidth</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> fromColor</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> toColor</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Document <span class="title">getDestDocumentSingle</span><span class="params">(Document source, <span class="keyword">int</span> itemWidth, <span class="keyword">int</span> width, <span class="keyword">int</span> height, String[] fromColor, String[] toColor)</span> </span>&#123;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>组合元素：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 多种元素平铺(每一个单元的元素都由用户指定（指定图像源及旋转角度即可），用户可以随意客制化)</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> sources   按顺序排列的原图数组（从左到右，从上到下）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> itemWidth 原图集合宽度</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> fromColor 图片原始色值</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> toColor   图片最终色值</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Document <span class="title">getDestDocument</span><span class="params">(FloorSvg[] sources, <span class="keyword">int</span> itemWidth, <span class="keyword">int</span> width, <span class="keyword">int</span> height, String[] fromColor, String[] toColor)</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/14/SVG图像处理/" data-id="cjtu0lw2t000ta4uq7rh5wgs7" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/svg-java/">svg java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android-图片实现类似素描的效果" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/11/08/Android-图片实现类似素描的效果/" class="article-date">
@@ -103,7 +149,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/08/Android-图片实现类似素描的效果/" data-id="cjsctjrw2000bm6uqy0414t01" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/08/Android-图片实现类似素描的效果/" data-id="cjtu0lw2b000ba4uq9lacsegx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li></ul>
@@ -225,7 +271,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/29/leetcode-编辑距离(72)/" data-id="cjsctjrxg001wm6uqtu02o6hb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/29/leetcode-编辑距离(72)/" data-id="cjtu0lw51002xa4uqh0m6fn8d" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -277,7 +323,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/22/leetcode-分割等和子集(416)/" data-id="cjsctjrwy0017m6uq0c8i7eb3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/22/leetcode-分割等和子集(416)/" data-id="cjtu0lw47001wa4uqnhdwiyzr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li></ul>
@@ -323,7 +369,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/19/leetcode-最长上升子序列(300)/" data-id="cjsctjrxa001nm6uqx5p6dq2t" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/19/leetcode-最长上升子序列(300)/" data-id="cjtu0lw4n002fa4uq3dj8dwey" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -375,7 +421,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/19/leetcode-完全平方数(279)/" data-id="cjsctjrx3001fm6uqugd1qjcl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/19/leetcode-完全平方数(279)/" data-id="cjtu0lw4c0023a4uq6z0f9nzh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -422,7 +468,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/19/leetcode-判断子序列（392）/" data-id="cjsctjrwz0019m6uqnme2najn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/19/leetcode-判断子序列（392）/" data-id="cjtu0lw4a0020a4uqq0smigtf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -490,7 +536,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/15/Android---https/" data-id="cjsctjrvg0000m6uq38juampt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/15/Android---https/" data-id="cjtu0lw1p0000a4uqc3a2q17u" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-net/">android net</a></li></ul>
@@ -538,7 +584,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/12/leetcode-回文子串(647)/" data-id="cjsctjrx2001dm6uqe2vcygvx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/12/leetcode-回文子串(647)/" data-id="cjtu0lw4f0027a4uqibhpwhc3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -591,56 +637,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/11/leetcode-等差数列划分(413)/" data-id="cjsctjrxe001sm6uqy1z9wrxm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/11/leetcode-等差数列划分(413)/" data-id="cjtu0lw4t002na4uq0reebygk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-Arouter（调整人民日报结构）" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/11/Android-Arouter（调整人民日报结构）/" class="article-date">
-  <time datetime="2018-10-11T03:18:08.590Z" itemprop="datePublished">2018-10-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/11/Android-Arouter（调整人民日报结构）/">Android-Arouter（调整人民日报结构）</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>项目要求解耦各个模块，每个大模块可以作为一个单独的module。那么就需要解决如下问题：</p>
-<ol>
-<li>跨模块跳转（A模块的act要跳转到B模块的act）</li>
-<li>跨模块调用（A模块要使用B模块的数据）</li>
-</ol>
-<p>最终选择了利用Arouter来解决如上问题。</p>
-<p>ps（另外为了编译速度，是否每个module都可以单独运行？？？？？）</p>
-<h4 id="Arouter"><a href="#Arouter" class="headerlink" title="Arouter"></a>Arouter</h4><p>官方文档：<a href="https://github.com/alibaba/ARouter/blob/master/README_CN.md" target="_blank" rel="noopener">https://github.com/alibaba/ARouter/blob/master/README_CN.md</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/11/Android-Arouter（调整人民日报结构）/" data-id="cjsctjrvs0004m6uqthy0xttg" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-架构/">Android 架构</a></li></ul>
 
     </footer>
   </div>
@@ -686,7 +686,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -697,6 +697,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/03/27/server-springBoot/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2019/02/20/设计模式-工厂/">设计模式-工厂模式</a>
@@ -712,10 +716,6 @@
         
           <li>
             <a href="/2019/01/30/okhttp拦截器/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/14/spring-boot---添加日志/">spring boot - 添加日志</a>
           </li>
         
       </ul>
