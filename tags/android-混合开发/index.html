@@ -5,20 +5,15 @@
   
 
   
-  <title>一次技术选型（webView加载h5） | kb_jay的开发站台</title>
+  <title>Tag: android 混合开发 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="背景公司有写好的前端，其中包括  原生不太好实现的动画  动作跟情绪识别的model（利用的是tensorflow.js） 音视频  android端也希望可以实现相同的功能，此时想到的可能就是通过webview直接加载一个url就可以了，简单快捷。但是产品希望用户在没有网络的情况下也可以使用，直接加载url的方案肯定是行不通的。此时想到的方案是把前端的代码build到apk中，也就是把前端代码放">
-<meta name="keywords" content="混合开发 webView">
-<meta property="og:type" content="article">
-<meta property="og:title" content="一次技术选型（webView加载h5）">
-<meta property="og:url" content="http://yoursite.com/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="kb_jay的开发站台">
+<meta property="og:url" content="http://yoursite.com/tags/android-混合开发/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="背景公司有写好的前端，其中包括  原生不太好实现的动画  动作跟情绪识别的model（利用的是tensorflow.js） 音视频  android端也希望可以实现相同的功能，此时想到的可能就是通过webview直接加载一个url就可以了，简单快捷。但是产品希望用户在没有网络的情况下也可以使用，直接加载url的方案肯定是行不通的。此时想到的方案是把前端的代码build到apk中，也就是把前端代码放">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-27T08:28:04.003Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一次技术选型（webView加载h5）">
-<meta name="twitter:description" content="背景公司有写好的前端，其中包括  原生不太好实现的动画  动作跟情绪识别的model（利用的是tensorflow.js） 音视频  android端也希望可以实现相同的功能，此时想到的可能就是通过webview直接加载一个url就可以了，简单快捷。但是产品希望用户在没有网络的情况下也可以使用，直接加载url的方案肯定是行不通的。此时想到的方案是把前端的代码build到apk中，也就是把前端代码放">
+<meta name="twitter:title" content="kb_jay的开发站台">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -65,90 +60,40 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Android-一次技术选型（webView跟h5（vue框架））" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/" class="article-date">
-  <time datetime="2019-02-15T05:12:24.534Z" itemprop="datePublished">2019-02-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      一次技术选型（webView加载h5）
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2019/04/01/Android-jsbridge/" class="archive-article-date">
+  <time datetime="2019-04-01T08:13:50.083Z" itemprop="datePublished">Apr 1</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/04/01/Android-jsbridge/">Android-jsbridge</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h5><p>公司有写好的前端，其中包括</p>
-<ol>
-<li>原生不太好实现的动画 </li>
-<li>动作跟情绪识别的model（利用的是tensorflow.js）</li>
-<li>音视频</li>
-</ol>
-<p>android端也希望可以实现相同的功能，此时想到的可能就是通过webview直接加载一个url就可以了，简单快捷。但是产品希望用户在没有网络的情况下也可以使用，直接加载url的方案肯定是行不通的。此时想到的方案是把前端的代码build到apk中，也就是把前端代码放在assets目录中。</p>
-<p>方案确定之后开始爬坑～</p>
-<h5 id="一：如何将vue前端代码添加到assets中"><a href="#一：如何将vue前端代码添加到assets中" class="headerlink" title="一：如何将vue前端代码添加到assets中"></a>一：如何将vue前端代码添加到assets中</h5><p>将前端build之后生成的dist文件夹copy到assets中，之后使用webview加载assets中的入口html。</p>
-<p><strong>加载之后webview一片空白</strong></p>
-<p>问题出在了前端build之后的引用资源（css，js等）路径上。前端配置文件中assetsPublic的属性为“/”，对应的是根目录，而引用的资源文件static/css/xx.css目录和index.html是同级的，去根目录下找自然就找不到资源。修改配置文件中的assetsPublic属性为“./”，再重新build解决问题。</p>
-<h5 id="二：如何使用chrome调试webview显示的h5页面"><a href="#二：如何使用chrome调试webview显示的h5页面" class="headerlink" title="二：如何使用chrome调试webview显示的h5页面"></a>二：如何使用chrome调试webview显示的h5页面</h5><p>加载webview空白的问题，我们是如何定位到的呢。其实chrome提供了调试andorid WebView的功能，inspect之后可以在console中看到报错信息。至于如何调试，过程非常简单，两三步就可以，想自己体验的可以百度下，个人感觉还是非常实用的～（注意在webView中设置debug模式为true）</p>
-<h5 id="三：webView如何加载具有音视频功能的h5页面"><a href="#三：webView如何加载具有音视频功能的h5页面" class="headerlink" title="三：webView如何加载具有音视频功能的h5页面"></a>三：webView如何加载具有音视频功能的h5页面</h5><p>有两种方案可以选择：</p>
-<ol>
-<li>通过原生跟前端交互实现（需要修改前端代码，android端也有一定的工作量）</li>
-<li>webView在5.0之后默认支持WebRtc（支持网页实时语音跟视频对话），需要新建一个WebChromeClient设置给webView，其中WebChromeClient需要重写onPermissionRequest（）方法赋予网页音视频权限。另外需要在manifest中声明使用的音视频权限。</li>
-</ol>
-<p>#####四：跨域问题</p>
-<p>webView加载assets中的静态html使用的是file协议，如果在index.html中再去加载http协议的页面或者发送ajax请求都会有跨域的问题。</p>
-<p>实际项目中加载model使用到了http协议。</p>
-<p>方案：可以使用NanoHttpd或者AndroidAsync在app中搭建本地服务器。</p>
-<p>webView使用loadUtl（http）的形式加载index.html，这样统一使用http协议。</p>
-<p>NanoHttpd不支持ttf以及woff等格式，最终使用了AndroidAsync跑通了demo。</p>
-<p>具体可以参考demo中的代码或者google 百度。</p>
-<h5 id="五：跨域问题备选方案"><a href="#五：跨域问题备选方案" class="headerlink" title="五：跨域问题备选方案"></a>五：跨域问题备选方案</h5><p>要求提供pb格式的model，之后使用tensorflowLite（tensorFlow对android的解决方案）去跟model交互，交互完成之后再去跟前端h5交互。</p>
-<h5 id="六：webView跟js交互"><a href="#六：webView跟js交互" class="headerlink" title="六：webView跟js交互"></a>六：webView跟js交互</h5><p>dist放在本地之后webview直接load一直担心vue build之后生成的dist中的js文件加了类似android的混淆，可能h5跟android交互会有问题，测试证明我的担心是多余的😓。交互跟直接load服务器中的h5是一样的。可以参考下：</p>
-<p><a href="https://juejin.im/post/5b7d30dfe51d4538b2046d63" target="_blank" rel="noopener">https://juejin.im/post/5b7d30dfe51d4538b2046d63</a></p>
-<h5 id="七：demo地址"><a href="#七：demo地址" class="headerlink" title="七：demo地址"></a>七：demo地址</h5><p><a href="https://github.com/kbjay/AndroidAsyncDemo" target="_blank" rel="noopener">https://github.com/kbjay/AndroidAsyncDemo</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/" data-id="cju17eifw00040puqdfmkfr9g" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2019/02/15/android-TextureView/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          android-TextureView
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/01/30/okhttp拦截器/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title"></div>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
+
 
 </section>
         
