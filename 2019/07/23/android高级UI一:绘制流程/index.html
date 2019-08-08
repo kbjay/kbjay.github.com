@@ -7,18 +7,18 @@
   
   <title>android setContentView源码分析 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="#####view是如何添加到屏幕 上的？ 从setContentView出发-&amp;gt; 1234public void setContentView(@LayoutRes int layoutResID) &amp;#123;       getWindow().setContentView(layoutResID);       initWindowDecorActionBar();&amp;#125; 可以">
+  <meta name="description" content="view是如何添加到屏幕 上的？从setContentView出发-&amp;gt; 1234public void setContentView(@LayoutRes int layoutResID) &amp;#123;       getWindow().setContentView(layoutResID);       initWindowDecorActionBar();&amp;#125; 可以看到调用的是">
 <meta name="keywords" content="android ui">
 <meta property="og:type" content="article">
 <meta property="og:title" content="android setContentView源码分析">
 <meta property="og:url" content="http://yoursite.com/2019/07/23/android高级UI一:绘制流程/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="#####view是如何添加到屏幕 上的？ 从setContentView出发-&amp;gt; 1234public void setContentView(@LayoutRes int layoutResID) &amp;#123;       getWindow().setContentView(layoutResID);       initWindowDecorActionBar();&amp;#125; 可以">
+<meta property="og:description" content="view是如何添加到屏幕 上的？从setContentView出发-&amp;gt; 1234public void setContentView(@LayoutRes int layoutResID) &amp;#123;       getWindow().setContentView(layoutResID);       initWindowDecorActionBar();&amp;#125; 可以看到调用的是">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-08T03:29:45.992Z">
+<meta property="og:updated_time" content="2019-08-08T03:33:14.966Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="android setContentView源码分析">
-<meta name="twitter:description" content="#####view是如何添加到屏幕 上的？ 从setContentView出发-&amp;gt; 1234public void setContentView(@LayoutRes int layoutResID) &amp;#123;       getWindow().setContentView(layoutResID);       initWindowDecorActionBar();&amp;#125; 可以">
+<meta name="twitter:description" content="view是如何添加到屏幕 上的？从setContentView出发-&amp;gt; 1234public void setContentView(@LayoutRes int layoutResID) &amp;#123;       getWindow().setContentView(layoutResID);       initWindowDecorActionBar();&amp;#125; 可以看到调用的是">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -87,8 +87,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#####view是如何添加到屏幕 上的？</p>
-<p>从setContentView出发-&gt;</p>
+        <h5 id="view是如何添加到屏幕-上的？"><a href="#view是如何添加到屏幕-上的？" class="headerlink" title="view是如何添加到屏幕 上的？"></a>view是如何添加到屏幕 上的？</h5><p>从setContentView出发-&gt;</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(@LayoutRes <span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">       getWindow().setContentView(layoutResID);</span><br><span class="line">       initWindowDecorActionBar();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看到调用的是getWindow的setContentView方法，</p>
 <p>那么getWindow是啥呢？</p>
@@ -120,7 +119,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/23/android高级UI一:绘制流程/" data-id="cjz24i2p9000ud1uqrgkj6cvp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/23/android高级UI一:绘制流程/" data-id="cjz24mj5s000udnuqa41w19df" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-ui/">android ui</a></li></ul>

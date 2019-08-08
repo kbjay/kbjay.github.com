@@ -84,8 +84,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#####view是如何添加到屏幕 上的？</p>
-<p>从setContentView出发-&gt;</p>
+        <h5 id="view是如何添加到屏幕-上的？"><a href="#view是如何添加到屏幕-上的？" class="headerlink" title="view是如何添加到屏幕 上的？"></a>view是如何添加到屏幕 上的？</h5><p>从setContentView出发-&gt;</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(@LayoutRes <span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">       getWindow().setContentView(layoutResID);</span><br><span class="line">       initWindowDecorActionBar();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看到调用的是getWindow的setContentView方法，</p>
 <p>那么getWindow是啥呢？</p>
@@ -117,7 +116,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/23/android高级UI一:绘制流程/" data-id="cjz24i2p9000ud1uqrgkj6cvp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/23/android高级UI一:绘制流程/" data-id="cjz24mj5s000udnuqa41w19df" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-ui/">android ui</a></li></ul>
@@ -155,7 +154,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/01/数据结构系列-数组/" data-id="cjz24i2qk002jd1uq1gx7hb59" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/01/数据结构系列-数组/" data-id="cjz24mj7i002fdnuqlassb4kv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -185,7 +184,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/19/traceView ：展示执行时间。/" data-id="cjz24i2qj002hd1uqiafy574o" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/19/traceView ：展示执行时间。/" data-id="cjz24mj7j002hdnuqfc52g12t" class="article-share-link">Share</a>
       
       
     </footer>
@@ -224,12 +223,10 @@
 <p>可以跟java完美结合，可以使用java库；</p>
 <p>支持动态类型，闭包；</p>
 <p>支持面向对象，也支持面向过程（写脚本）；</p>
-<p>#####环境搭建</p>
-<p>官网下载groovy—sdk；</p>
+<h5 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h5><p>官网下载groovy—sdk；</p>
 <p>安装jdk；</p>
 <p>安装idea；</p>
-<p>#####新建项目</p>
-<p>idea中new project，选择groovy，指定groovy sdk即可；</p>
+<h5 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h5><p>idea中new project，选择groovy，指定groovy sdk即可；</p>
 <h5 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h5><ol>
 <li><p>基本语法</p>
 <p>变量类型：跟java一致，没有基本类型，自动装箱；</p>
@@ -252,8 +249,7 @@
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> variable.clazz.study</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> <span class="doctag">@author</span> kb_jay</span></span><br><span class="line"><span class="comment"> <span class="doctag">@time</span> 2019/4/18</span></span><br><span class="line"><span class="comment">  * */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Action</span> &#123;</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> sayHello() &#123;</span><br><span class="line">        println(<span class="string">"$&#123;name&#125;-&gt;$&#123;age&#125; say hello"</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">void</span> play() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">void</span> eat() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//运行时 1</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    Object invokeMethod(String s, Object o) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"method-&gt;$&#123;s&#125;,args-&gt;$&#123;o&#125;"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//类的使用！！！！！！！</span></span><br><span class="line"><span class="keyword">package</span> variable.clazz.study</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> person = <span class="keyword">new</span> Person(<span class="string">name:</span> <span class="string">"wzq"</span>, <span class="string">age:</span> <span class="number">18</span>)</span><br><span class="line"></span><br><span class="line">println(person.name)</span><br><span class="line"></span><br><span class="line">person.sayHello()</span><br><span class="line"></span><br><span class="line"><span class="comment">//metaClass</span></span><br><span class="line"><span class="keyword">def</span> cry = person.cry()</span><br><span class="line">println(cry)</span><br><span class="line"></span><br><span class="line"><span class="comment">//为类动态添加属性</span></span><br><span class="line">Person.metaClass.sex=<span class="string">'male'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> person1 = <span class="keyword">new</span> Person(<span class="string">name:</span> <span class="string">"wzq"</span>, <span class="string">age:</span> <span class="number">18</span>)</span><br><span class="line">println(person1.sex)</span><br><span class="line"></span><br><span class="line"><span class="comment">//动态添加方法</span></span><br><span class="line">Person.metaClass.newMethod=&#123;<span class="keyword">return</span> <span class="string">"$&#123;name&#125;"</span>&#125;</span><br><span class="line"></span><br><span class="line">println(person1.newMethod())</span><br><span class="line"><span class="comment">//动态添加静态方法</span></span><br><span class="line">Person.metaClass.<span class="keyword">static</span>.newStaticMethod=&#123;String name,<span class="keyword">int</span> age-&gt;</span><br><span class="line">    <span class="keyword">new</span> Person(<span class="string">name:</span>name,<span class="string">age:</span>age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> person2=Person.newStaticMethod(<span class="string">"zpy"</span>,<span class="number">17</span>)</span><br><span class="line">println person2.name</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>#####进阶语法</p>
-<ol>
+<h5 id="进阶语法"><a href="#进阶语法" class="headerlink" title="进阶语法"></a>进阶语法</h5><ol>
 <li><p>json文件操作</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> variable</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> groovy.json.JsonOutput</span><br><span class="line"><span class="keyword">import</span> groovy.json.JsonParser</span><br><span class="line"><span class="keyword">import</span> groovy.json.JsonSlurper</span><br><span class="line"></span><br><span class="line"><span class="comment">//object -&gt; jsonString</span></span><br><span class="line"><span class="keyword">def</span> list = [<span class="keyword">new</span> Test(<span class="string">name:</span> <span class="string">"wzq"</span>, <span class="string">age:</span> <span class="number">16</span>), <span class="keyword">new</span> Test(<span class="string">name:</span> <span class="string">"zpy"</span>, <span class="string">age:</span> <span class="number">15</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> json = JsonOutput.toJson(list)</span><br><span class="line"><span class="keyword">def</span> print = JsonOutput.prettyPrint(json)</span><br><span class="line">println(print)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> &#123;</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//jsonString 2 object</span></span><br><span class="line"><span class="keyword">def</span> slurper = <span class="keyword">new</span> JsonSlurper()</span><br><span class="line"><span class="keyword">def</span> text = slurper.parseText(json)</span><br><span class="line">println text[<span class="number">0</span>].name</span><br><span class="line"></span><br><span class="line"><span class="comment">//call net</span></span><br><span class="line"><span class="keyword">def</span> response=callNet(<span class="string">'http://yuexibo.top/yxApp/course_detail.json'</span>)</span><br><span class="line">println response.data.head.name </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> callNet(String path) &#123;</span><br><span class="line">    <span class="keyword">def</span> connection = <span class="keyword">new</span> URL(path).openConnection()</span><br><span class="line">    connection.setRequestMethod(<span class="string">"GET"</span>)</span><br><span class="line">    connection.connect()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> response = connection.content.text</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> slurper = <span class="keyword">new</span> JsonSlurper()</span><br><span class="line">    <span class="keyword">return</span> slurper.parseText(response)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
@@ -284,11 +280,12 @@
 <li>Task实战</li>
 </ol>
 <h5 id="Settings"><a href="#Settings" class="headerlink" title="Settings"></a>Settings</h5><h5 id="SourceSet"><a href="#SourceSet" class="headerlink" title="SourceSet"></a>SourceSet</h5><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//修改jnilib-&gt;lib</span></span><br><span class="line">sourceSets &#123;</span><br><span class="line">    main &#123;</span><br><span class="line">        jniLibs.srcDirs = [<span class="string">'libs'</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//资源分模块    </span></span><br><span class="line">sourceSets &#123;</span><br><span class="line">    main&#123;</span><br><span class="line">        res.srcDirs = [<span class="string">'src/main/res'</span>,</span><br><span class="line">                       <span class="string">'src/main/res-ad'</span>,</span><br><span class="line">                       <span class="string">'src/main/res-player'</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="自定义plugin"><a href="#自定义plugin" class="headerlink" title="自定义plugin"></a>自定义plugin</h5>
+<h5 id="自定义plugin"><a href="#自定义plugin" class="headerlink" title="自定义plugin"></a>自定义plugin</h5><p>源码地址：<a href="https://github.com/kbjay/Kj_ReleasInfoPlugin" target="_blank" rel="noopener">https://github.com/kbjay/Kj_ReleasInfoPlugin</a></p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/30/Android-gradle/" data-id="cjz24i2ry0041d1uq4hk32vm6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/30/Android-gradle/" data-id="cjz24mj940041dnuq9nh1qubp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-gradle/">android gradle</a></li></ul>
@@ -427,7 +424,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/01/Android-jsbridge/" data-id="cjz24i2se004jd1uq0qtyxkkt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/01/Android-jsbridge/" data-id="cjz24mj9s004jdnuqzwssgoyr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li></ul>
@@ -460,7 +457,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/27/server-springBoot/" data-id="cjz24i2qe0029d1uqlkw98gf5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/27/server-springBoot/" data-id="cjz24mj7b0029dnuq1wzv1y6z" class="article-share-link">Share</a>
       
       
     </footer>
@@ -556,7 +553,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/20/设计模式-工厂/" data-id="cjz24i2s40047d1uq8ua8bvzs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/20/设计模式-工厂/" data-id="cjz24mj9f0047dnuqddiu8b5m" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
@@ -596,7 +593,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/15/android-TextureView/" data-id="cjz24i2pc000yd1uq0gpou61b" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/15/android-TextureView/" data-id="cjz24mj5u000wdnuq06jacfg7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-音视频/">android 音视频</a></li></ul>
@@ -662,7 +659,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/" data-id="cjz24i2on0005d1uqiq0pqhqm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/" data-id="cjz24mj4q0005dnuqxcukw282" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li></ul>
@@ -724,7 +721,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/30/okhttp拦截器/" data-id="cjz24i2qa0024d1uq2q4k2ht5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/30/okhttp拦截器/" data-id="cjz24mj720022dnuqp0vybq2f" class="article-share-link">Share</a>
       
       
     </footer>
