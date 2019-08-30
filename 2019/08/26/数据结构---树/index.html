@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>数据结构 - 树 | kb_jay的开发站台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="二叉树遍历 定义二叉树 12345678910111213141516171819202122/** * @author kb_jay * @time 2019/8/26 **/public class Node&amp;lt;T&amp;gt; &amp;#123;    public T data;    public Node leftChild;    public Node rightChild;    pub">
+<meta name="keywords" content="数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构 - 树">
+<meta property="og:url" content="http://yoursite.com/2019/08/26/数据结构---树/index.html">
+<meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="二叉树遍历 定义二叉树 12345678910111213141516171819202122/** * @author kb_jay * @time 2019/8/26 **/public class Node&amp;lt;T&amp;gt; &amp;#123;    public T data;    public Node leftChild;    public Node rightChild;    pub">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-27T01:46:31.736Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构 - 树">
+<meta name="twitter:description" content="二叉树遍历 定义二叉树 12345678910111213141516171819202122/** * @author kb_jay * @time 2019/8/26 **/public class Node&amp;lt;T&amp;gt; &amp;#123;    public T data;    public Node leftChild;    public Node rightChild;    pub">
+  
+    <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">kb_jay的开发站台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-数据结构---树" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/26/数据结构---树/" class="article-date">
+  <time datetime="2019-08-26T08:01:38.968Z" itemprop="datePublished">2019-08-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      数据结构 - 树
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="二叉树遍历"><a href="#二叉树遍历" class="headerlink" title="二叉树遍历"></a>二叉树遍历</h4><ol>
+<li><p>定义二叉树</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> kb_jay</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@time</span> 2019/8/26</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> T data;</span><br><span class="line">    <span class="keyword">public</span> Node leftChild;</span><br><span class="line">    <span class="keyword">public</span> Node rightChild;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(T data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(data, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(T data, Node leftChild, Node rightChild)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        <span class="keyword">this</span>.leftChild = leftChild;</span><br><span class="line">        <span class="keyword">this</span>.rightChild = rightChild;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>遍历二叉树</p>
+<ul>
+<li><p>前序遍历（递归跟非递归）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//递归</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">firstRoot</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(root.data);</span><br><span class="line">    firstRoot(root.leftChild);</span><br><span class="line">    firstRoot(root.rightChild);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//非递归</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">firstRootStack</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span> || stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//输出并压栈左孩子</span></span><br><span class="line">        <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.println(root.data);</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root = root.leftChild;</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//出栈遍历右孩子</span></span><br><span class="line">        <span class="keyword">if</span> (stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            Node node = stack.pop();</span><br><span class="line">            root = node.rightChild;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>中序遍历（递归跟非递归）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">centerRoot</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    centerRoot(root.leftChild);</span><br><span class="line">    System.out.println(root.data);</span><br><span class="line">    centerRoot(root.rightChild);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">centerRootStack</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span> || stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root = root.leftChild;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            root = stack.pop();</span><br><span class="line">            System.out.println(root.data);</span><br><span class="line">            root = root.rightChild;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>后序遍历（递归跟非递归）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lastRoot</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    lastRoot(node.leftChild);</span><br><span class="line">    lastRoot(node.rightChild);</span><br><span class="line">    System.out.println(node.data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lastRootStack</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="comment">//记录前一个输出的node</span></span><br><span class="line">    Node pre = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span> || stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root = root.leftChild;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            Node temp = stack.peek().rightChild;</span><br><span class="line">            <span class="keyword">if</span> (temp == <span class="keyword">null</span> || temp == pre) &#123;</span><br><span class="line">                pre = stack.pop();</span><br><span class="line">                System.out.println(pre.data);</span><br><span class="line">                root = <span class="keyword">null</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                root = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>层序遍历</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">layerOut</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Queue&lt;Node&gt; queue = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">        System.out.println(root.data);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root.leftChild != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.offer(root.leftChild);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root.rightChild != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.offer(root.rightChild);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果队列为空，返回null， 栈的pop方法，如果栈为空，则报异常</span></span><br><span class="line">        root = queue.poll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="二分搜索树"><a href="#二分搜索树" class="headerlink" title="二分搜索树"></a>二分搜索树</h4><ol>
+<li><p>任意一个节点的值大于左边的所有节点的值，小于右边的所有节点的值。</p>
+<ol start="2">
+<li>中序遍历是有序的。</li>
+</ol>
+</li>
+</ol>
+<h4 id="2-3-树"><a href="#2-3-树" class="headerlink" title="2-3 树"></a>2-3 树</h4><ol>
+<li>满足二分搜索树</li>
+<li>一个节点可以存放1个或者2个元素</li>
+<li>二三树是绝对平衡树</li>
+<li>二三树添加元素不会往空节点添加，第一步肯定是跟叶子节点合并</li>
+</ol>
+<h4 id="AVL树"><a href="#AVL树" class="headerlink" title="AVL树"></a>AVL树</h4><ol>
+<li>平衡二叉树</li>
+<li>任何一个节点的左右孩子到叶子节点的距离相差不超过1</li>
+<li>它是为了解决二分搜索树的退化问题</li>
+<li>每次更新数据都需要通过旋转来维持平衡，所以实际开发中用红黑树会更多</li>
+</ol>
+<h4 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h4><ol>
+<li>红黑树是一个自平衡的二叉搜索树，并不是严格的avl树。</li>
+<li>它是为了解决二分搜索树在数据更新的过程中复杂度退化的问题。</li>
+<li>红黑树高度近似log2n，近似平衡，红黑树是有2-3-4树演变过来的，因为2-3-4树有绝对平衡性，所以将红色节点去掉之后的高度&lt;=log2n，而红色节点的儿子不能是黑色节点，所以红黑树中从跟节点到叶子节点有一个黑色就最多有一个红色，我们将红色加回来之后的高度&lt;2*log2n</li>
+<li>插入查找删除时间复杂度是log2n</li>
+<li>是由2-3-4树演变过来的我们将红黑树中的红色节点跟父亲节点合并之后就是一个绝对平衡的2-3-4树</li>
+<li>红黑树的平衡过程其实跟魔方复原差不多，记住规则就行（变色跟旋转）</li>
+<li>四条性质：根黑；叶子节点的子节点是黑色；红色节点不相邻；根节点到叶子节点的路径上黑色节点个数一致。   通过234树理解这个还是很好理解的。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/26/数据结构---树/" data-id="cjzxjxhp9003ju4uqig6blzx2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/08/26/数据结构---图/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          数据结构 - 图
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/08/26/https/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">https</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 13.33px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/leetcode/" style="font-size: 13.33px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 13.33px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/08/30/JVM---内存区域/">JVM - 内存区域</a>
+          </li>
+        
+          <li>
+            <a href="/2019/08/28/URL参数的sign签名认证/">URL参数的sign签名认证</a>
+          </li>
+        
+          <li>
+            <a href="/2019/08/26/android---线程通信/">android - 线程通信</a>
+          </li>
+        
+          <li>
+            <a href="/2019/08/26/android---handler/">android - handler</a>
+          </li>
+        
+          <li>
+            <a href="/2019/08/26/android---事件传递/">android - 事件传递</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 kb_jay<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
