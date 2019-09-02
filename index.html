@@ -62,6 +62,142 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-JVM---GC" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/02/JVM---GC/" class="article-date">
+  <time datetime="2019-09-02T06:19:17.958Z" itemprop="datePublished">2019-09-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/02/JVM---GC/">JVM - GC</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="Q：如何确认那些对象的可以回收的"><a href="#Q：如何确认那些对象的可以回收的" class="headerlink" title="Q：如何确认那些对象的可以回收的"></a>Q：如何确认那些对象的可以回收的</h4><ol>
+<li><p>引用计数</p>
+<p><img src="data:image/png;base64,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" alt="âjvmå¼ç¨è®¡æ°âçå¾çæç´¢ç»æ"></p>
+<p>如上图，左边为堆，右边为虚拟机栈中的局部变量表，如果堆中的对象相互引用了，那么使用这种方式，即使将引用1跟2断开，对象的引用数量不为0，此时两个堆中的对象无法回收，所以现有的主流jvm虚拟机实现基本不会采用这种方式。</p>
+</li>
+<li><p>GCRoot（可达性分析）</p>
+<p>从如下的GCRoot节点开始向下搜索，当一个对象跟GCRoot节点没有任何引用链的时候，这个对象就是可以回收的。</p>
+</li>
+</ol>
+<p>   可以作为GCRoot的有</p>
+<ul>
+<li>虚拟机栈中的局部变量表中的引用</li>
+<li>本地方法栈。。</li>
+<li>方法区中类静态变量引用的对象</li>
+<li>方法区中常量引用的对象</li>
+</ul>
+<h4 id="Q：怎么回收"><a href="#Q：怎么回收" class="headerlink" title="Q：怎么回收"></a>Q：怎么回收</h4><ol>
+<li><p>标记-清除：通过GCRoot找到可回收对象，标记之后清除掉。</p>
+<p>会有空间碎片</p>
+</li>
+<li><p>标记-整理：找到可回收对象之后将它拼接到内存空间的首部</p>
+</li>
+<li><p>复制：将空间分为两部分A跟B，当A需要回收时，将不回收的对象copy到B，之后清除A。</p>
+<p>空间浪费</p>
+</li>
+<li><p>分代算法：将堆空间分为新生代跟老年代，新生代中的对象在GC的时候有很大一部分需要被回收（IBM-98%），对新生代的GC我们可以改进下复制算法，将区域分为eden（80%）跟两个survivor  A跟B（20%）；申请空间的时候我们从优先从eden申请，之后从A申请，回收的时候将eden跟A中的不回收对象copy到B，之后清理掉eden跟A。如此。。</p>
+<p>对于老年代，每次GC都会有很大部分对象不需要被回收掉，所以更加适合标记-整理算法。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/02/JVM---GC/" data-id="ck02bvr9p000sxcuqde9d1stv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM---对象的创建" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/30/JVM---对象的创建/" class="article-date">
+  <time datetime="2019-08-30T08:22:30.862Z" itemprop="datePublished">2019-08-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/30/JVM---对象的创建/">JVM - 对象的创建</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ol>
+<li>new 对象之后，先看方法区的常量池中是否有类的符号引用</li>
+<li>如果没有，那么加载类（todo），完成之后就知道我们需要申请多少空间了</li>
+<li>堆中申请空间</li>
+<li>初始化，基本对象为0，引用对象为null</li>
+<li>调用&lt; init &gt; 构造方法</li>
+</ol>
+<h5 id="内存分配问题"><a href="#内存分配问题" class="headerlink" title="内存分配问题"></a>内存分配问题</h5><p>两种方案</p>
+<ol>
+<li>使用指针碰撞：可用内存跟不可用内存之间有个指针，可用跟不可用内存是规整的</li>
+<li>使用空闲列表：空闲区域的指针放入链表中</li>
+</ol>
+<h5 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h5><p>假如线程1有个a对象，线程2有个b对象，a正在申请的时候，b也开始申请，堆是共享的，会有线程安全问题。</p>
+<p>两种方案：</p>
+<ol>
+<li>每次分配内存都加锁</li>
+<li>堆中按线程分区域（线程缓存区），申请线程缓存区的时候加锁</li>
+</ol>
+<h4 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h4><ol>
+<li>对象头 <ul>
+<li>运行时数据（对象的hashcode，gc年代，锁状态等）</li>
+<li>类指针（指向方法区中的类信息，表明该对象是哪个类）</li>
+</ul>
+</li>
+<li>实例数据</li>
+<li>对齐填充padding</li>
+</ol>
+<h5 id="Hotspot对象访问定位"><a href="#Hotspot对象访问定位" class="headerlink" title="Hotspot对象访问定位"></a>Hotspot对象访问定位</h5><p>栈中有堆对象的引用，堆对象中有方法区中对象类型数据（class）的引用</p>
+<p>tip：还有一种是句柄的方式</p>
+<p>堆中有句柄池跟对象池，栈中有句柄池的引用，句柄池中有对象的引用跟对象类型数据（class）的引用</p>
+<p>参考 《深入理解jvm》49页</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/30/JVM---对象的创建/" data-id="ck02bvr9u000wxcuq3ir8dh5a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-JVM---内存区域" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/08/30/JVM---内存区域/" class="article-date">
@@ -112,26 +248,18 @@
 <li>会oom</li>
 </ol>
 <h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><ol>
-<li>存放类信息（跟class对应），存放常量（常量池），存放静态变量等</li>
+<li>存放类信息（跟class对应），存放常量（常量池，1.8 将常量池放入了堆），存放静态变量等</li>
 <li>线程共享的</li>
 <li>会oom</li>
 <li>在java8中被移除了，取而代之的是metaspace（元数据空间）</li>
 </ol>
-<h4 id="eg："><a href="#eg：" class="headerlink" title="eg："></a>eg：</h4><p>运行如下代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">"123"</span>;</span><br><span class="line">String b = <span class="string">"123"</span>;</span><br><span class="line">System.out.println(a == b);</span><br><span class="line"></span><br><span class="line">String c = <span class="keyword">new</span> String(<span class="string">"123"</span>);</span><br><span class="line">System.out.println(a == c);</span><br><span class="line"></span><br><span class="line"><span class="comment">//将c的内容放入方法区中的常量池中</span></span><br><span class="line">String d = c.intern();</span><br><span class="line">System.out.println(a == d);</span><br><span class="line"></span><br><span class="line">String e = <span class="keyword">new</span> String(<span class="string">"1234"</span>);</span><br><span class="line">String f = e.intern();</span><br><span class="line">String g = <span class="string">"1234"</span>;</span><br><span class="line">System.out.println(f == g);</span><br></pre></td></tr></table></figure>
-<ol>
-<li>true ， false  ，true ，true</li>
-<li>a～g作为方法的局部变量，会存放在虚拟机栈的局部方法表里面，这里存放的是地址（引用）</li>
-<li>“123”作为常量会放在方法区的常量池中，该常量池类似hashset，不能有重复的，所以a跟b存放的都是“123”的地址，所以a==b是true</li>
-<li>c因为是new的String，所以存放的是对象地址，而对象是存放在堆里面的，所有a==c是false，此时堆里面有个“123”，方法区的常量池中也有个“123”。</li>
-<li>c.intern() 方法会把堆中的“123”放入常量池，返回常量池中的“123”的地址，所以a==d 是true</li>
-<li>f==g是true，原因跟5一样。</li>
-</ol>
+<h4 id="eg："><a href="#eg：" class="headerlink" title="eg："></a>eg：</h4><p>运行如下代码：以下只分析1.8</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">"123"</span>;</span><br><span class="line">String b = <span class="string">"123"</span>;</span><br><span class="line"><span class="comment">//true  两个都是常量池中 123 的地址</span></span><br><span class="line">System.out.println(a == b);</span><br><span class="line"></span><br><span class="line">String c = <span class="keyword">new</span> String(<span class="string">"123"</span>);</span><br><span class="line"><span class="comment">//一个堆 一个常量池，不一样 false</span></span><br><span class="line">System.out.println(a == c);</span><br><span class="line"></span><br><span class="line"><span class="comment">//java 1.8 因为常量池已经有 123 了，所以返回常量池中的123的地址</span></span><br><span class="line">String d = c.intern();</span><br><span class="line"><span class="comment">//所以true</span></span><br><span class="line">System.out.println(a == d);</span><br><span class="line"></span><br><span class="line"><span class="comment">//下面的代码将 "我是wzq" 放入常量池，并创建了一个堆对象e</span></span><br><span class="line">String e = <span class="keyword">new</span> String(<span class="string">"我是wzq"</span>);</span><br><span class="line"><span class="comment">//java 1.8 因为常量池有 我是wzq ，所以将 我是wzq 在常量池中的地址返回，</span></span><br><span class="line">String f = e.intern();</span><br><span class="line"><span class="comment">//e是堆地址，f是常量池地址 false</span></span><br><span class="line">System.out.println(e == f);</span><br><span class="line"></span><br><span class="line"><span class="comment">//往常量池中放入 我是wzq，以为已经有了，所有返回 我是wzq 在常量池中的地址，所以是true</span></span><br><span class="line">String g = <span class="string">"我是wzq"</span>;</span><br><span class="line">System.out.println(f == g);</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="cjzxjxhn7000qu4uq15vur7pt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="ck02bvr9v000yxcuqz652124w" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
@@ -210,7 +338,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="cjzxjxhnr001fu4uqxcg0f5it" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck02bvra40013xcuqtlxfetmq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络，安全/">网络，安全</a></li></ul>
@@ -248,7 +376,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="cjzxjxhnx001ou4uq7544gjwf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck02bvrbt002lxcuqrbu1lqrt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -286,7 +414,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---handler/" data-id="cjzxjxhnl0017u4uqm9htqwzg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---handler/" data-id="ck02bvrbc0025xcuq500vzqh3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -324,7 +452,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="cjzxjxhnw001nu4uq4f15b47w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck02bvrbj002dxcuq6unpztz8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -362,7 +490,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---animation/" data-id="cjzxjxhns001hu4uqnamhtrt1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---animation/" data-id="ck02bvra60016xcuqxfgeuh7k" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -400,7 +528,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---view/" data-id="cjzxjxhnu001ku4uqg3ok1z9m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---view/" data-id="ck02bvrbr002jxcuqlyxr72k5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -438,83 +566,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---permission/" data-id="cjzxjxhnp001bu4uqgppnuz7x" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android---file" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/android---file/" class="article-date">
-  <time datetime="2019-08-26T08:17:11.493Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---file/">android - file</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---file/" data-id="cjzxjxhni0013u4uqew60ygxr" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android---sql" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/android---sql/" class="article-date">
-  <time datetime="2019-08-26T08:16:56.700Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---sql/">android - sql</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---sql/" data-id="cjzxjxhnt001ju4uq19q8f314" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---permission/" data-id="ck02bvrbh002bxcuq8xhi7lze" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -530,7 +582,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -544,7 +596,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -554,7 +606,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 13.33px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/leetcode/" style="font-size: 13.33px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 13.33px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 13.33px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 13.33px;">JVM</a> <a href="/tags/android/" style="font-size: 16.67px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 10px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 13.33px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 13.33px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/数据结构/" style="font-size: 13.33px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
     </div>
   </div>
 
@@ -563,7 +615,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -576,6 +628,14 @@
       <ul>
         
           <li>
+            <a href="/2019/09/02/JVM---GC/">JVM - GC</a>
+          </li>
+        
+          <li>
+            <a href="/2019/08/30/JVM---对象的创建/">JVM - 对象的创建</a>
+          </li>
+        
+          <li>
             <a href="/2019/08/30/JVM---内存区域/">JVM - 内存区域</a>
           </li>
         
@@ -585,14 +645,6 @@
         
           <li>
             <a href="/2019/08/26/android---线程通信/">android - 线程通信</a>
-          </li>
-        
-          <li>
-            <a href="/2019/08/26/android---handler/">android - handler</a>
-          </li>
-        
-          <li>
-            <a href="/2019/08/26/android---事件传递/">android - 事件传递</a>
           </li>
         
       </ul>
