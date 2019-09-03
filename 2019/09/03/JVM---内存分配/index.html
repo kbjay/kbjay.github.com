@@ -5,15 +5,20 @@
   
 
   
-  <title>Archives: 2018 | kb_jay的开发站台</title>
+  <title>JVM - 内存分配 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="kb_jay的开发站台">
-<meta property="og:url" content="http://yoursite.com/archives/2018/page/3/index.html">
+  <meta name="description" content="jvm内存管理分为内存回收跟内存分配两个大部分，内存分配时本篇的主题。 分配规则 对象优先在eden区域申请空间 大对象直接进入老年代 长期存活的对象进入老年代 内存分配担保（老年代对survivor区域的担保）  前三个很好理解，我们分析下第四个，堆分为老年代跟新生代，新生代有一块eden跟两块survivor，eden跟survivor占新生代空间大小是可以通过jvm运行参数配置的，一般8:1">
+<meta name="keywords" content="JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM - 内存分配">
+<meta property="og:url" content="http://yoursite.com/2019/09/03/JVM---内存分配/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="jvm内存管理分为内存回收跟内存分配两个大部分，内存分配时本篇的主题。 分配规则 对象优先在eden区域申请空间 大对象直接进入老年代 长期存活的对象进入老年代 内存分配担保（老年代对survivor区域的担保）  前三个很好理解，我们分析下第四个，堆分为老年代跟新生代，新生代有一块eden跟两块survivor，eden跟survivor占新生代空间大小是可以通过jvm运行参数配置的，一般8:1">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-03T03:48:41.882Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kb_jay的开发站台">
+<meta name="twitter:title" content="JVM - 内存分配">
+<meta name="twitter:description" content="jvm内存管理分为内存回收跟内存分配两个大部分，内存分配时本篇的主题。 分配规则 对象优先在eden区域申请空间 大对象直接进入老年代 长期存活的对象进入老年代 内存分配担保（老年代对survivor区域的担保）  前三个很好理解，我们分析下第四个，堆分为老年代跟新生代，新生代有一块eden跟两块survivor，eden跟survivor占新生代空间大小是可以通过jvm运行参数配置的，一般8:1">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -60,216 +65,72 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/08/15/Android-sdk签名验证/" class="archive-article-date">
-  <time datetime="2018-08-15T12:40:02.551Z" itemprop="datePublished">Aug 15</time>
+        <section id="main"><article id="post-JVM---内存分配" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/03/JVM---内存分配/" class="article-date">
+  <time datetime="2019-09-03T03:27:59.983Z" itemprop="datePublished">2019-09-03</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/15/Android-sdk签名验证/">Android-sdk签名验证</a>
+    <h1 class="article-title" itemprop="name">
+      JVM - 内存分配
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/08/14/Andriod-线程间通信二线程池/" class="archive-article-date">
-  <time datetime="2018-08-14T15:40:43.255Z" itemprop="datePublished">Aug 14</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/14/Andriod-线程间通信二线程池/">Andriod 线程间通信二:线程池</a>
-    </h1>
-  
+        <p>jvm内存管理分为内存回收跟内存分配两个大部分，内存分配时本篇的主题。</p>
+<h4 id="分配规则"><a href="#分配规则" class="headerlink" title="分配规则"></a>分配规则</h4><ol>
+<li>对象优先在eden区域申请空间</li>
+<li>大对象直接进入老年代</li>
+<li>长期存活的对象进入老年代</li>
+<li>内存分配担保（老年代对survivor区域的担保）</li>
+</ol>
+<p>前三个很好理解，我们分析下第四个，堆分为老年代跟新生代，新生代有一块eden跟两块survivor，eden跟survivor占新生代空间大小是可以通过jvm运行参数配置的，一般8:1；</p>
+<p>假设我们配置了新生代跟老年代分别10M，eden跟survivor8:1；我们依次创建2M，2M，2M，4M的对象，那么情况如下：</p>
+<ol>
+<li>前三个对象进入eden区域</li>
+<li>第四个对象发现空间不够了（eden区域剩下2M，survivorA 1M），触发GC</li>
+<li>GC时前三个对象都是不可回收对象，需要放入survivorB，但是survivorB空间不够，此时就会触发分配担保，这样这三个对象就直接放入了老年代。此时老年代使用了6M，eden跟两个survivor区域都是空，</li>
+<li>将4M的对象放入eden区域</li>
+</ol>
+<h4 id="所有的对象都会在堆上申请空间吗？"><a href="#所有的对象都会在堆上申请空间吗？" class="headerlink" title="所有的对象都会在堆上申请空间吗？"></a>所有的对象都会在堆上申请空间吗？</h4><p>大部分是的，但也会有在栈上申请空间的对象。</p>
+<p>这里涉及内存逃逸跟栈内存分配。</p>
+<p>我们先回顾下虚拟机栈的内容，它可以用来描述方法执行过程，每个方法对应一个栈帧，栈帧中有局部变量表等。</p>
+<p>如果在一个方法中有一个变量的作用域只是该方法，那么就会在栈上给它申请空间（包含在方法栈帧中），此时该变量对方法来说就是没有逃逸的，也就是被方法栈帧“捉”住了。当方法执行完毕之后随着栈帧的释放会释放该变量的内存。</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/08/10/HMAC-sha1-加密算法/" class="archive-article-date">
-  <time datetime="2018-08-10T10:52:42.984Z" itemprop="datePublished">Aug 10</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/10/HMAC-sha1-加密算法/">HMAC-sha1 加密算法</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/08/10/Android-微信小程序/" class="archive-article-date">
-  <time datetime="2018-08-10T06:16:07.800Z" itemprop="datePublished">Aug 10</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/03/JVM---内存分配/" data-id="ck03amu70000u7puq7ksg9gki" class="article-share-link">Share</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/10/Android-微信小程序/">Android-微信小程序</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/08/01/Android-反编译详细流程/" class="archive-article-date">
-  <time datetime="2018-08-01T08:17:26.966Z" itemprop="datePublished">Aug 1</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/01/Android-反编译详细流程/">Android-反编译详细流程</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
 
-    </header>
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/09/02/JVM---GC/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JVM - GC</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/08/01/leetcode-摆动序列/" class="archive-article-date">
-  <time datetime="2018-08-01T05:03:39.266Z" itemprop="datePublished">Aug 1</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/08/01/leetcode-摆动序列/">leetcode-摆动序列</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/07/26/Android-实现上下翻页的recyclerView/" class="archive-article-date">
-  <time datetime="2018-07-26T03:09:47.652Z" itemprop="datePublished">Jul 26</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/26/Android-实现上下翻页的recyclerView/">Android-实现上下翻页的recyclerView</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/07/24/Android-自定义ItemDecoration/" class="archive-article-date">
-  <time datetime="2018-07-24T02:56:10.121Z" itemprop="datePublished">Jul 24</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/24/Android-自定义ItemDecoration/">Android-自定义瀑布流的itemDecoration</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/07/20/Android-自定义圆角ImageView/" class="archive-article-date">
-  <time datetime="2018-07-19T17:30:35.015Z" itemprop="datePublished">Jul 20</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/20/Android-自定义圆角ImageView/">Android-自定义圆角ImageView</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/07/16/leetcode-猜数字大小2/" class="archive-article-date">
-  <time datetime="2018-07-16T15:35:31.108Z" itemprop="datePublished">Jul 16</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/16/leetcode-猜数字大小2/">leetcode-猜数字大小2</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-
-  <nav id="page-nav">
-    
-    <a class="extend prev" rel="prev" href="/archives/2018/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/2018/">1</a><a class="page-number" href="/archives/2018/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/2018/page/4/">4</a><a class="page-number" href="/archives/2018/page/5/">5</a><a class="extend next" rel="next" href="/archives/2018/page/4/">Next &raquo;</a>
-  </nav>
 
 </section>
         
