@@ -62,6 +62,104 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-设计模式-工厂" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/20/设计模式-工厂/" class="article-date">
+  <time datetime="2019-02-20T05:14:57.555Z" itemprop="datePublished">2019-02-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/20/设计模式-工厂/">设计模式-工厂模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>工厂模式是最常用的一类创建型设计模式，通常我们所说的工厂模式是指工厂方法模式，它也是使用频率最高的工厂模式。简单工厂模式是工厂方法模式的“小弟”，它不属于GoF 23种设计模式，但在软件开发中应用也较为频繁，通常将它作为学习其他工厂模式的入门。此外，工厂方法模式还有一位“大哥”——抽象工厂模式。这三种工厂模式各具特色，难度也逐个加大，在软件开发中它们都得到了广泛的应用，成为面向对象软件中常用的创建对象的工具。</p>
+<h4 id="简单工厂"><a href="#简单工厂" class="headerlink" title="简单工厂"></a>简单工厂</h4><h5 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h5><p>简单工厂模式(Simple Factory Pattern)：定义一个工厂类，它可以<strong>根据参数的不同返回不同类的实例</strong>，被创建的实例通常都具有共同的父类。因为在简单工厂模式中用于创建实例的方法是静态(static)方法，因此简单工厂模式又被称为<strong>静态工厂方法(Static Factory Method)模式</strong>，它属于类创建型模式。</p>
+<h5 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h5><p>在简单工厂模式结构图中包含如下几个角色：</p>
+<pre><code>● Factory（工厂角色）：工厂角色即工厂类，它是简单工厂模式的核心，负责实现创建所有产品实例的内部逻辑；工厂类可以被外界直接调用，创建所需的产品对象；在工厂类中提供了静态的工厂方法factoryMethod()，它的返回类型为抽象产品类型Product。
+
+● Product（抽象产品角色）：它是工厂类所创建的所有对象的父类，封装了各种产品对象的公有方法，它的引入将提高系统的灵活性，使得在工厂类中只需定义一个通用的工厂方法，因为所有创建的具体产品对象都是其子类对象。
+
+● ConcreteProduct（具体产品角色）：它是简单工厂模式的创建目标，所有被创建的对象都充当这个角色的某个具体类的实例。每一个具体产品角色都继承了抽象产品角色，需要实现在抽象产品中声明的抽象方法。
+</code></pre><h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">interface Car &#123;</span><br><span class="line">     void run();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class BenchiCar implements Car &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        Log.d(&quot;kb_jay&quot;,&quot;BenchiCar run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class BiyadiCar implements Car&#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        Log.d(&quot;kb_jay&quot;,&quot;BiyadiCar run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class SimpleFactory &#123;</span><br><span class="line">    public static final int TYPE_BENCHI = 1;</span><br><span class="line">    public static final int TYPE_BIYADI = 2;</span><br><span class="line"></span><br><span class="line">    public static Car createCar(int type) &#123;</span><br><span class="line">        Car car = null;</span><br><span class="line">        switch (type) &#123;</span><br><span class="line">            case TYPE_BENCHI:</span><br><span class="line">                car = new BenchiCar();</span><br><span class="line">                break;</span><br><span class="line">            case TYPE_BIYADI:</span><br><span class="line">                car = new BiyadiCar();</span><br><span class="line">                break;</span><br><span class="line">            default:</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">        return car;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端测试代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Client &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">       //1：简单工厂</span><br><span class="line">        Car car = SimpleFactory.createCar(SimpleFactory.TYPE_BENCHI);</span><br><span class="line">        car.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/kb_jay: BenchiCar run</span><br></pre></td></tr></table></figure>
+<h4 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h4><h5 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h5><p>定义一个用于创建对象的接口，让子类决定将哪一个类实例化。工厂方法模式让一个类的实例化延迟到其子类。工厂方法模式又简称为工厂模式(Factory Pattern)，又可称作虚拟构造器模式(Virtual Constructor Pattern)或多态工厂模式(Polymorphic Factory Pattern)。工厂方法模式是一种类创建型模式。</p>
+<p>工厂方法模式提供一个抽象工厂接口来声明抽象工厂方法，而由其子类来具体实现工厂方法，针对不同的产品提供不同的工厂。</p>
+<h5 id="角色-1"><a href="#角色-1" class="headerlink" title="角色"></a>角色</h5><p>  在工厂方法模式结构图中包含如下几个角色：</p>
+<pre><code>● Product（抽象产品）：它是定义产品的接口，是工厂方法模式所创建对象的超类型，也就是产品对象的公共父类。
+
+● ConcreteProduct（具体产品）：它实现了抽象产品接口，某种类型的具体产品由专门的具体工厂创建，具体工厂和具体产品之间一一对应。
+
+● Factory（抽象工厂）：在抽象工厂类中，声明了工厂方法(Factory Method)，用于返回一个产品。抽象工厂是工厂方法模式的核心，所有创建对象的工厂类都必须实现该接口。
+
+● ConcreteFactory（具体工厂）：它是抽象工厂类的子类，实现了抽象工厂中定义的工厂方法，并可由客户端调用，返回一个具体产品类的实例。
+</code></pre><h5 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">public interface Car &#123;</span><br><span class="line">    void run();</span><br><span class="line"></span><br><span class="line">    class BiyadiCar implements Car&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;,&quot;biyadi run!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    class BenchiCar implements Car&#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;,&quot;benchi run!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public interface CarFactory &#123;</span><br><span class="line">    Car createCar();</span><br><span class="line"></span><br><span class="line">    class BenchiFactory implements CarFactory &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Car createCar() &#123;</span><br><span class="line">            return new Car.BenchiCar();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class BiyadiFatory implements CarFactory &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Car createCar() &#123;</span><br><span class="line">            return new Car.BiyadiCar();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端测试代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">CarFactory carFactory = new CarFactory.BenchiFactory();</span><br><span class="line">Car car1 = carFactory.createCar();</span><br><span class="line">car1.run();</span><br></pre></td></tr></table></figure>
+<p>测试运行结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/kb_jay: benchi run!!</span><br></pre></td></tr></table></figure>
+<h4 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h4><h5 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h5><p>提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。抽象工厂模式又称为Kit模式，它是一种对象创建型模式。</p>
+<h5 id="角色-2"><a href="#角色-2" class="headerlink" title="角色"></a>角色</h5><p> 在抽象工厂模式结构图中包含如下几个角色：</p>
+<pre><code>● AbstractFactory（抽象工厂）：它声明了一组用于创建一族产品的方法，每一个方法对应一种产品。
+
+● ConcreteFactory（具体工厂）：它实现了在抽象工厂中声明的创建产品的方法，生成一组具体产品，这些产品构成了一个产品族，每一个产品都位于某个产品等级结构中。
+
+● AbstractProduct（抽象产品）：它为每种产品声明接口，在抽象产品中声明了产品所具有的业务方法。
+
+● ConcreteProduct（具体产品）：它定义具体工厂生产的具体产品对象，实现抽象产品接口中声明的业务方法。
+</code></pre><h5 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public interface Engine &#123;</span><br><span class="line">    void engine();</span><br><span class="line"></span><br><span class="line">    class GoodEngine implements Engine&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void engine() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;,&quot;good engine!!!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    class BadEngine implements Engine&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void engine() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;,&quot;bad engine!!!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public interface LingjianFactory &#123;</span><br><span class="line">    Engine createEngine();</span><br><span class="line">    Seater createSeater();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    class GoodLingjianFactory implements LingjianFactory&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Engine createEngine() &#123;</span><br><span class="line">            return new Engine.GoodEngine();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public Seater createSeater() &#123;</span><br><span class="line">            return new Seater.GoodSeater();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class BadLingjianFactory implements LingjianFactory&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Engine createEngine() &#123;</span><br><span class="line">            return new Engine.BadEngine();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public Seater createSeater() &#123;</span><br><span class="line">            return new Seater.BadSeater();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public interface Seater &#123;</span><br><span class="line">    void seat();</span><br><span class="line"></span><br><span class="line">    class GoodSeater implements Seater &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void seat() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;, &quot;good seater!!!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class BadSeater implements Seater &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void seat() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;, &quot;bad Seater!!!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端测试代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//3：抽象工厂</span><br><span class="line">LingjianFactory lingjianFactory = new LingjianFactory.BadLingjianFactory();</span><br><span class="line">Engine engine = lingjianFactory.createEngine();</span><br><span class="line">engine.engine();</span><br></pre></td></tr></table></figure>
+<p>测试运行结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/kb_jay: bad engine!!!!</span><br></pre></td></tr></table></figure>
+<h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h4><ol>
+<li><p><strong>简单工厂（静态工厂）：</strong></p>
+<p>抽象产品，不抽象工厂</p>
+<p>一个汽车工厂，生产多种car（一对多）</p>
+<p>我想买一辆奔驰，那么我就到这个厂里告诉它我想要奔驰（type），之后它就给我奔驰；</p>
+<p>朋羽毛想买一辆比亚迪，他同样到这个厂子里告诉老板，他想要比亚迪（type），那么老板就给他一辆比亚迪</p>
+</li>
+<li><p><strong>工厂方法：</strong></p>
+<p>抽象产品，也抽象工厂</p>
+<p>一个工厂对应一个产品（一对一） 我想买一辆奔驰，那么我到奔驰专卖店买；</p>
+<p>朋羽毛想买一辆比亚迪，那么她到比亚迪专卖店去买；</p>
+</li>
+<li><p><strong>抽象工厂： </strong></p>
+<p>抽象工厂，也抽象产品 </p>
+<p>一个工厂对应一组不同但是相关的产品 产品簇，这些产品是相关的，</p>
+<p>比如：生产汽车零件的工厂</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/02/20/设计模式-工厂/" data-id="ck03sr3t40069jfuqh2v9cswo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-android-TextureView" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/02/15/android-TextureView/" class="article-date">
@@ -90,7 +188,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/15/android-TextureView/" data-id="ck03amu7w001w7puq3lwpckyn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/15/android-TextureView/" data-id="ck03sr3pg001yjfuqzgz2fex3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-音视频/">android 音视频</a></li></ul>
@@ -155,7 +253,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/" data-id="ck03amu6f00087puqh9og98x5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/" data-id="ck03sr3nq0009jfuqi933cfwe" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li></ul>
@@ -217,7 +315,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/30/okhttp拦截器/" data-id="ck03amu90003a7puq1x4ejpbh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/30/okhttp拦截器/" data-id="ck03sr3r1003djfuqu9ngx3f7" class="article-share-link">Share</a>
       
       
     </footer>
@@ -257,7 +355,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/14/spring-boot---添加日志/" data-id="ck03amu98003h7puq1d272ldi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/14/spring-boot---添加日志/" data-id="ck03sr3rc003pjfuq5p1i2bo8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li></ul>
@@ -295,7 +393,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/14/算法-回溯/" data-id="ck03amu9i003t7puq3xb0r1qw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/14/算法-回溯/" data-id="ck03sr3rk003tjfuqp0ypak7e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
@@ -333,7 +431,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/20/python-爬虫图片/" data-id="ck03amu93003d7puq05cbvgq7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/20/python-爬虫图片/" data-id="ck03sr3r3003fjfuq3eqnrsh1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li></ul>
@@ -377,7 +475,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/20/leetcode-85.-最大矩形/" data-id="ck03amu8400257puq7fpfxxs9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/20/leetcode-85.-最大矩形/" data-id="ck03sr3ps0029jfuqpzbnjbjn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li></ul>
@@ -427,7 +525,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/19/leetcode-84.-柱状图中最大的矩形/" data-id="ck03amu8300247puq1jn6i81v" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/19/leetcode-84.-柱状图中最大的矩形/" data-id="ck03sr3pn0025jfuqdv6fnso2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li></ul>
@@ -473,63 +571,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/14/SVG图像处理/" data-id="ck03amu7600137puq41sqylz3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/14/SVG图像处理/" data-id="ck03sr3p5001njfuqaxzl6av6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/svg-java/">svg java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-图片实现类似素描的效果" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/11/08/Android-图片实现类似素描的效果/" class="article-date">
-  <time datetime="2018-11-08T04:34:30.346Z" itemprop="datePublished">2018-11-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/08/Android-图片实现类似素描的效果/">Android-图片实现类似素描的效果</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="核心思路"><a href="#核心思路" class="headerlink" title="核心思路"></a>核心思路</h5><ol>
-<li><p>使用openCV获取灰度图像：0（黑）～255（白）</p>
-</li>
-<li><p>将该图像按照灰度值分层，每一层是一个0，1二维数组：1表示绘制，0表示不绘制，之后绘制每一层</p>
-</li>
-<li><p>先绘制颜色最深的那一层。</p>
-<p>在二维数组中找一个随机点，从该点出发依次向上下左右四个方向探测，如果找到需要绘制的点，那么再去找该点所在的区域中所有的跟该点绘制次数相同的点，之后按照随机的mask去绘制找到的点（注意点的颜色由该位置的已经绘制的次数决定）。遍历完该点的4个方向之后，再遍历该点左下位置的点，直到超出边界，之后再去遍历该点右上位置的点，直到超出边界，这样就遍历完了一层。</p>
-<p>之后再遍历下一层，直到遍历完所有层。</p>
-</li>
-<li><p>上面提到的mask是预先生成的蒙板。具体可以去看源代码，非常简单。</p>
-</li>
-</ol>
-<h5 id="效果gif："><a href="#效果gif：" class="headerlink" title="效果gif："></a>效果gif：</h5><p><img src="/Users/kb_jay/Downloads/sumiao.gif" alt="sumiao"></p>
-<h5 id="最终效果图"><a href="#最终效果图" class="headerlink" title="最终效果图"></a>最终效果图</h5><p><img src="/Users/kb_jay/Desktop/sketch.png" alt="sketch"></p>
-<h5 id="代码地址"><a href="#代码地址" class="headerlink" title="代码地址"></a>代码地址</h5><p><a href="https://github.com/kbjay/KJ_Sketch" target="_blank" rel="noopener">https://github.com/kbjay/KJ_Sketch</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/08/Android-图片实现类似素描的效果/" data-id="ck03amu6k000d7puqv2eh312b" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li></ul>
 
     </footer>
   </div>
@@ -588,6 +633,10 @@
       <ul>
         
           <li>
+            <a href="/2019/09/03/JVM---jvm工具/">JVM - jvm工具</a>
+          </li>
+        
+          <li>
             <a href="/2019/09/03/JVM---内存分配/">JVM - 内存分配</a>
           </li>
         
@@ -601,10 +650,6 @@
         
           <li>
             <a href="/2019/08/30/JVM---内存区域/">JVM - 内存区域</a>
-          </li>
-        
-          <li>
-            <a href="/2019/08/28/URL参数的sign签名认证/">URL参数的sign签名认证</a>
           </li>
         
       </ul>

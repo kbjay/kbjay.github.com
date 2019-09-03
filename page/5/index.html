@@ -62,6 +62,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Android-图片实现类似素描的效果" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/08/Android-图片实现类似素描的效果/" class="article-date">
+  <time datetime="2018-11-08T04:34:30.346Z" itemprop="datePublished">2018-11-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/08/Android-图片实现类似素描的效果/">Android-图片实现类似素描的效果</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="核心思路"><a href="#核心思路" class="headerlink" title="核心思路"></a>核心思路</h5><ol>
+<li><p>使用openCV获取灰度图像：0（黑）～255（白）</p>
+</li>
+<li><p>将该图像按照灰度值分层，每一层是一个0，1二维数组：1表示绘制，0表示不绘制，之后绘制每一层</p>
+</li>
+<li><p>先绘制颜色最深的那一层。</p>
+<p>在二维数组中找一个随机点，从该点出发依次向上下左右四个方向探测，如果找到需要绘制的点，那么再去找该点所在的区域中所有的跟该点绘制次数相同的点，之后按照随机的mask去绘制找到的点（注意点的颜色由该位置的已经绘制的次数决定）。遍历完该点的4个方向之后，再遍历该点左下位置的点，直到超出边界，之后再去遍历该点右上位置的点，直到超出边界，这样就遍历完了一层。</p>
+<p>之后再遍历下一层，直到遍历完所有层。</p>
+</li>
+<li><p>上面提到的mask是预先生成的蒙板。具体可以去看源代码，非常简单。</p>
+</li>
+</ol>
+<h5 id="效果gif："><a href="#效果gif：" class="headerlink" title="效果gif："></a>效果gif：</h5><p><img src="/Users/kb_jay/Downloads/sumiao.gif" alt="sumiao"></p>
+<h5 id="最终效果图"><a href="#最终效果图" class="headerlink" title="最终效果图"></a>最终效果图</h5><p><img src="/Users/kb_jay/Desktop/sketch.png" alt="sketch"></p>
+<h5 id="代码地址"><a href="#代码地址" class="headerlink" title="代码地址"></a>代码地址</h5><p><a href="https://github.com/kbjay/KJ_Sketch" target="_blank" rel="noopener">https://github.com/kbjay/KJ_Sketch</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/08/Android-图片实现类似素描的效果/" data-id="ck03sr3nv000djfuq1c3sjvg4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-leetcode-编辑距离(72)" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/10/29/leetcode-编辑距离(72)/" class="article-date">
@@ -172,7 +225,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/29/leetcode-编辑距离(72)/" data-id="ck03amu8r00327puqfdch4ode" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/29/leetcode-编辑距离(72)/" data-id="ck03sr3qw0037jfuqo7uipymj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -224,7 +277,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/22/leetcode-分割等和子集(416)/" data-id="ck03amu8a002d7puqz8fhfom9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/22/leetcode-分割等和子集(416)/" data-id="ck03sr3q2002djfuql5p1v4yl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li></ul>
@@ -270,7 +323,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/19/leetcode-最长上升子序列(300)/" data-id="ck03amu8k002t7puqutlslpap" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/19/leetcode-最长上升子序列(300)/" data-id="ck03sr3qf002tjfuqtzqmbe0m" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -322,7 +375,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/19/leetcode-完全平方数(279)/" data-id="ck03amu8f002l7puqaasm7rfn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/19/leetcode-完全平方数(279)/" data-id="ck03sr3qa002njfuqvd3mj49b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -369,7 +422,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/19/leetcode-判断子序列（392）/" data-id="ck03amu8b002g7puqkq6imsso" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/19/leetcode-判断子序列（392）/" data-id="ck03sr3q6002hjfuqf04dbczr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -438,7 +491,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/15/Android---https/" data-id="ck03amu6000007puqk2hv2h4d" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/15/Android---https/" data-id="ck03sr3n30000jfuq0ow5w043" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-net/">android net</a></li></ul>
@@ -486,7 +539,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/12/leetcode-回文子串(647)/" data-id="ck03amu8e002j7puqhizp2vrx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/12/leetcode-回文子串(647)/" data-id="ck03sr3q9002ljfuqqxr5qfrg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -539,7 +592,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/11/leetcode-等差数列划分(413)/" data-id="ck03amu8o002y7puqfnkii0dk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/11/leetcode-等差数列划分(413)/" data-id="ck03sr3qr0033jfuq9qivgv9v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -585,49 +638,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/11/Android-Arouter（调整人民日报结构）/" data-id="ck03amu6c00047puqkurxuk5x" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/11/Android-Arouter（调整人民日报结构）/" data-id="ck03sr3nj0004jfuqlhf3ole2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-架构/">Android 架构</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android--viewPager-+fragment-实现懒加载" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/28/Android--viewPager-+fragment-实现懒加载/" class="article-date">
-  <time datetime="2018-09-28T10:01:14.141Z" itemprop="datePublished">2018-09-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/28/Android--viewPager-+fragment-实现懒加载/">Android- viewPager +fragment 实现懒加载</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">LazyLoadFragment</span> <span class="keyword">extends</span> <span class="title">BaseLazyFragment</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">boolean</span> isViewInitiated;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">boolean</span> isVisibleToUser;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">boolean</span> isDataInitiated;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        Bundle bundle = getArguments();</span><br><span class="line">        <span class="keyword">if</span> (bundle != <span class="keyword">null</span> &amp;&amp; bundle.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            initVariables(bundle);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">initVariables</span><span class="params">(Bundle bundle)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityCreated</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onActivityCreated(savedInstanceState);</span><br><span class="line">        isViewInitiated = <span class="keyword">true</span>;</span><br><span class="line">        prepareFetchData();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUserVisibleHint</span><span class="params">(<span class="keyword">boolean</span> isVisibleToUser)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.setUserVisibleHint(isVisibleToUser);</span><br><span class="line">        <span class="keyword">this</span>.isVisibleToUser = isVisibleToUser;</span><br><span class="line">        prepareFetchData();</span><br><span class="line">        <span class="keyword">if</span> (getUserVisibleHint()) &#123;</span><br><span class="line">            onVisible();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            onInvisible();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onVisible</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onInvisible</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onFirstVisible</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onHiddenChanged</span><span class="params">(<span class="keyword">boolean</span> hidden)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onHiddenChanged(hidden);</span><br><span class="line">        <span class="keyword">this</span>.isVisibleToUser = !hidden;</span><br><span class="line">        prepareFetchData();</span><br><span class="line">        <span class="keyword">if</span> (!hidden) &#123;</span><br><span class="line">            onVisible();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            onInvisible();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">fetchData</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">prepareFetchData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> prepareFetchData(<span class="keyword">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">prepareFetchData</span><span class="params">(<span class="keyword">boolean</span> forceUpdate)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isVisibleToUser &amp;&amp; isViewInitiated &amp;&amp; (!isDataInitiated || forceUpdate)) &#123;</span><br><span class="line">            fetchData();</span><br><span class="line">            isDataInitiated = <span class="keyword">true</span>;</span><br><span class="line">            onFirstVisible();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/28/Android--viewPager-+fragment-实现懒加载/" data-id="ck03amu6500017puqk0s59tml" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li></ul>
 
     </footer>
   </div>
@@ -686,6 +700,10 @@
       <ul>
         
           <li>
+            <a href="/2019/09/03/JVM---jvm工具/">JVM - jvm工具</a>
+          </li>
+        
+          <li>
             <a href="/2019/09/03/JVM---内存分配/">JVM - 内存分配</a>
           </li>
         
@@ -699,10 +717,6 @@
         
           <li>
             <a href="/2019/08/30/JVM---内存区域/">JVM - 内存区域</a>
-          </li>
-        
-          <li>
-            <a href="/2019/08/28/URL参数的sign签名认证/">URL参数的sign签名认证</a>
           </li>
         
       </ul>

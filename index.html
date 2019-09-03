@@ -62,6 +62,64 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-JVM---jvm工具" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/03/JVM---jvm工具/" class="article-date">
+  <time datetime="2019-09-03T11:15:38.638Z" itemprop="datePublished">2019-09-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/03/JVM---jvm工具/">JVM - jvm工具</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="jvm工具简介"><a href="#jvm工具简介" class="headerlink" title="jvm工具简介"></a>jvm工具简介</h4><h5 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h5><ol>
+<li><p>jps（查看jvm进程id）</p>
+</li>
+<li><p>jstat （查看jvm进程的运行时内存状态）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kb-jaydeMacBook-Air:tree kb_jay$ jstat -gcutil <span class="number">5552</span></span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line"> <span class="number">66.70</span>   <span class="number">0.00</span>  <span class="number">79.02</span>   <span class="number">0.16</span>  <span class="number">97.32</span>  <span class="number">93.78</span>      <span class="number">2</span>    <span class="number">0.013</span>     <span class="number">0</span>    <span class="number">0.000</span>    <span class="number">0.013</span></span><br></pre></td></tr></table></figure>
+<p>对应的信息。survivor0，1，eden，老年代，元数据，压缩类信息，新生代gc次数，新生代gc时间。。。</p>
+</li>
+<li><p>jinfo （查看jvm配置）</p>
+</li>
+<li><p>jstack （查看线程运行信息）</p>
+</li>
+<li><p>jMap (堆转储)</p>
+</li>
+</ol>
+<h5 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h5><ol>
+<li><p>jconsole （查看cpu，内存，线程等）</p>
+</li>
+<li><p>VisualVm （多和一，想看啥看啥，支持安装插件）</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/03/JVM---jvm工具/" data-id="ck03sr3ol000sjfuq1ex4rm1v" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-JVM---内存分配" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/09/03/JVM---内存分配/" class="article-date">
@@ -107,7 +165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/03/JVM---内存分配/" data-id="ck03amu70000u7puq7ksg9gki" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/09/03/JVM---内存分配/" data-id="ck03sr3or000yjfuqincqlegk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
@@ -174,7 +232,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/02/JVM---GC/" data-id="ck03amu72000w7puqu3cd9207" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/09/02/JVM---GC/" data-id="ck03sr3os0010jfuqx9aizviz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
@@ -243,7 +301,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/30/JVM---对象的创建/" data-id="ck03amu7400107puq5fcs95ho" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/30/JVM---对象的创建/" data-id="ck03sr3ox0019jfuqr7eqd0uh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
@@ -316,7 +374,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="ck03amu73000y7puqtxtaia4b" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="ck03sr3oq000wjfuqny80vla2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
@@ -395,7 +453,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck03amu7700167puqs5151pmi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck03sr3p6001ojfuq4pshdshj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络，安全/">网络，安全</a></li></ul>
@@ -433,7 +491,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck03amu7v001u7puqgtps6rye" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck03sr3pc001sjfuqeygcjh7r" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -471,7 +529,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---handler/" data-id="ck03amu7f001j7puqoyjvx8jh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---handler/" data-id="ck03sr3p0001fjfuqvrb47fcp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -509,7 +567,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck03amu7p001s7puql7q9xt0l" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck03sr3pa001qjfuqec7605b4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -547,45 +605,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---animation/" data-id="ck03amu7900197puqax8ybjue" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android---view" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/android---view/" class="article-date">
-  <time datetime="2019-08-26T08:18:47.077Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---view/">android - view</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---view/" data-id="ck03amu7k001o7puqk29bntxy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---animation/" data-id="ck03sr3pd001ujfuq3bv1p9bn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -647,6 +667,10 @@
       <ul>
         
           <li>
+            <a href="/2019/09/03/JVM---jvm工具/">JVM - jvm工具</a>
+          </li>
+        
+          <li>
             <a href="/2019/09/03/JVM---内存分配/">JVM - 内存分配</a>
           </li>
         
@@ -660,10 +684,6 @@
         
           <li>
             <a href="/2019/08/30/JVM---内存区域/">JVM - 内存区域</a>
-          </li>
-        
-          <li>
-            <a href="/2019/08/28/URL参数的sign签名认证/">URL参数的sign签名认证</a>
           </li>
         
       </ul>
