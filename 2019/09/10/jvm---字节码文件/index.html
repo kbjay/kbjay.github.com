@@ -5,15 +5,22 @@
   
 
   
-  <title>kb_jay的开发站台</title>
+  <title>jvm - 字节码文件 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="kb_jay的开发站台">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="​    java号称编译一次，到处运行；其实真正可以到处运行的是java编译器编译之后的字节码文件同时jvm针对不同平台都做了实现； ​    除了平台无关性，字节码文件还有语言无关系；比如groovy，它用自己的编译器编译之后生成class文件同样可以运行在jvm之上。 ​    其实我们自己也可以定义一种属于我们自己的语言，然后再写一个编译器，只要编译之后的文件符合class文件的规范，同样">
+<meta name="keywords" content="jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm - 字节码文件">
+<meta property="og:url" content="http://yoursite.com/2019/09/10/jvm---字节码文件/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="​    java号称编译一次，到处运行；其实真正可以到处运行的是java编译器编译之后的字节码文件同时jvm针对不同平台都做了实现； ​    除了平台无关性，字节码文件还有语言无关系；比如groovy，它用自己的编译器编译之后生成class文件同样可以运行在jvm之上。 ​    其实我们自己也可以定义一种属于我们自己的语言，然后再写一个编译器，只要编译之后的文件符合class文件的规范，同样">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="data:image/png;base64,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">
+<meta property="og:updated_time" content="2019-09-10T05:31:57.260Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kb_jay的开发站台">
+<meta name="twitter:title" content="jvm - 字节码文件">
+<meta name="twitter:description" content="​    java号称编译一次，到处运行；其实真正可以到处运行的是java编译器编译之后的字节码文件同时jvm针对不同平台都做了实现； ​    除了平台无关性，字节码文件还有语言无关系；比如groovy，它用自己的编译器编译之后生成class文件同样可以运行在jvm之上。 ​    其实我们自己也可以定义一种属于我们自己的语言，然后再写一个编译器，只要编译之后的文件符合class文件的规范，同样">
+<meta name="twitter:image" content="data:image/png;base64,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">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -60,9 +67,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-jvm---字节码文件" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-jvm---字节码文件" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/09/10/jvm---字节码文件/" class="article-date">
   <time datetime="2019-09-10T04:43:33.737Z" itemprop="datePublished">2019-09-10</time>
@@ -75,8 +80,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/10/jvm---字节码文件/">jvm - 字节码文件</a>
+    <h1 class="article-title" itemprop="name">
+      jvm - 字节码文件
     </h1>
   
 
@@ -1549,533 +1554,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-JVM---jvm工具" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/03/JVM---jvm工具/" class="article-date">
-  <time datetime="2019-09-03T11:15:38.638Z" itemprop="datePublished">2019-09-03</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/03/JVM---jvm工具/">JVM - jvm工具</a>
-    </h1>
+    <a href="/2019/09/03/JVM---jvm工具/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JVM - jvm工具</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="jvm工具简介"><a href="#jvm工具简介" class="headerlink" title="jvm工具简介"></a>jvm工具简介</h4><h5 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h5><ol>
-<li><p>jps（查看jvm进程id）</p>
-</li>
-<li><p>jstat （查看jvm进程的运行时内存状态）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kb-jaydeMacBook-Air:tree kb_jay$ jstat -gcutil <span class="number">5552</span></span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line"> <span class="number">66.70</span>   <span class="number">0.00</span>  <span class="number">79.02</span>   <span class="number">0.16</span>  <span class="number">97.32</span>  <span class="number">93.78</span>      <span class="number">2</span>    <span class="number">0.013</span>     <span class="number">0</span>    <span class="number">0.000</span>    <span class="number">0.013</span></span><br></pre></td></tr></table></figure>
-<p>对应的信息。survivor0，1，eden，老年代，元数据，压缩类信息，新生代gc次数，新生代gc时间。。。</p>
-</li>
-<li><p>jinfo （查看jvm配置）</p>
-</li>
-<li><p>jstack （查看线程运行信息）</p>
-</li>
-<li><p>jMap (堆转储)</p>
-</li>
-</ol>
-<h5 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h5><ol>
-<li><p>jconsole （查看cpu，内存，线程等）</p>
-</li>
-<li><p>VisualVm （多和一，想看啥看啥，支持安装插件）</p>
-</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/03/JVM---jvm工具/" data-id="ck0deelhe000sctuqnucclxzd" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-JVM---内存分配" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/03/JVM---内存分配/" class="article-date">
-  <time datetime="2019-09-03T03:27:59.983Z" itemprop="datePublished">2019-09-03</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/03/JVM---内存分配/">JVM - 内存分配</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>jvm内存管理分为内存回收跟内存分配两个大部分，内存分配时本篇的主题。</p>
-<h4 id="分配规则"><a href="#分配规则" class="headerlink" title="分配规则"></a>分配规则</h4><ol>
-<li>对象优先在eden区域申请空间</li>
-<li>大对象直接进入老年代</li>
-<li>长期存活的对象进入老年代</li>
-<li>内存分配担保（老年代对survivor区域的担保）</li>
-</ol>
-<p>前三个很好理解，我们分析下第四个，堆分为老年代跟新生代，新生代有一块eden跟两块survivor，eden跟survivor占新生代空间大小是可以通过jvm运行参数配置的，一般8:1；</p>
-<p>假设我们配置了新生代跟老年代分别10M，eden跟survivor8:1；我们依次创建2M，2M，2M，4M的对象，那么情况如下：</p>
-<ol>
-<li>前三个对象进入eden区域</li>
-<li>第四个对象发现空间不够了（eden区域剩下2M，survivorA 1M），触发GC</li>
-<li>GC时前三个对象都是不可回收对象，需要放入survivorB，但是survivorB空间不够，此时就会触发分配担保，这样这三个对象就直接放入了老年代。此时老年代使用了6M，eden跟两个survivor区域都是空，</li>
-<li>将4M的对象放入eden区域</li>
-</ol>
-<h4 id="所有的对象都会在堆上申请空间吗？"><a href="#所有的对象都会在堆上申请空间吗？" class="headerlink" title="所有的对象都会在堆上申请空间吗？"></a>所有的对象都会在堆上申请空间吗？</h4><p>大部分是的，但也会有在栈上申请空间的对象。</p>
-<p>这里涉及内存逃逸跟栈内存分配。</p>
-<p>我们先回顾下虚拟机栈的内容，它可以用来描述方法执行过程，每个方法对应一个栈帧，栈帧中有局部变量表等。</p>
-<p>如果在一个方法中有一个变量的作用域只是该方法，那么就会在栈上给它申请空间（包含在方法栈帧中），此时该变量对方法来说就是没有逃逸的，也就是被方法栈帧“捉”住了。当方法执行完毕之后随着栈帧的释放会释放该变量的内存。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/03/JVM---内存分配/" data-id="ck0deelhl000wctuqspcuc6e1" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-JVM---GC" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/02/JVM---GC/" class="article-date">
-  <time datetime="2019-09-02T06:19:17.958Z" itemprop="datePublished">2019-09-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/02/JVM---GC/">JVM - GC</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="Q：如何确认那些对象的可以回收的"><a href="#Q：如何确认那些对象的可以回收的" class="headerlink" title="Q：如何确认那些对象的可以回收的"></a>Q：如何确认那些对象的可以回收的</h4><ol>
-<li><p>引用计数</p>
-<p><img src="data:image/png;base64,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" alt="âjvmå¼ç¨è®¡æ°âçå¾çæç´¢ç»æ"></p>
-<p>如上图，左边为堆，右边为虚拟机栈中的局部变量表，如果堆中的对象相互引用了，那么使用这种方式，即使将引用1跟2断开，对象的引用数量不为0，此时两个堆中的对象无法回收，所以现有的主流jvm虚拟机实现基本不会采用这种方式。</p>
-</li>
-<li><p>GCRoot（可达性分析）</p>
-<p>从如下的GCRoot节点开始向下搜索，当一个对象跟GCRoot节点没有任何引用链的时候，这个对象就是可以回收的。</p>
-</li>
-</ol>
-<p>   可以作为GCRoot的有</p>
-<ul>
-<li>虚拟机栈中的局部变量表中的引用</li>
-<li>本地方法栈。。</li>
-<li>方法区中类静态变量引用的对象</li>
-<li>方法区中常量引用的对象</li>
-</ul>
-<h4 id="Q：怎么回收"><a href="#Q：怎么回收" class="headerlink" title="Q：怎么回收"></a>Q：怎么回收</h4><ol>
-<li><p>标记-清除：通过GCRoot找到可回收对象，标记之后清除掉。</p>
-<p>会有空间碎片</p>
-</li>
-<li><p>标记-整理：找到可回收对象之后将它拼接到内存空间的首部</p>
-</li>
-<li><p>复制：将空间分为两部分A跟B，当A需要回收时，将不回收的对象copy到B，之后清除A。</p>
-<p>空间浪费</p>
-</li>
-<li><p>分代算法：将堆空间分为新生代跟老年代，新生代中的对象在GC的时候有很大一部分需要被回收（IBM-98%），对新生代的GC我们可以改进下复制算法，将区域分为eden（80%）跟两个survivor  A跟B（20%）；申请空间的时候我们从优先从eden申请，之后从A申请，回收的时候将eden跟A中的不回收对象copy到B，之后清理掉eden跟A。如此。。</p>
-<p>对于老年代，每次GC都会有很大部分对象不需要被回收掉，所以更加适合标记-整理算法。</p>
-</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/02/JVM---GC/" data-id="ck0deelhb000pctuqc7je3odc" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-JVM---对象的创建" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/30/JVM---对象的创建/" class="article-date">
-  <time datetime="2019-08-30T08:22:30.862Z" itemprop="datePublished">2019-08-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/30/JVM---对象的创建/">JVM - 对象的创建</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ol>
-<li>new 对象之后，先看方法区的常量池中是否有类的符号引用</li>
-<li>如果没有，那么加载类（todo），完成之后就知道我们需要申请多少空间了</li>
-<li>堆中申请空间</li>
-<li>初始化，基本对象为0，引用对象为null</li>
-<li>调用&lt; init &gt; 构造方法</li>
-</ol>
-<h5 id="内存分配问题"><a href="#内存分配问题" class="headerlink" title="内存分配问题"></a>内存分配问题</h5><p>两种方案</p>
-<ol>
-<li>使用指针碰撞：可用内存跟不可用内存之间有个指针，可用跟不可用内存是规整的</li>
-<li>使用空闲列表：空闲区域的指针放入链表中</li>
-</ol>
-<h5 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h5><p>假如线程1有个a对象，线程2有个b对象，a正在申请的时候，b也开始申请，堆是共享的，会有线程安全问题。</p>
-<p>两种方案：</p>
-<ol>
-<li>每次分配内存都加锁</li>
-<li>堆中按线程分区域（线程缓存区），申请线程缓存区的时候加锁</li>
-</ol>
-<h4 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h4><ol>
-<li>对象头 <ul>
-<li>运行时数据（对象的hashcode，gc年代，锁状态等）</li>
-<li>类指针（指向方法区中的类信息，表明该对象是哪个类）</li>
-</ul>
-</li>
-<li>实例数据</li>
-<li>对齐填充padding</li>
-</ol>
-<h5 id="Hotspot对象访问定位"><a href="#Hotspot对象访问定位" class="headerlink" title="Hotspot对象访问定位"></a>Hotspot对象访问定位</h5><p>栈中有堆对象的引用，堆对象中有方法区中对象类型数据（class）的引用</p>
-<p>tip：还有一种是句柄的方式</p>
-<p>堆中有句柄池跟对象池，栈中有句柄池的引用，句柄池中有对象的引用跟对象类型数据（class）的引用</p>
-<p>参考 《深入理解jvm》49页</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/30/JVM---对象的创建/" data-id="ck0deelhn0010ctuq49tgsp8v" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-JVM---内存区域" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/30/JVM---内存区域/" class="article-date">
-  <time datetime="2019-08-30T02:39:09.972Z" itemprop="datePublished">2019-08-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/30/JVM---内存区域/">JVM - 内存区域</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="全貌"><a href="#全貌" class="headerlink" title="全貌"></a>全貌</h4><p>盗图一张如下：</p>
-<p><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1567143038993&amp;di=728787914453f7c702ce0038fb1a16b8&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2Fe26275cf8c88f16ed498a3563ba6ad90.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="img"></p>
-<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><ol>
-<li>记录字节码文件当前的执行行数</li>
-<li>是每个线程私有的，共有的话，切换线程会懵逼掉的</li>
-<li>如果执行native方法的话，它的值是undifined。因为native方法是java通过JNI直接调用本地C/C++库，可以近似的认为native方法相当于C/C++暴露给java的一个接口，java通过调用这个接口从而调用到C/C++方法。由于该方法是通过C/C++而不是java进行实现。那么自然无法产生相应的字节码，并且C/C++执行时的内存分配是由自己语言决定的，而不是由JVM决定的。</li>
-<li>不会oom。因为它的空间很小并且不是我们申请的，是jvm自己管理的。</li>
-</ol>
-<h4 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h4><ol>
-<li>它是跟方法对应的，是用来描述方法调用过程中的内存模型。（方法区是跟class对应的）</li>
-<li>栈帧：他的数据结构是个栈，每个方法对应一个栈帧，假如执行a方法，a方法中又调用了b方法，那么会先把a 压栈，执行到b的时候把b压栈，b执行完b出栈，之后接着执行a，a执行完a出栈。</li>
-<li>局部方法表：每个方法执行需要的内存大小在编译的时候就确定了，局部方法表存放执行方法需要的变量，如果该变量是个对象的话，存放的是引用。局部方法表是在栈帧中的。（所有对象的真实存放区域是堆）</li>
-<li>虚拟机的栈的深度是有最大值的，如果栈太深会报stackoverflow</li>
-<li>如果方法执行没有到达栈的最大值，但是没有内存空间可用了，那么会报oom</li>
-<li>线程私有的</li>
-</ol>
-<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><ol>
-<li>虚拟机栈跟本地方法栈基本一致，只不过不是java方法，而是对应native方法</li>
-<li>线程私有的</li>
-<li>会有oom跟stackoverflow</li>
-</ol>
-<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ol>
-<li>存放对象的</li>
-<li>线程共享的</li>
-<li>gc主要的目标</li>
-<li>会oom</li>
-</ol>
-<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><ol>
-<li>存放类信息（跟class对应），存放常量（常量池，1.8 将常量池放入了堆），存放静态变量等</li>
-<li>线程共享的</li>
-<li>会oom</li>
-<li>在java8中被移除了，取而代之的是metaspace（元数据空间）</li>
-</ol>
-<h4 id="eg："><a href="#eg：" class="headerlink" title="eg："></a>eg：</h4><p>运行如下代码：以下只分析1.8</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">"123"</span>;</span><br><span class="line">String b = <span class="string">"123"</span>;</span><br><span class="line"><span class="comment">//true  两个都是常量池中 123 的地址</span></span><br><span class="line">System.out.println(a == b);</span><br><span class="line"></span><br><span class="line">String c = <span class="keyword">new</span> String(<span class="string">"123"</span>);</span><br><span class="line"><span class="comment">//一个堆 一个常量池，不一样 false</span></span><br><span class="line">System.out.println(a == c);</span><br><span class="line"></span><br><span class="line"><span class="comment">//java 1.8 因为常量池已经有 123 了，所以返回常量池中的123的地址</span></span><br><span class="line">String d = c.intern();</span><br><span class="line"><span class="comment">//所以true</span></span><br><span class="line">System.out.println(a == d);</span><br><span class="line"></span><br><span class="line"><span class="comment">//下面的代码将 "我是wzq" 放入常量池，并创建了一个堆对象e</span></span><br><span class="line">String e = <span class="keyword">new</span> String(<span class="string">"我是wzq"</span>);</span><br><span class="line"><span class="comment">//java 1.8 因为常量池有 我是wzq ，所以将 我是wzq 在常量池中的地址返回，</span></span><br><span class="line">String f = e.intern();</span><br><span class="line"><span class="comment">//e是堆地址，f是常量池地址 false</span></span><br><span class="line">System.out.println(e == f);</span><br><span class="line"></span><br><span class="line"><span class="comment">//往常量池中放入 我是wzq，以为已经有了，所有返回 我是wzq 在常量池中的地址，所以是true</span></span><br><span class="line">String g = <span class="string">"我是wzq"</span>;</span><br><span class="line">System.out.println(f == g);</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="ck0deelhm000yctuqberr4hxp" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-URL参数的sign签名认证" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/28/URL参数的sign签名认证/" class="article-date">
-  <time datetime="2019-08-28T09:27:13.238Z" itemprop="datePublished">2019-08-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/28/URL参数的sign签名认证/">URL参数的sign签名认证</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="在写开放的API接口时是如何保证数据的安全性的？"><a href="#在写开放的API接口时是如何保证数据的安全性的？" class="headerlink" title="在写开放的API接口时是如何保证数据的安全性的？"></a>在写开放的API接口时是如何保证数据的安全性的？</h4><p>tip：以下内容非原创，</p>
-<p>原文：<a href="https://blog.csdn.net/qq_15901351/article/details/80175169" target="_blank" rel="noopener">https://blog.csdn.net/qq_15901351/article/details/80175169</a></p>
-<p>先来看看有哪些安全性问题在开放的api接口中，我们通过http Post或者Get方式请求服务器的时候，会面临着许多的安全性问题，例如：</p>
-<ol>
-<li><p>请求来源(身份)是否合法？</p>
-</li>
-<li><p>请求参数被篡改？</p>
-</li>
-<li><p>请求的唯一性(不可复制)</p>
-</li>
-</ol>
-<p>解决方案：为了保证数据在通信时的安全性，我们可以采用参数签名的方式来进行相关验证。</p>
-<h5 id="案列分析"><a href="#案列分析" class="headerlink" title="案列分析"></a>案列分析</h5><p>我们通过给某 [移动端(app)] 写 [后台接口(api)] 的案例进行分析：     </p>
-<p>   客户端：以下简称app   </p>
-<p>  后台接口：以下简称api </p>
-<p>我们通过app查询产品列表这个操作来进行分析：</p>
-<p>app中点击查询按钮==》调用api进行查询==》返回查询结果==&gt;显示在app中</p>
-<p>一、不进行验证的方式</p>
-<p>api查询接口：</p>
-<p>app调用：<a href="http://api.test.com/getproducts?参数1=value1......" target="_blank" rel="noopener">http://api.test.com/getproducts?参数1=value1......</a>.</p>
-<p>如上，这种方式简单粗暴，通过调用getproducts方法即可获取产品列表信息了，但是这样的方式会存在很严重的安全性问题，没有进行任何的验证，大家都可以通过这个方法获取到产品列表，导致产品信息泄露。</p>
-<p>那么，如何验证调用者身份呢？如何防止参数被篡改呢？</p>
-<p>二、MD5参数签名的方式</p>
-<p>我们对api查询产品接口进行优化：</p>
-<p>1.给app分配对应的key、secret</p>
-<p>2.Sign签名，调用API 时需要对请求参数进行签名验证，签名方式如下： </p>
-<p>   a. 按照请求参数名称将所有请求参数按照字母先后顺序排序得到：keyvaluekeyvalue…keyvalue  字符串如：将arong=1,mrong=2,crong=3 排序为：arong=1, crong=3,mrong=2  然后将参数名和参数值进行拼接得到参数字符串：arong1crong3mrong2。 </p>
-<p>   b. 将secret加在参数字符串的头部后进行MD5加密 ,加密后的字符串需大写。即得到签名Sign</p>
-<p>新api接口代码:</p>
-<p>app调用：<a href="http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;参数1=value1&amp;参数2=value2......" target="_blank" rel="noopener">http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;参数1=value1&amp;参数2=value2......</a>.</p>
-<p>注：secret 仅作加密使用, 为了保证数据安全请不要在请求参数中使用。</p>
-<p>如上，优化后的请求多了key和sign参数，这样请求的时候就需要合法的key和正确签名sign才可以获取产品数据。这样就解决了身份验证和防止参数篡改问题，如果请求参数被人拿走，没事，他们永远也拿不到secret,因为secret是不传递的。再也无法伪造合法的请求。</p>
-<p>但是…这样就够了吗？细心的同学可能会发现，如果我获取了你完整的链接，一直使用你的key和sign和一样的参数不就可以正常获取数据了…-_-!是的，仅仅是如上的优化是不够的。。。。。。</p>
-<p>请求的唯一性：</p>
-<p>为了防止别人重复使用请求参数问题，我们需要保证请求的唯一性，就是对应请求只能使用一次，这样就算别人拿走了请求的完整链接也是无效的。<br>唯一性的实现：在如上的请求参数中，我们加入时间戳：timestamp（yyyyMMddHHmmss），同样，时间戳作为请求参数之一，也加入sign算法中进行加密。</p>
-<p>新的api接口：</p>
-<p>app调用：<br><a href="http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;timestamp=201603261407&amp;参数1=value1&amp;参数2=value2......" target="_blank" rel="noopener">http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;timestamp=201603261407&amp;参数1=value1&amp;参数2=value2......</a>.<br>如上，我们通过timestamp时间戳用来验证请求是否过期。这样就算被人拿走完整的请求链接也是无效的。</p>
-<p>Sign签名安全性分析： </p>
-<p>通过上面的案例，我们可以看出，安全的关键在于参与签名的secret，整个过程中secret是不参与通信的，所以只要保证secret不泄露，请求就不会被伪造。</p>
-<p>总结</p>
-<p>上述的Sign签名的方式能够在一定程度上防止信息被篡改和伪造，保障通信的安全，这里使用的是MD5进行加密，当然实际使用中大家可以根据实际需求进行自定义签名算法，比如：RSA，SHA等加密算法。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck0deelhr0017ctuqudzrvfhf" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络，安全/">网络，安全</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android---线程通信" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/android---线程通信/" class="article-date">
-  <time datetime="2019-08-26T08:20:18.198Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---线程通信/">android - 线程通信</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck0deelic0022ctuqb9uqabg4" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android---handler" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/android---handler/" class="article-date">
-  <time datetime="2019-08-26T08:19:58.523Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---handler/">android - handler</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---handler/" data-id="ck0deeli0001jctuqbbn2y574" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android---事件传递" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/android---事件传递/" class="article-date">
-  <time datetime="2019-08-26T08:19:39.835Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---事件传递/">android - 事件传递</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck0deeli5001sctuqz1cvwo7x" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
-
-  <nav id="page-nav">
-    
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-  </nav>
 
 </section>
         
