@@ -5,20 +5,20 @@
   
 
   
-  <title>JVM - jvm工具 | kb_jay的开发站台</title>
+  <title>jvm — jvm加载机制 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="jvm工具简介命令行 jps（查看jvm进程id）  jstat （查看jvm进程的运行时内存状态） 123kb-jaydeMacBook-Air:tree kb_jay$ jstat -gcutil 5552  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT    66.70   0.00">
-<meta name="keywords" content="JVM">
+  <meta name="description" content="概念​    类的class文件中包含了类的所有信息。 ​    jvm将描述类的数据从class文件中加载到内存，并对数据进行校验，解析和初始化，生成可以被jvm直接使用的java类型。 类加载时机 加载  链接（跟加载并行） 包括验证，准备，解析  初始化  使用  卸载   类加载过程-加载 通过类的全限定名获取此类的二进制流 加载源（文件 eg:class文件，jar文件；网络；计算生成">
+<meta name="keywords" content="jvm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM - jvm工具">
-<meta property="og:url" content="http://yoursite.com/2019/09/03/JVM---jvm工具/index.html">
+<meta property="og:title" content="jvm — jvm加载机制">
+<meta property="og:url" content="http://yoursite.com/2019/09/10/jvm-—-jvm加载机制/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="jvm工具简介命令行 jps（查看jvm进程id）  jstat （查看jvm进程的运行时内存状态） 123kb-jaydeMacBook-Air:tree kb_jay$ jstat -gcutil 5552  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT    66.70   0.00">
+<meta property="og:description" content="概念​    类的class文件中包含了类的所有信息。 ​    jvm将描述类的数据从class文件中加载到内存，并对数据进行校验，解析和初始化，生成可以被jvm直接使用的java类型。 类加载时机 加载  链接（跟加载并行） 包括验证，准备，解析  初始化  使用  卸载   类加载过程-加载 通过类的全限定名获取此类的二进制流 加载源（文件 eg:class文件，jar文件；网络；计算生成">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-03T12:15:59.646Z">
+<meta property="og:updated_time" content="2019-09-11T06:20:14.107Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JVM - jvm工具">
-<meta name="twitter:description" content="jvm工具简介命令行 jps（查看jvm进程id）  jstat （查看jvm进程的运行时内存状态） 123kb-jaydeMacBook-Air:tree kb_jay$ jstat -gcutil 5552  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT    66.70   0.00">
+<meta name="twitter:title" content="jvm — jvm加载机制">
+<meta name="twitter:description" content="概念​    类的class文件中包含了类的所有信息。 ​    jvm将描述类的数据从class文件中加载到内存，并对数据进行校验，解析和初始化，生成可以被jvm直接使用的java类型。 类加载时机 加载  链接（跟加载并行） 包括验证，准备，解析  初始化  使用  卸载   类加载过程-加载 通过类的全限定名获取此类的二进制流 加载源（文件 eg:class文件，jar文件；网络；计算生成">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -65,10 +65,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-JVM---jvm工具" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-jvm-—-jvm加载机制" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/09/03/JVM---jvm工具/" class="article-date">
-  <time datetime="2019-09-03T11:15:38.638Z" itemprop="datePublished">2019-09-03</time>
+    <a href="/2019/09/10/jvm-—-jvm加载机制/" class="article-date">
+  <time datetime="2019-09-10T13:33:33.579Z" itemprop="datePublished">2019-09-10</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      JVM - jvm工具
+      jvm — jvm加载机制
     </h1>
   
 
@@ -87,34 +87,64 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="jvm工具简介"><a href="#jvm工具简介" class="headerlink" title="jvm工具简介"></a>jvm工具简介</h4><h5 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h5><ol>
-<li><p>jps（查看jvm进程id）</p>
+        <h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>​    类的class文件中包含了类的所有信息。</p>
+<p>​    jvm将描述类的数据从class文件中加载到内存，并对数据进行校验，解析和初始化，生成可以被jvm直接使用的<strong>java类型</strong>。</p>
+<h4 id="类加载时机"><a href="#类加载时机" class="headerlink" title="类加载时机"></a>类加载时机</h4><ol>
+<li><p>加载</p>
 </li>
-<li><p>jstat （查看jvm进程的运行时内存状态）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kb-jaydeMacBook-Air:tree kb_jay$ jstat -gcutil <span class="number">5552</span></span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line"> <span class="number">66.70</span>   <span class="number">0.00</span>  <span class="number">79.02</span>   <span class="number">0.16</span>  <span class="number">97.32</span>  <span class="number">93.78</span>      <span class="number">2</span>    <span class="number">0.013</span>     <span class="number">0</span>    <span class="number">0.000</span>    <span class="number">0.013</span></span><br></pre></td></tr></table></figure>
-<p>对应的信息。survivor0，1，eden，老年代，元数据，压缩类信息，新生代gc次数，新生代gc时间。。。</p>
+<li><p>链接（跟加载并行） 包括验证，准备，解析</p>
 </li>
-<li><p>jinfo （查看jvm配置）</p>
+<li><p>初始化</p>
 </li>
-<li><p>jstack （查看线程运行信息）</p>
+<li><p>使用</p>
 </li>
-<li><p>jMap (堆转储)</p>
-</li>
-</ol>
-<h5 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h5><ol>
-<li><p>jconsole （查看cpu，内存，线程等）</p>
-</li>
-<li><p>VisualVm （多和一，想看啥看啥，支持安装插件）</p>
+<li><p>卸载</p>
 </li>
 </ol>
+<h4 id="类加载过程-加载"><a href="#类加载过程-加载" class="headerlink" title="类加载过程-加载"></a>类加载过程-加载</h4><ul>
+<li><p>通过类的全限定名获取此类的二进制流</p>
+<p>加载源（文件 eg:class文件，jar文件；网络；计算生成 eg:动态代理生成接口的实例）</p>
+</li>
+<li><p>将字节流中的静态数据结构转化成运行时方法区中的动态数据结构</p>
+</li>
+<li><p>在内存中生成一个这个类的Class对象，作为这个类的各种数据的访问入口</p>
+</li>
+</ul>
+<h4 id="类加载过程-验证"><a href="#类加载过程-验证" class="headerlink" title="类加载过程-验证"></a>类加载过程-验证</h4><ul>
+<li>保证class文件符合规范</li>
+<li>文件格式   cafebaby，版本号等</li>
+<li>元数据   语义校验，比如是否有父类，是否继承了final修饰的类等</li>
+<li>字节码校验</li>
+<li>符号引用校验</li>
+</ul>
+<h4 id="类加载过程-准备"><a href="#类加载过程-准备" class="headerlink" title="类加载过程-准备"></a>类加载过程-准备</h4><ul>
+<li>类变量赋初始值。 Int 0；double 0.0； 应用 null ;  在方法区中</li>
+<li>类常量赋指定值。</li>
+</ul>
+<h4 id="类加载过程-解析"><a href="#类加载过程-解析" class="headerlink" title="类加载过程-解析"></a>类加载过程-解析</h4><ul>
+<li>将常量池中的符号引用转为直接引用</li>
+</ul>
+<h4 id="类加载过程-初始化"><a href="#类加载过程-初始化" class="headerlink" title="类加载过程-初始化"></a>类加载过程-初始化</h4><p>触发初始化：</p>
+<ul>
+<li>遇到new，getstatic，putstatic （使用类的静态变量），invokestatic（调用类的静态方法）的字节码命令的时候，会初始化</li>
+<li>反射</li>
+<li>初始化子类之前一定会先初始化父类</li>
+<li>程序入口main的类</li>
+</ul>
+<p>不会初始化： （ 211页 3段demo）</p>
+<ul>
+<li>通过子类引用父类的静态变量，子类不会被初始化     Child.filed 不会初始化Child，其中filed是父类的静态变量</li>
+<li>使用类的常量，不会初始化类（常量在编译的时候已经放入了方法区）</li>
+<li>数组引用类   Student[] stus=new Student[10]; 不会初始化Student类</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/03/JVM---jvm工具/" data-id="ck0evkep5000uoauqgsdljlrw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/09/10/jvm-—-jvm加载机制/" data-id="ck0evkerp0032oauqz1l52z9r" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
 
     </footer>
   </div>
@@ -122,19 +152,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/09/10/jvm---字节码文件/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          jvm - 字节码文件
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/09/03/JVM---内存分配/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/09/10/jvm---字节码文件/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">JVM - 内存分配</div>
+      <div class="article-nav-title">jvm - 字节码文件</div>
     </a>
   
 </nav>

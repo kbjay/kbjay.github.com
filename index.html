@@ -62,6 +62,94 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-jvm-—-jvm加载机制" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/10/jvm-—-jvm加载机制/" class="article-date">
+  <time datetime="2019-09-10T13:33:33.579Z" itemprop="datePublished">2019-09-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/10/jvm-—-jvm加载机制/">jvm — jvm加载机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>​    类的class文件中包含了类的所有信息。</p>
+<p>​    jvm将描述类的数据从class文件中加载到内存，并对数据进行校验，解析和初始化，生成可以被jvm直接使用的<strong>java类型</strong>。</p>
+<h4 id="类加载时机"><a href="#类加载时机" class="headerlink" title="类加载时机"></a>类加载时机</h4><ol>
+<li><p>加载</p>
+</li>
+<li><p>链接（跟加载并行） 包括验证，准备，解析</p>
+</li>
+<li><p>初始化</p>
+</li>
+<li><p>使用</p>
+</li>
+<li><p>卸载</p>
+</li>
+</ol>
+<h4 id="类加载过程-加载"><a href="#类加载过程-加载" class="headerlink" title="类加载过程-加载"></a>类加载过程-加载</h4><ul>
+<li><p>通过类的全限定名获取此类的二进制流</p>
+<p>加载源（文件 eg:class文件，jar文件；网络；计算生成 eg:动态代理生成接口的实例）</p>
+</li>
+<li><p>将字节流中的静态数据结构转化成运行时方法区中的动态数据结构</p>
+</li>
+<li><p>在内存中生成一个这个类的Class对象，作为这个类的各种数据的访问入口</p>
+</li>
+</ul>
+<h4 id="类加载过程-验证"><a href="#类加载过程-验证" class="headerlink" title="类加载过程-验证"></a>类加载过程-验证</h4><ul>
+<li>保证class文件符合规范</li>
+<li>文件格式   cafebaby，版本号等</li>
+<li>元数据   语义校验，比如是否有父类，是否继承了final修饰的类等</li>
+<li>字节码校验</li>
+<li>符号引用校验</li>
+</ul>
+<h4 id="类加载过程-准备"><a href="#类加载过程-准备" class="headerlink" title="类加载过程-准备"></a>类加载过程-准备</h4><ul>
+<li>类变量赋初始值。 Int 0；double 0.0； 应用 null ;  在方法区中</li>
+<li>类常量赋指定值。</li>
+</ul>
+<h4 id="类加载过程-解析"><a href="#类加载过程-解析" class="headerlink" title="类加载过程-解析"></a>类加载过程-解析</h4><ul>
+<li>将常量池中的符号引用转为直接引用</li>
+</ul>
+<h4 id="类加载过程-初始化"><a href="#类加载过程-初始化" class="headerlink" title="类加载过程-初始化"></a>类加载过程-初始化</h4><p>触发初始化：</p>
+<ul>
+<li>遇到new，getstatic，putstatic （使用类的静态变量），invokestatic（调用类的静态方法）的字节码命令的时候，会初始化</li>
+<li>反射</li>
+<li>初始化子类之前一定会先初始化父类</li>
+<li>程序入口main的类</li>
+</ul>
+<p>不会初始化： （ 211页 3段demo）</p>
+<ul>
+<li>通过子类引用父类的静态变量，子类不会被初始化     Child.filed 不会初始化Child，其中filed是父类的静态变量</li>
+<li>使用类的常量，不会初始化类（常量在编译的时候已经放入了方法区）</li>
+<li>数组引用类   Student[] stus=new Student[10]; 不会初始化Student类</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/10/jvm-—-jvm加载机制/" data-id="ck0evkerp0032oauqz1l52z9r" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-jvm---字节码文件" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/09/10/jvm---字节码文件/" class="article-date">
@@ -1541,7 +1629,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/10/jvm---字节码文件/" data-id="ck0deelm7006rctuqxinsti6c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/09/10/jvm---字节码文件/" data-id="ck0evkev8006ooauqwoyizdzb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
@@ -1599,7 +1687,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/03/JVM---jvm工具/" data-id="ck0deelhe000sctuqnucclxzd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/09/03/JVM---jvm工具/" data-id="ck0evkep5000uoauqgsdljlrw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
@@ -1656,7 +1744,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/03/JVM---内存分配/" data-id="ck0deelhl000wctuqspcuc6e1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/09/03/JVM---内存分配/" data-id="ck0evkeqq001woauqtxenqvhe" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
@@ -1723,7 +1811,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/02/JVM---GC/" data-id="ck0deelhb000pctuqc7je3odc" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/09/02/JVM---GC/" data-id="ck0evkep1000qoauqrbka5ydi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
@@ -1792,7 +1880,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/30/JVM---对象的创建/" data-id="ck0deelhn0010ctuq49tgsp8v" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/30/JVM---对象的创建/" data-id="ck0evkeqn001uoauq29k1a64d" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
@@ -1865,7 +1953,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="ck0deelhm000yctuqberr4hxp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="ck0evkep6000woauq334b39ve" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
@@ -1944,7 +2032,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck0deelhr0017ctuqudzrvfhf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck0evkerc002noauq41ybmsv1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络，安全/">网络，安全</a></li></ul>
@@ -1982,7 +2070,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck0deelic0022ctuqb9uqabg4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck0evkerh002uoauqz0vtwfir" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -2020,45 +2108,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---handler/" data-id="ck0deeli0001jctuqbbn2y574" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android---事件传递" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/android---事件传递/" class="article-date">
-  <time datetime="2019-08-26T08:19:39.835Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---事件传递/">android - 事件传递</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck0deeli5001sctuqz1cvwo7x" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---handler/" data-id="ck0evker1002boauqjeoq7obk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -2098,7 +2148,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/android/" style="font-size: 17.5px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 12.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 16px;">JVM</a> <a href="/tags/android/" style="font-size: 18px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 14px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/数据结构/" style="font-size: 12px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
     </div>
   </div>
 
@@ -2120,6 +2170,10 @@
       <ul>
         
           <li>
+            <a href="/2019/09/10/jvm-—-jvm加载机制/">jvm — jvm加载机制</a>
+          </li>
+        
+          <li>
             <a href="/2019/09/10/jvm---字节码文件/">jvm - 字节码文件</a>
           </li>
         
@@ -2133,10 +2187,6 @@
         
           <li>
             <a href="/2019/09/02/JVM---GC/">JVM - GC</a>
-          </li>
-        
-          <li>
-            <a href="/2019/08/30/JVM---对象的创建/">JVM - 对象的创建</a>
           </li>
         
       </ul>
