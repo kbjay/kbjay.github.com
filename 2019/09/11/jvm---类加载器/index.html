@@ -5,20 +5,20 @@
   
 
   
-  <title>JVM - 对象的创建 | kb_jay的开发站台</title>
+  <title>jvm - 类加载器 | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="流程 new 对象之后，先看方法区的常量池中是否有类的符号引用 如果没有，那么加载类（todo），完成之后就知道我们需要申请多少空间了 堆中申请空间 初始化，基本对象为0，引用对象为null 调用&amp;lt; init &amp;gt; 构造方法  内存分配问题两种方案  使用指针碰撞：可用内存跟不可用内存之间有个指针，可用跟不可用内存是规整的 使用空闲列表：空闲区域的指针放入链表中  线程安全问题假如线程1">
+  <meta name="description" content="​    jvm加载字节码的第一步有个加载，加载首先就是根据类的全限定名找到类的二进制字节流。jvm将这一步暴漏了出来，我们可以通过实现自己的类加载器完成这一步。这样我们就可以动态的指定我们类所在的位置，网络，磁盘等等，或者动态生成也可以。 ​    通过这个特性，我们就有了实现热部署，代码加密等的思路。 分类 boot加载 ，javahome中的jar extent加载 ，javahome中ex">
 <meta name="keywords" content="jvm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM - 对象的创建">
-<meta property="og:url" content="http://yoursite.com/2019/08/30/JVM---对象的创建/index.html">
+<meta property="og:title" content="jvm - 类加载器">
+<meta property="og:url" content="http://yoursite.com/2019/09/11/jvm---类加载器/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="流程 new 对象之后，先看方法区的常量池中是否有类的符号引用 如果没有，那么加载类（todo），完成之后就知道我们需要申请多少空间了 堆中申请空间 初始化，基本对象为0，引用对象为null 调用&amp;lt; init &amp;gt; 构造方法  内存分配问题两种方案  使用指针碰撞：可用内存跟不可用内存之间有个指针，可用跟不可用内存是规整的 使用空闲列表：空闲区域的指针放入链表中  线程安全问题假如线程1">
+<meta property="og:description" content="​    jvm加载字节码的第一步有个加载，加载首先就是根据类的全限定名找到类的二进制字节流。jvm将这一步暴漏了出来，我们可以通过实现自己的类加载器完成这一步。这样我们就可以动态的指定我们类所在的位置，网络，磁盘等等，或者动态生成也可以。 ​    通过这个特性，我们就有了实现热部署，代码加密等的思路。 分类 boot加载 ，javahome中的jar extent加载 ，javahome中ex">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-30T11:49:38.937Z">
+<meta property="og:updated_time" content="2019-09-11T08:08:46.582Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JVM - 对象的创建">
-<meta name="twitter:description" content="流程 new 对象之后，先看方法区的常量池中是否有类的符号引用 如果没有，那么加载类（todo），完成之后就知道我们需要申请多少空间了 堆中申请空间 初始化，基本对象为0，引用对象为null 调用&amp;lt; init &amp;gt; 构造方法  内存分配问题两种方案  使用指针碰撞：可用内存跟不可用内存之间有个指针，可用跟不可用内存是规整的 使用空闲列表：空闲区域的指针放入链表中  线程安全问题假如线程1">
+<meta name="twitter:title" content="jvm - 类加载器">
+<meta name="twitter:description" content="​    jvm加载字节码的第一步有个加载，加载首先就是根据类的全限定名找到类的二进制字节流。jvm将这一步暴漏了出来，我们可以通过实现自己的类加载器完成这一步。这样我们就可以动态的指定我们类所在的位置，网络，磁盘等等，或者动态生成也可以。 ​    通过这个特性，我们就有了实现热部署，代码加密等的思路。 分类 boot加载 ，javahome中的jar extent加载 ，javahome中ex">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -65,10 +65,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-JVM---对象的创建" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-jvm---类加载器" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/08/30/JVM---对象的创建/" class="article-date">
-  <time datetime="2019-08-30T08:22:30.862Z" itemprop="datePublished">2019-08-30</time>
+    <a href="/2019/09/11/jvm---类加载器/" class="article-date">
+  <time datetime="2019-09-11T07:08:20.786Z" itemprop="datePublished">2019-09-11</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      JVM - 对象的创建
+      jvm - 类加载器
     </h1>
   
 
@@ -87,42 +87,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ol>
-<li>new 对象之后，先看方法区的常量池中是否有类的符号引用</li>
-<li>如果没有，那么加载类（todo），完成之后就知道我们需要申请多少空间了</li>
-<li>堆中申请空间</li>
-<li>初始化，基本对象为0，引用对象为null</li>
-<li>调用&lt; init &gt; 构造方法</li>
-</ol>
-<h5 id="内存分配问题"><a href="#内存分配问题" class="headerlink" title="内存分配问题"></a>内存分配问题</h5><p>两种方案</p>
-<ol>
-<li>使用指针碰撞：可用内存跟不可用内存之间有个指针，可用跟不可用内存是规整的</li>
-<li>使用空闲列表：空闲区域的指针放入链表中</li>
-</ol>
-<h5 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h5><p>假如线程1有个a对象，线程2有个b对象，a正在申请的时候，b也开始申请，堆是共享的，会有线程安全问题。</p>
-<p>两种方案：</p>
-<ol>
-<li>每次分配内存都加锁</li>
-<li>堆中按线程分区域（线程缓存区），申请线程缓存区的时候加锁</li>
-</ol>
-<h4 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h4><ol>
-<li>对象头 <ul>
-<li>运行时数据（对象的hashcode，gc年代，锁状态等）</li>
-<li>类指针（指向方法区中的类信息，表明该对象是哪个类）</li>
+        <p>​    jvm加载字节码的第一步有个加载，加载首先就是根据类的全限定名找到类的二进制字节流。jvm将这一步暴漏了出来，我们可以通过实现自己的类加载器完成这一步。这样我们就可以动态的指定我们类所在的位置，网络，磁盘等等，或者动态生成也可以。</p>
+<p>​    通过这个特性，我们就有了实现热部署，代码加密等的思路。</p>
+<h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><ul>
+<li>boot加载 ，javahome中的jar</li>
+<li>extent加载 ，javahome中ext下的jar文件</li>
+<li>app加载，程序运行的class文件</li>
+<li>自定义加载，自己指定</li>
 </ul>
-</li>
-<li>实例数据</li>
-<li>对齐填充padding</li>
+<h4 id="双亲委派（保证了核心类只加载一次）"><a href="#双亲委派（保证了核心类只加载一次）" class="headerlink" title="双亲委派（保证了核心类只加载一次）"></a>双亲委派（保证了核心类只加载一次）</h4><ol>
+<li>双亲委派并不是继承，而是组合的方法</li>
+<li>逻辑：<ol>
+<li>先检查是否加载过（native）</li>
+<li>没有加载过的话，如果parent不空，让parent加载。如果parent空，让boot加载。</li>
+<li>之后class还是为空，调用自己的findClass方法加载。</li>
+<li>代码如下：</li>
 </ol>
-<h5 id="Hotspot对象访问定位"><a href="#Hotspot对象访问定位" class="headerlink" title="Hotspot对象访问定位"></a>Hotspot对象访问定位</h5><p>栈中有堆对象的引用，堆对象中有方法区中对象类型数据（class）的引用</p>
-<p>tip：还有一种是句柄的方式</p>
-<p>堆中有句柄池跟对象池，栈中有句柄池的引用，句柄池中有对象的引用跟对象类型数据（class）的引用</p>
-<p>参考 《深入理解jvm》49页</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; loadClass(String name, <span class="keyword">boolean</span> resolve)</span><br><span class="line">       <span class="keyword">throws</span> ClassNotFoundException</span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">synchronized</span> (getClassLoadingLock(name)) &#123;</span><br><span class="line">           <span class="comment">// First, check if the class has already been loaded</span></span><br><span class="line">           Class&lt;?&gt; c = findLoadedClass(name);</span><br><span class="line">           <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">               <span class="keyword">long</span> t0 = System.nanoTime();</span><br><span class="line">               <span class="keyword">try</span> &#123;</span><br><span class="line">                   <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">                       c = parent.loadClass(name, <span class="keyword">false</span>);</span><br><span class="line">                   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                       c = findBootstrapClassOrNull(name);</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">                   <span class="comment">// ClassNotFoundException thrown if class not found</span></span><br><span class="line">                   <span class="comment">// from the non-null parent class loader</span></span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">               <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">                   <span class="comment">// If still not found, then invoke findClass in order</span></span><br><span class="line">                   <span class="comment">// to find the class.</span></span><br><span class="line">                   <span class="keyword">long</span> t1 = System.nanoTime();</span><br><span class="line">                   c = findClass(name);</span><br><span class="line"></span><br><span class="line">                   <span class="comment">// this is the defining class loader; record the stats</span></span><br><span class="line">                   sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);</span><br><span class="line">                   sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);</span><br><span class="line">                   sun.misc.PerfCounter.getFindClasses().increment();</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (resolve) &#123;</span><br><span class="line">               resolveClass(c);</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">return</span> c;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>我们知道了双亲委派的机制是在classLoader的loadClass方法中实现的，所以我们在实现自定义classlaoder的时候原则上不建议重写loadclass，而是重写findclass方法</li>
+</ol>
+<h4 id="Thinker大致原理"><a href="#Thinker大致原理" class="headerlink" title="Thinker大致原理"></a>Thinker大致原理</h4><p>​    android虚拟机不是加载class文件的，而是dex文件。使用的是dexClassLoader，dexClassLoader中有一个List存放dex文件的路径，加载的时候会安顺序去加载，我们可以通过反射将修复好的dex文件放入list的首部，这样修复好的类会先被找到，那么运行的时候跑的就是修复好的类文件。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/30/JVM---对象的创建/" data-id="ck0ezg2ir0012tnuq3ret85t9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/09/11/jvm---类加载器/" data-id="ck0ezg2ji0025tnuqnc57um93" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
@@ -133,19 +125,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/09/02/JVM---GC/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          JVM - GC
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/08/30/JVM---内存区域/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/09/10/jvm-—-jvm加载机制/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">JVM - 内存区域</div>
+      <div class="article-nav-title">jvm — jvm加载机制</div>
     </a>
   
 </nav>
