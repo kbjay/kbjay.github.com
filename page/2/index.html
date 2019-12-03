@@ -62,79 +62,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-JVM---内存区域" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/30/JVM---内存区域/" class="article-date">
-  <time datetime="2019-08-30T02:39:09.972Z" itemprop="datePublished">2019-08-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/30/JVM---内存区域/">JVM - 内存区域</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="全貌"><a href="#全貌" class="headerlink" title="全貌"></a>全貌</h4><p>盗图一张如下：</p>
-<p><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1567143038993&amp;di=728787914453f7c702ce0038fb1a16b8&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2Fe26275cf8c88f16ed498a3563ba6ad90.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="img"></p>
-<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><ol>
-<li>记录字节码文件当前的执行行数</li>
-<li>是每个线程私有的，共有的话，切换线程会懵逼掉的</li>
-<li>如果执行native方法的话，它的值是undifined。因为native方法是java通过JNI直接调用本地C/C++库，可以近似的认为native方法相当于C/C++暴露给java的一个接口，java通过调用这个接口从而调用到C/C++方法。由于该方法是通过C/C++而不是java进行实现。那么自然无法产生相应的字节码，并且C/C++执行时的内存分配是由自己语言决定的，而不是由JVM决定的。</li>
-<li>不会oom。因为它的空间很小并且不是我们申请的，是jvm自己管理的。</li>
-</ol>
-<h4 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h4><ol>
-<li>它是跟方法对应的，是用来描述方法调用过程中的内存模型。（方法区是跟class对应的）</li>
-<li>栈帧：他的数据结构是个栈，每个方法对应一个栈帧，假如执行a方法，a方法中又调用了b方法，那么会先把a 压栈，执行到b的时候把b压栈，b执行完b出栈，之后接着执行a，a执行完a出栈。</li>
-<li>局部方法表：每个方法执行需要的内存大小在编译的时候就确定了，局部方法表存放执行方法需要的变量，如果该变量是个对象的话，存放的是引用。局部方法表是在栈帧中的。（所有对象的真实存放区域是堆）</li>
-<li>虚拟机的栈的深度是有最大值的，如果栈太深会报stackoverflow</li>
-<li>如果方法执行没有到达栈的最大值，但是没有内存空间可用了，那么会报oom</li>
-<li>线程私有的</li>
-</ol>
-<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><ol>
-<li>虚拟机栈跟本地方法栈基本一致，只不过不是java方法，而是对应native方法</li>
-<li>线程私有的</li>
-<li>会有oom跟stackoverflow</li>
-</ol>
-<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ol>
-<li>存放对象的</li>
-<li>线程共享的</li>
-<li>gc主要的目标</li>
-<li>会oom</li>
-</ol>
-<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><ol>
-<li>存放类信息（跟class对应），存放常量（常量池，1.8 将常量池放入了堆），存放静态变量等</li>
-<li>线程共享的</li>
-<li>会oom</li>
-<li>在java8中被移除了，取而代之的是metaspace（元数据空间）</li>
-</ol>
-<h4 id="eg："><a href="#eg：" class="headerlink" title="eg："></a>eg：</h4><p>运行如下代码：以下只分析1.8</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">"123"</span>;</span><br><span class="line">String b = <span class="string">"123"</span>;</span><br><span class="line"><span class="comment">//true  两个都是常量池中 123 的地址</span></span><br><span class="line">System.out.println(a == b);</span><br><span class="line"></span><br><span class="line">String c = <span class="keyword">new</span> String(<span class="string">"123"</span>);</span><br><span class="line"><span class="comment">//一个堆 一个常量池，不一样 false</span></span><br><span class="line">System.out.println(a == c);</span><br><span class="line"></span><br><span class="line"><span class="comment">//java 1.8 因为常量池已经有 123 了，所以返回常量池中的123的地址</span></span><br><span class="line">String d = c.intern();</span><br><span class="line"><span class="comment">//所以true</span></span><br><span class="line">System.out.println(a == d);</span><br><span class="line"></span><br><span class="line"><span class="comment">//下面的代码将 "我是wzq" 放入常量池，并创建了一个堆对象e</span></span><br><span class="line">String e = <span class="keyword">new</span> String(<span class="string">"我是wzq"</span>);</span><br><span class="line"><span class="comment">//java 1.8 因为常量池有 我是wzq ，所以将 我是wzq 在常量池中的地址返回，</span></span><br><span class="line">String f = e.intern();</span><br><span class="line"><span class="comment">//e是堆地址，f是常量池地址 false</span></span><br><span class="line">System.out.println(e == f);</span><br><span class="line"></span><br><span class="line"><span class="comment">//往常量池中放入 我是wzq，以为已经有了，所有返回 我是wzq 在常量池中的地址，所以是true</span></span><br><span class="line">String g = <span class="string">"我是wzq"</span>;</span><br><span class="line">System.out.println(f == g);</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="ck3pnof2g000ypnuq42xwtctg" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-URL参数的sign签名认证" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/08/28/URL参数的sign签名认证/" class="article-date">
@@ -202,7 +129,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck3pnof2m0019pnuqjx00nn3m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck3pnrc520019q7uqmjjggizw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络，安全/">网络，安全</a></li></ul>
@@ -240,7 +167,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck3pnof2p001dpnuqt6eki0v1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck3pnrc54001dq7uqf23es6po" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -278,7 +205,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck3pnof2n001bpnuqvmrpf7py" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck3pnrc53001bq7uqlel4iron" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -328,7 +255,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/数据结构---图/" data-id="ck3pnof44003epnuqx38u18v1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/数据结构---图/" data-id="ck3pnrc6h003aq7uqlu0q6png" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
@@ -415,7 +342,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/数据结构---树/" data-id="ck3pnof41003apnuqdfoipd30" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/数据结构---树/" data-id="ck3pnrc6l003eq7uqdi9fgoz6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
@@ -482,7 +409,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/https/" data-id="ck3pnof2q001hpnuqbb2b5qc8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/https/" data-id="ck3pnrc5a001nq7uqjfbddmqt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/net/">net</a></li></ul>
@@ -524,7 +451,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/21/ArrayMap vs HashMap/" data-id="ck3pnof2c000spnuq1w2q95fh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/21/ArrayMap vs HashMap/" data-id="ck3pnrc4o000sq7uqs0385sfj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li></ul>
@@ -562,7 +489,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/08/Android-AndPermission/" data-id="ck3pnof1n0004pnuqplx1dcyn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/08/Android-AndPermission/" data-id="ck3pnrc400003q7uqv8e8sllt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-permission/">android permission</a></li></ul>
@@ -628,11 +555,47 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/23/android高级UI一:绘制流程/" data-id="ck3pnof2r001jpnuqpu8h64yx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/23/android高级UI一:绘制流程/" data-id="ck3pnrc57001jq7uqgyk6dklz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-ui/">android ui</a></li></ul>
 
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-数据结构系列-数组" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/01/数据结构系列-数组/" class="article-date">
+  <time datetime="2019-06-01T02:06:22.630Z" itemprop="datePublished">2019-06-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/01/数据结构系列-数组/">数据结构系列-数组</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/06/01/数据结构系列-数组/" data-id="ck3pnrc6o003gq7uqfv5sytos" class="article-share-link">Share</a>
+      
+      
     </footer>
   </div>
   
@@ -698,15 +661,15 @@
           </li>
         
           <li>
-            <a href="/2019/09/18/简历/">简历</a>
-          </li>
-        
-          <li>
             <a href="/2019/09/11/jvm---类加载器/">jvm - 类加载器</a>
           </li>
         
           <li>
             <a href="/2019/09/10/jvm-—-jvm加载机制/">jvm — jvm加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/10/jvm---字节码文件/">jvm - 字节码文件</a>
           </li>
         
       </ul>

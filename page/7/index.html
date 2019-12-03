@@ -62,58 +62,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Android-瀑布流" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/16/Android-瀑布流/" class="article-date">
-  <time datetime="2018-07-16T02:02:50.539Z" itemprop="datePublished">2018-07-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/16/Android-瀑布流/">Android-瀑布流</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>point1</strong></p>
-<p>需要服务器返回图片规格</p>
-<p><strong>point2</strong></p>
-<p>在adapter的onBindViewHolder中根据服务端返回的图片的规格设置layoutParams</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(@NonNull CusHolder holder, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">    BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();</span><br><span class="line">    options.inJustDecodeBounds=<span class="keyword">true</span>;</span><br><span class="line">    BitmapFactory.decodeResource(mContext.getResources(), mData.get(position).score,options);</span><br><span class="line">    <span class="keyword">float</span> f=options.outWidth/(<span class="keyword">float</span>)options.outHeight;</span><br><span class="line">    <span class="keyword">int</span> h= (<span class="keyword">int</span>) (<span class="number">650</span>/f);</span><br><span class="line">    RelativeLayout.LayoutParams lp = <span class="keyword">new</span> RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, h);</span><br><span class="line">    holder.itemView.setLayoutParams(lp);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// holder.mIv.setImageResource(mData.get(position).score);</span></span><br><span class="line">    Glide.with(mContext).load(mData.get(position).score).into(holder.mIv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>point3</strong></p>
-<p>设置rv的manager为StaggeredGridLayoutManager</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mRv.setLayoutManager(<span class="keyword">new</span> StaggeredGridLayoutManager(<span class="number">2</span>,StaggeredGridLayoutManager.VERTICAL));</span><br></pre></td></tr></table></figure>
-<p><strong>point4</strong>（不用设置）</p>
-<ul>
-<li>来回滑动的时候item交换位置:在设置layoutManager的时候，多加一句代码防止item位置交换 layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE); </li>
-<li>顶部留空的问题，在onScrollStateChanged里再加一句layoutManager.invalidateSpanAssignments(); </li>
-</ul>
-<p>参考：<a href="https://blog.csdn.net/qq_31390699/article/details/53465671" target="_blank" rel="noopener">https://blog.csdn.net/qq_31390699/article/details/53465671</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/16/Android-瀑布流/" data-id="ck3pnof25000mpnuq0c4r1d9d" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-Android-特殊的vp" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/13/Android-特殊的vp/" class="article-date">
@@ -155,7 +103,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/13/Android-特殊的vp/" data-id="ck3pnof2a000ppnuqlivbnp9c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/13/Android-特殊的vp/" data-id="ck3pnrc4j000mq7uqc7ic4fp0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
@@ -242,7 +190,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/11/android-微信登陆/" data-id="ck3pnof2s001kpnuqlz434vpi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/11/android-微信登陆/" data-id="ck3pnrc55001fq7uq6lz06a45" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li></ul>
@@ -293,7 +241,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/10/tensorFlow记录：/" data-id="ck3pnof3x0034pnuqgx3u7caz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/10/tensorFlow记录：/" data-id="ck3pnrc6d0036q7uqy96l612n" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li></ul>
@@ -338,7 +286,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/03/leetcode-计算各个位数不同的数字个数/" data-id="ck3pnof3r002xpnuqbt9io1hs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/03/leetcode-计算各个位数不同的数字个数/" data-id="ck3pnrc65002vq7uq4jvqaunj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -409,7 +357,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" data-id="ck3pnof21000hpnuqomupnezu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/03/Android-查找讯飞输入法下载的离线资源02/" data-id="ck3pnrc4f000hq7uq17dkeucg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li></ul>
@@ -454,7 +402,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/02/leetcode-整数拆分/" data-id="ck3pnof3a0029pnuq6bv1gz20" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/02/leetcode-整数拆分/" data-id="ck3pnrc5s002cq7uqnbnq48od" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -528,7 +476,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="ck3pnof23000jpnuqdfzw08ve" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/02/Android-查找讯飞输入法的下载资源的路径01/" data-id="ck3pnrc4i000lq7uqp7ob4ru5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li></ul>
@@ -578,7 +526,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="ck3pnof2y001spnuqa3e0j4l6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/leetcode-Bit位计数/" data-id="ck3pnrc5g001uq7uqqo7g8dxz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
@@ -646,10 +594,64 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="ck3pnof1v000bpnuqedrediq1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/29/Android-反编译调试smali文件/" data-id="ck3pnrc49000dq7uqvo21em9j" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode-单词拆分" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/28/leetcode-单词拆分/" class="article-date">
+  <time datetime="2018-06-28T12:32:44.963Z" itemprop="datePublished">2018-06-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/28/leetcode-单词拆分/">leetcode-单词拆分</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>给定一个<strong>非空</strong>字符串 <em>s</em> 和一个包含<strong>非空</strong>单词列表的字典 <em>wordDict</em>，判定 <em>s</em> 是否可以被空格拆分为一个或多个在字典中出现的单词。</p>
+<p><strong>说明：</strong></p>
+<ul>
+<li>拆分时可以重复使用字典中的单词。</li>
+<li>你可以假设字典中没有重复的单词。</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;leetcode&quot;, wordDict = [&quot;leet&quot;, &quot;code&quot;]</span><br><span class="line">输出: true</span><br><span class="line">解释: 返回 true 因为 &quot;leetcode&quot; 可以被拆分成 &quot;leet code&quot;。</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;applepenapple&quot;, wordDict = [&quot;apple&quot;, &quot;pen&quot;]</span><br><span class="line">输出: true</span><br><span class="line">解释: 返回 true 因为 &quot;applepenapple&quot; 可以被拆分成 &quot;apple pen apple&quot;。</span><br><span class="line">     注意你可以重复使用字典中的单词。</span><br></pre></td></tr></table></figure>
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;catsandog&quot;, wordDict = [&quot;cats&quot;, &quot;dog&quot;, &quot;sand&quot;, &quot;and&quot;, &quot;cat&quot;]</span><br><span class="line">输出: false</span><br></pre></td></tr></table></figure>
+<p><strong>思路</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">这道题仍然是动态规划的题目，我们总结一下动态规划题目的基本思路。首先我们要决定要存储什么历史信息以及用什么数据结构来存储信息。然后是最重要的递推式，就是如从存储的历史信息中得到当前步的结果。最后我们需要考虑的就是起始条件的值。</span><br><span class="line"></span><br><span class="line">首先我们要存储的历史信息res[i]是表示到字符串s的第i个元素为止能不能用字典中的词来表示，我们需要一个长度为n的布尔数组来存储信息。然后假设我们现在拥有res[<span class="number">0</span>,...,i-<span class="number">1</span>]的结果，我们来获得res[i]的表达式。思路是对于每个以i为结尾的子串，看看他是不是在字典里面以及他之前的元素对应的res[j]是不是<span class="keyword">true</span>，如果都成立，那么res[i]为<span class="keyword">true</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">wordBreak</span><span class="params">(String s, List&lt;String&gt; wordDict)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> [] arr=<span class="keyword">new</span> <span class="keyword">boolean</span>[s.length()];</span><br><span class="line">        String temp =s.substring(<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span> ;i&lt;wordDict.size();i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(temp.equals(wordDict.get(i)))&#123;</span><br><span class="line">                arr[<span class="number">0</span>]=<span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>;i&lt;arr.length;i++)&#123;</span><br><span class="line">            temp=s.substring(<span class="number">0</span>,i+<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">0</span>;j&lt;wordDict.size();j++)&#123;</span><br><span class="line">                String str=wordDict.get(j);</span><br><span class="line">                <span class="keyword">if</span>(temp.endsWith(str))&#123;</span><br><span class="line">                    <span class="keyword">if</span>(str.length()==(i+<span class="number">1</span>))&#123;</span><br><span class="line">                        arr[i]=<span class="keyword">true</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(str.length()&lt;(i+<span class="number">1</span>))&#123;</span><br><span class="line">                        <span class="keyword">int</span> k =i-str.length();</span><br><span class="line">                        <span class="keyword">if</span>(arr[k]==<span class="keyword">true</span>)&#123;                       </span><br><span class="line">                            arr[i]=<span class="keyword">true</span>;</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                            <span class="keyword">continue</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    </span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> arr[s.length()-<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/28/leetcode-单词拆分/" data-id="ck3pnrc5q0029q7uqq7jk4mw4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
 
     </footer>
   </div>
@@ -716,15 +718,15 @@
           </li>
         
           <li>
-            <a href="/2019/09/18/简历/">简历</a>
-          </li>
-        
-          <li>
             <a href="/2019/09/11/jvm---类加载器/">jvm - 类加载器</a>
           </li>
         
           <li>
             <a href="/2019/09/10/jvm-—-jvm加载机制/">jvm — jvm加载机制</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/10/jvm---字节码文件/">jvm - 字节码文件</a>
           </li>
         
       </ul>
