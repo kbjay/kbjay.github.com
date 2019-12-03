@@ -62,10 +62,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-android---handler" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-JVM---内存区域" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/08/26/android---handler/" class="article-date">
-  <time datetime="2019-08-26T08:19:58.523Z" itemprop="datePublished">2019-08-26</time>
+    <a href="/2019/08/30/JVM---内存区域/" class="article-date">
+  <time datetime="2019-08-30T02:39:09.972Z" itemprop="datePublished">2019-08-30</time>
 </a>
     
   </div>
@@ -76,7 +76,159 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---handler/">android - handler</a>
+      <a class="article-title" href="/2019/08/30/JVM---内存区域/">JVM - 内存区域</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="全貌"><a href="#全貌" class="headerlink" title="全貌"></a>全貌</h4><p>盗图一张如下：</p>
+<p><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1567143038993&amp;di=728787914453f7c702ce0038fb1a16b8&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2Fe26275cf8c88f16ed498a3563ba6ad90.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="img"></p>
+<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><ol>
+<li>记录字节码文件当前的执行行数</li>
+<li>是每个线程私有的，共有的话，切换线程会懵逼掉的</li>
+<li>如果执行native方法的话，它的值是undifined。因为native方法是java通过JNI直接调用本地C/C++库，可以近似的认为native方法相当于C/C++暴露给java的一个接口，java通过调用这个接口从而调用到C/C++方法。由于该方法是通过C/C++而不是java进行实现。那么自然无法产生相应的字节码，并且C/C++执行时的内存分配是由自己语言决定的，而不是由JVM决定的。</li>
+<li>不会oom。因为它的空间很小并且不是我们申请的，是jvm自己管理的。</li>
+</ol>
+<h4 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h4><ol>
+<li>它是跟方法对应的，是用来描述方法调用过程中的内存模型。（方法区是跟class对应的）</li>
+<li>栈帧：他的数据结构是个栈，每个方法对应一个栈帧，假如执行a方法，a方法中又调用了b方法，那么会先把a 压栈，执行到b的时候把b压栈，b执行完b出栈，之后接着执行a，a执行完a出栈。</li>
+<li>局部方法表：每个方法执行需要的内存大小在编译的时候就确定了，局部方法表存放执行方法需要的变量，如果该变量是个对象的话，存放的是引用。局部方法表是在栈帧中的。（所有对象的真实存放区域是堆）</li>
+<li>虚拟机的栈的深度是有最大值的，如果栈太深会报stackoverflow</li>
+<li>如果方法执行没有到达栈的最大值，但是没有内存空间可用了，那么会报oom</li>
+<li>线程私有的</li>
+</ol>
+<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><ol>
+<li>虚拟机栈跟本地方法栈基本一致，只不过不是java方法，而是对应native方法</li>
+<li>线程私有的</li>
+<li>会有oom跟stackoverflow</li>
+</ol>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ol>
+<li>存放对象的</li>
+<li>线程共享的</li>
+<li>gc主要的目标</li>
+<li>会oom</li>
+</ol>
+<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><ol>
+<li>存放类信息（跟class对应），存放常量（常量池，1.8 将常量池放入了堆），存放静态变量等</li>
+<li>线程共享的</li>
+<li>会oom</li>
+<li>在java8中被移除了，取而代之的是metaspace（元数据空间）</li>
+</ol>
+<h4 id="eg："><a href="#eg：" class="headerlink" title="eg："></a>eg：</h4><p>运行如下代码：以下只分析1.8</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">"123"</span>;</span><br><span class="line">String b = <span class="string">"123"</span>;</span><br><span class="line"><span class="comment">//true  两个都是常量池中 123 的地址</span></span><br><span class="line">System.out.println(a == b);</span><br><span class="line"></span><br><span class="line">String c = <span class="keyword">new</span> String(<span class="string">"123"</span>);</span><br><span class="line"><span class="comment">//一个堆 一个常量池，不一样 false</span></span><br><span class="line">System.out.println(a == c);</span><br><span class="line"></span><br><span class="line"><span class="comment">//java 1.8 因为常量池已经有 123 了，所以返回常量池中的123的地址</span></span><br><span class="line">String d = c.intern();</span><br><span class="line"><span class="comment">//所以true</span></span><br><span class="line">System.out.println(a == d);</span><br><span class="line"></span><br><span class="line"><span class="comment">//下面的代码将 "我是wzq" 放入常量池，并创建了一个堆对象e</span></span><br><span class="line">String e = <span class="keyword">new</span> String(<span class="string">"我是wzq"</span>);</span><br><span class="line"><span class="comment">//java 1.8 因为常量池有 我是wzq ，所以将 我是wzq 在常量池中的地址返回，</span></span><br><span class="line">String f = e.intern();</span><br><span class="line"><span class="comment">//e是堆地址，f是常量池地址 false</span></span><br><span class="line">System.out.println(e == f);</span><br><span class="line"></span><br><span class="line"><span class="comment">//往常量池中放入 我是wzq，以为已经有了，所有返回 我是wzq 在常量池中的地址，所以是true</span></span><br><span class="line">String g = <span class="string">"我是wzq"</span>;</span><br><span class="line">System.out.println(f == g);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="ck3pnm69q0010p0uq12ji91cn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-URL参数的sign签名认证" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/28/URL参数的sign签名认证/" class="article-date">
+  <time datetime="2019-08-28T09:27:13.238Z" itemprop="datePublished">2019-08-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/28/URL参数的sign签名认证/">URL参数的sign签名认证</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="在写开放的API接口时是如何保证数据的安全性的？"><a href="#在写开放的API接口时是如何保证数据的安全性的？" class="headerlink" title="在写开放的API接口时是如何保证数据的安全性的？"></a>在写开放的API接口时是如何保证数据的安全性的？</h4><p>tip：以下内容非原创，</p>
+<p>原文：<a href="https://blog.csdn.net/qq_15901351/article/details/80175169" target="_blank" rel="noopener">https://blog.csdn.net/qq_15901351/article/details/80175169</a></p>
+<p>先来看看有哪些安全性问题在开放的api接口中，我们通过http Post或者Get方式请求服务器的时候，会面临着许多的安全性问题，例如：</p>
+<ol>
+<li><p>请求来源(身份)是否合法？</p>
+</li>
+<li><p>请求参数被篡改？</p>
+</li>
+<li><p>请求的唯一性(不可复制)</p>
+</li>
+</ol>
+<p>解决方案：为了保证数据在通信时的安全性，我们可以采用参数签名的方式来进行相关验证。</p>
+<h5 id="案列分析"><a href="#案列分析" class="headerlink" title="案列分析"></a>案列分析</h5><p>我们通过给某 [移动端(app)] 写 [后台接口(api)] 的案例进行分析：     </p>
+<p>   客户端：以下简称app   </p>
+<p>  后台接口：以下简称api </p>
+<p>我们通过app查询产品列表这个操作来进行分析：</p>
+<p>app中点击查询按钮==》调用api进行查询==》返回查询结果==&gt;显示在app中</p>
+<p>一、不进行验证的方式</p>
+<p>api查询接口：</p>
+<p>app调用：<a href="http://api.test.com/getproducts?参数1=value1......" target="_blank" rel="noopener">http://api.test.com/getproducts?参数1=value1......</a>.</p>
+<p>如上，这种方式简单粗暴，通过调用getproducts方法即可获取产品列表信息了，但是这样的方式会存在很严重的安全性问题，没有进行任何的验证，大家都可以通过这个方法获取到产品列表，导致产品信息泄露。</p>
+<p>那么，如何验证调用者身份呢？如何防止参数被篡改呢？</p>
+<p>二、MD5参数签名的方式</p>
+<p>我们对api查询产品接口进行优化：</p>
+<p>1.给app分配对应的key、secret</p>
+<p>2.Sign签名，调用API 时需要对请求参数进行签名验证，签名方式如下： </p>
+<p>   a. 按照请求参数名称将所有请求参数按照字母先后顺序排序得到：keyvaluekeyvalue…keyvalue  字符串如：将arong=1,mrong=2,crong=3 排序为：arong=1, crong=3,mrong=2  然后将参数名和参数值进行拼接得到参数字符串：arong1crong3mrong2。 </p>
+<p>   b. 将secret加在参数字符串的头部后进行MD5加密 ,加密后的字符串需大写。即得到签名Sign</p>
+<p>新api接口代码:</p>
+<p>app调用：<a href="http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;参数1=value1&amp;参数2=value2......" target="_blank" rel="noopener">http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;参数1=value1&amp;参数2=value2......</a>.</p>
+<p>注：secret 仅作加密使用, 为了保证数据安全请不要在请求参数中使用。</p>
+<p>如上，优化后的请求多了key和sign参数，这样请求的时候就需要合法的key和正确签名sign才可以获取产品数据。这样就解决了身份验证和防止参数篡改问题，如果请求参数被人拿走，没事，他们永远也拿不到secret,因为secret是不传递的。再也无法伪造合法的请求。</p>
+<p>但是…这样就够了吗？细心的同学可能会发现，如果我获取了你完整的链接，一直使用你的key和sign和一样的参数不就可以正常获取数据了…-_-!是的，仅仅是如上的优化是不够的。。。。。。</p>
+<p>请求的唯一性：</p>
+<p>为了防止别人重复使用请求参数问题，我们需要保证请求的唯一性，就是对应请求只能使用一次，这样就算别人拿走了请求的完整链接也是无效的。<br>唯一性的实现：在如上的请求参数中，我们加入时间戳：timestamp（yyyyMMddHHmmss），同样，时间戳作为请求参数之一，也加入sign算法中进行加密。</p>
+<p>新的api接口：</p>
+<p>app调用：<br><a href="http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;timestamp=201603261407&amp;参数1=value1&amp;参数2=value2......" target="_blank" rel="noopener">http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;timestamp=201603261407&amp;参数1=value1&amp;参数2=value2......</a>.<br>如上，我们通过timestamp时间戳用来验证请求是否过期。这样就算被人拿走完整的请求链接也是无效的。</p>
+<p>Sign签名安全性分析： </p>
+<p>通过上面的案例，我们可以看出，安全的关键在于参与签名的secret，整个过程中secret是不参与通信的，所以只要保证secret不泄露，请求就不会被伪造。</p>
+<p>总结</p>
+<p>上述的Sign签名的方式能够在一定程度上防止信息被篡改和伪造，保障通信的安全，这里使用的是MD5进行加密，当然实际使用中大家可以根据实际需求进行自定义签名算法，比如：RSA，SHA等加密算法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck3pnm69v0019p0uqcgkp7u24" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络，安全/">网络，安全</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-android---线程通信" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/26/android---线程通信/" class="article-date">
+  <time datetime="2019-08-26T08:20:18.198Z" itemprop="datePublished">2019-08-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/26/android---线程通信/">android - 线程通信</a>
     </h1>
   
 
@@ -88,7 +240,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---handler/" data-id="ck0ezg2j2001jtnuq15itp57u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck3pnm69x001bp0uqp0mye8ed" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -126,7 +278,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck0ezg2j9001rtnuq1yz500gg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck3pnm69u0017p0uqfgq0l6pm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -138,10 +290,10 @@
 
 
   
-    <article id="post-android---animation" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-数据结构---图" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/08/26/android---animation/" class="article-date">
-  <time datetime="2019-08-26T08:19:05.027Z" itemprop="datePublished">2019-08-26</time>
+    <a href="/2019/08/26/数据结构---图/" class="article-date">
+  <time datetime="2019-08-26T08:02:50.008Z" itemprop="datePublished">2019-08-26</time>
 </a>
     
   </div>
@@ -152,7 +304,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---animation/">android - animation</a>
+      <a class="article-title" href="/2019/08/26/数据结构---图/">数据结构 - 图</a>
     </h1>
   
 
@@ -160,14 +312,26 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h4 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h4><ol>
+<li>矩阵（二维数组）</li>
+<li>临接表</li>
+</ol>
+<h4 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h4><ol>
+<li>深度优先</li>
+<li>广度优先</li>
+</ol>
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><ol>
+<li>灰度图</li>
+<li>gradle 中task是个有向图</li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---animation/" data-id="ck0ezg2iy001btnuqm3trqg3w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/数据结构---图/" data-id="ck3pnm6da004tp0uqnjfwz0xa" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
 
     </footer>
   </div>
@@ -176,10 +340,10 @@
 
 
   
-    <article id="post-android---view" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-数据结构---树" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/08/26/android---view/" class="article-date">
-  <time datetime="2019-08-26T08:18:47.077Z" itemprop="datePublished">2019-08-26</time>
+    <a href="/2019/08/26/数据结构---树/" class="article-date">
+  <time datetime="2019-08-26T08:01:38.968Z" itemprop="datePublished">2019-08-26</time>
 </a>
     
   </div>
@@ -190,7 +354,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---view/">android - view</a>
+      <a class="article-title" href="/2019/08/26/数据结构---树/">数据结构 - 树</a>
     </h1>
   
 
@@ -198,14 +362,63 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h4 id="二叉树遍历"><a href="#二叉树遍历" class="headerlink" title="二叉树遍历"></a>二叉树遍历</h4><ol>
+<li><p>定义二叉树</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> kb_jay</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@time</span> 2019/8/26</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> T data;</span><br><span class="line">    <span class="keyword">public</span> Node leftChild;</span><br><span class="line">    <span class="keyword">public</span> Node rightChild;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(T data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(data, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(T data, Node leftChild, Node rightChild)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        <span class="keyword">this</span>.leftChild = leftChild;</span><br><span class="line">        <span class="keyword">this</span>.rightChild = rightChild;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>遍历二叉树</p>
+<ul>
+<li><p>前序遍历（递归跟非递归）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//递归</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">firstRoot</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(root.data);</span><br><span class="line">    firstRoot(root.leftChild);</span><br><span class="line">    firstRoot(root.rightChild);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//非递归</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">firstRootStack</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span> || stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//输出并压栈左孩子</span></span><br><span class="line">        <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.println(root.data);</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root = root.leftChild;</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//出栈遍历右孩子</span></span><br><span class="line">        <span class="keyword">if</span> (stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            Node node = stack.pop();</span><br><span class="line">            root = node.rightChild;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>中序遍历（递归跟非递归）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">centerRoot</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    centerRoot(root.leftChild);</span><br><span class="line">    System.out.println(root.data);</span><br><span class="line">    centerRoot(root.rightChild);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">centerRootStack</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span> || stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root = root.leftChild;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            root = stack.pop();</span><br><span class="line">            System.out.println(root.data);</span><br><span class="line">            root = root.rightChild;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>后序遍历（递归跟非递归）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lastRoot</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    lastRoot(node.leftChild);</span><br><span class="line">    lastRoot(node.rightChild);</span><br><span class="line">    System.out.println(node.data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lastRootStack</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="comment">//记录前一个输出的node</span></span><br><span class="line">    Node pre = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span> || stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root = root.leftChild;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            Node temp = stack.peek().rightChild;</span><br><span class="line">            <span class="keyword">if</span> (temp == <span class="keyword">null</span> || temp == pre) &#123;</span><br><span class="line">                pre = stack.pop();</span><br><span class="line">                System.out.println(pre.data);</span><br><span class="line">                root = <span class="keyword">null</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                root = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>层序遍历</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">layerOut</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Queue&lt;Node&gt; queue = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">        System.out.println(root.data);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root.leftChild != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.offer(root.leftChild);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root.rightChild != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.offer(root.rightChild);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果队列为空，返回null， 栈的pop方法，如果栈为空，则报异常</span></span><br><span class="line">        root = queue.poll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="二分搜索树"><a href="#二分搜索树" class="headerlink" title="二分搜索树"></a>二分搜索树</h4><ol>
+<li><p>任意一个节点的值大于左边的所有节点的值，小于右边的所有节点的值。</p>
+<ol start="2">
+<li>中序遍历是有序的。</li>
+</ol>
+</li>
+</ol>
+<h4 id="2-3-树"><a href="#2-3-树" class="headerlink" title="2-3 树"></a>2-3 树</h4><ol>
+<li>满足二分搜索树</li>
+<li>一个节点可以存放1个或者2个元素</li>
+<li>二三树是绝对平衡树</li>
+<li>二三树添加元素不会往空节点添加，第一步肯定是跟叶子节点合并</li>
+</ol>
+<h4 id="AVL树"><a href="#AVL树" class="headerlink" title="AVL树"></a>AVL树</h4><ol>
+<li>平衡二叉树</li>
+<li>任何一个节点的左右孩子到叶子节点的距离相差不超过1</li>
+<li>它是为了解决二分搜索树的退化问题</li>
+<li>每次更新数据都需要通过旋转来维持平衡，所以实际开发中用红黑树会更多</li>
+</ol>
+<h4 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h4><ol>
+<li>红黑树是一个自平衡的二叉搜索树，并不是严格的avl树。</li>
+<li>它是为了解决二分搜索树在数据更新的过程中复杂度退化的问题。</li>
+<li>红黑树高度近似log2n，近似平衡，红黑树是有2-3-4树演变过来的，因为2-3-4树有绝对平衡性，所以将红色节点去掉之后的高度&lt;=log2n，而红色节点的儿子不能是黑色节点，所以红黑树中从跟节点到叶子节点有一个黑色就最多有一个红色，我们将红色加回来之后的高度&lt;2*log2n</li>
+<li>插入查找删除时间复杂度是log2n</li>
+<li>是由2-3-4树演变过来的我们将红黑树中的红色节点跟父亲节点合并之后就是一个绝对平衡的2-3-4树</li>
+<li>红黑树的平衡过程其实跟魔方复原差不多，记住规则就行（变色跟旋转）</li>
+<li>四条性质：根黑；叶子节点的子节点是黑色；红色节点不相邻；根节点到叶子节点的路径上黑色节点个数一致。   通过234树理解这个还是很好理解的。</li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---view/" data-id="ck0ezg2jc001wtnuq94s4047i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/数据结构---树/" data-id="ck3pnm6de004yp0uqx3n4elx0" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
 
     </footer>
   </div>
@@ -214,10 +427,10 @@
 
 
   
-    <article id="post-android---permission" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-https" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/08/26/android---permission/" class="article-date">
-  <time datetime="2019-08-26T08:17:25.712Z" itemprop="datePublished">2019-08-26</time>
+    <a href="/2019/08/26/https/" class="article-date">
+  <time datetime="2019-08-26T07:29:23.791Z" itemprop="datePublished">2019-08-26</time>
 </a>
     
   </div>
@@ -228,7 +441,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---permission/">android - permission</a>
+      <a class="article-title" href="/2019/08/26/https/">https</a>
     </h1>
   
 
@@ -236,14 +449,43 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>​    假设甲跟乙需要通信，他们之间隔着若干个中间人（路由，网关）。他们说什么这些中间人都可以截取到。</p>
+<p>​    如果是http的方式，甲跟乙的通话都是明文，那么这些中间人可以非常轻易的获取到甲跟乙的通话内容，如果这些通话内容涉及一些隐私内容，那么这种方式就不太合适了。</p>
+<p>​    对于这个问题，我们对明文加密就可以了。这样即使中间人看到了甲乙的通话内容，也没有关系。下面考虑选择什么方式进行加密呢？对称还是非对称？</p>
+<p>​    首先考虑对称加密，对称加密需要甲跟乙有相同的秘钥才行。那这个秘钥要怎么传输呢？（鸡生蛋，蛋生鸡）。甲跟乙当然可以私下约定一个秘钥，只有他两个知道。但是甲跟丙通信，甲跟丁通信，等等呢。在只有一对一通信的场景下，私下约定也可以作为一个不错的选择。但是实际情况大多都不是一对一的。对称加密不太合适。</p>
+<p>​    那我们考虑使用非对称加密。甲跟乙都有自己的公钥跟私钥，甲跟乙通信的时候都用对方的公钥加密。这样解决了使用对称加密的问题。但是非对称加密耗时且对加密的长度有限制，在实际情况中也并不十分合适。</p>
+<p>​    https对明文加密这块选择的是非对称跟对称结合的方式。</p>
+<p>​    甲跟乙说我要跟你对话，乙将自己的公钥发给甲，甲生成一个随机的字符串作为对称加密的秘钥，然后用乙的公钥对该秘钥加密之后发送给乙。乙解密之后就有了对称加密的秘钥。之后的通信内容都用该秘钥进行加密。</p>
+<p>​    以上解决明文传输的问题。</p>
+<p>再考虑一个新的问题，乙将自己的公钥发给甲的过程中，中间人也收到了乙的公钥，假如中间人把自己的公钥发给甲，然后甲同样生成一个随机的字符串作为对称加密的秘钥，之后用中间人发的公钥对对称加密的秘钥加密之后发给中间人，中间人再用自己的私钥解密，此时中间人就获取了对称加密的秘钥，之后它再用乙的公钥对对称加密的秘钥加密之后转发给乙。在整个过程中甲跟乙都没有办法check到有个中间人修改了通信内容。</p>
+<p>其实这个问题说的底是甲没有办法确认自己收到的公钥是乙的公钥而不是其他人的。</p>
+<p>为了解决上面的问题，我们需要引入如下概念：</p>
+<p>​    <strong>ca</strong></p>
+<p>​    <strong>数字签名</strong></p>
+<p>​    <strong>数字证书</strong></p>
+<p>​    ca在网络通信中扮演的角色相当于现实世界中的公证处，它拥有自己的公钥跟私钥。我们可以认为这个私钥只有该公证处知道，那些中间人是不可能知道的。</p>
+<p>​    数字签名跟现实生活中的签名作用是一样的。可以唯一标识一个“人”。</p>
+<p>​    数字证书在现实生活中相当于身份证，它有你的个人信息，还有你的签名（身份证号），还有公钥。</p>
+<p>​    它们三者之间的关系是这样的，ca会给乙颁发数字证书，该证书中包含乙的公钥，乙的个人信息以及乙的数字签名。签名制作过程是这样的，ca会对数字证书中的个人信息，以及公钥做个hash，算出信息摘要，之后用自己的私钥对该信息摘要加密生成数字签名。</p>
+<p>​    我们接着思考上述问题，首先甲跟乙说我要跟你对话，之后乙不是将公钥而是将ca给自己的证书发给甲，首先中间人会收到该证书，假设中间人用自己的公钥替换了证书中的公钥，（因为它没有ca的私钥，所以它没有办法修改证书中的签名），之后他把伪造的证书转给甲。甲收到证书之后首先会对证书中的信息做同样的hash运行获取信息摘要。之后用ca的公钥对证书中的签名做解密，获得另一个信息摘要，之后比对这两个信息摘要，因为中间人对证书中的公钥做了修改，所以这两个信息摘要肯定是不一致的，这样甲就知道了我即将使用到的公钥是伪造的。</p>
+<p>​    或者中间人也跟ca申请到了自己的证书，然后它将自己的证书给了甲，这种情况下，甲会对证书中的个人信息做一个检查，很轻易的甲就会发现我想要访问的跟我真实访问的并不是同一个对象。</p>
+<h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>HTTPS是以安全为目标的HTTP通道，简单讲是HTTP的安全版。即HTTP下加入SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。</p>
+<h4 id="解决什么问题"><a href="#解决什么问题" class="headerlink" title="解决什么问题"></a>解决什么问题</h4><ol>
+<li>通信过程中明文传输问题</li>
+<li>通信过程中中间人攻击问题</li>
+</ol>
+<h4 id="怎么解决的"><a href="#怎么解决的" class="headerlink" title="怎么解决的"></a>怎么解决的</h4><ol>
+<li>数据加密传输，对称跟非对称加密</li>
+<li>服务端身份认证，证书（数字签名）</li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---permission/" data-id="ck0ezg2j6001ntnuqudtpp6gi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/https/" data-id="ck3pnm69z001fp0uqrm1y2cm9" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/net/">net</a></li></ul>
 
     </footer>
   </div>
@@ -252,10 +494,10 @@
 
 
   
-    <article id="post-android---file" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-ArrayMap vs HashMap" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/08/26/android---file/" class="article-date">
-  <time datetime="2019-08-26T08:17:11.493Z" itemprop="datePublished">2019-08-26</time>
+    <a href="/2019/08/21/ArrayMap vs HashMap/" class="article-date">
+  <time datetime="2019-08-21T10:52:30.970Z" itemprop="datePublished">2019-08-21</time>
 </a>
     
   </div>
@@ -266,7 +508,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---file/">android - file</a>
+      <a class="article-title" href="/2019/08/21/ArrayMap vs HashMap/">ArrayMap vs HashMap</a>
     </h1>
   
 
@@ -274,14 +516,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h5 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h5><p>Java 8 对接口做了进一步的增强。</p>
+<p><strong>a.</strong> 在接口中可以添加使用 default 关键字修饰的非抽象方法。即：默认方法（或扩展方法）</p>
+<p><strong>b.</strong> 接口里可以声明静态方法，并且可以实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TTT</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hhhh"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">sayHi</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hhh"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---file/" data-id="ck0ezg2j1001htnuqlrnjf3n0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/21/ArrayMap vs HashMap/" data-id="ck3pnm69l000sp0uq0yxs419e" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li></ul>
 
     </footer>
   </div>
@@ -290,10 +536,10 @@
 
 
   
-    <article id="post-android---sql" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Android-AndPermission" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/08/26/android---sql/" class="article-date">
-  <time datetime="2019-08-26T08:16:56.700Z" itemprop="datePublished">2019-08-26</time>
+    <a href="/2019/08/08/Android-AndPermission/" class="article-date">
+  <time datetime="2019-08-08T07:59:03.585Z" itemprop="datePublished">2019-08-08</time>
 </a>
     
   </div>
@@ -304,7 +550,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---sql/">android - sql</a>
+      <a class="article-title" href="/2019/08/08/Android-AndPermission/">Android-AndPermission</a>
     </h1>
   
 
@@ -316,10 +562,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---sql/" data-id="ck0ezg2j3001ktnuq9xhli995" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/08/Android-AndPermission/" data-id="ck3pnm68r0004p0uqxob92s86" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-permission/">android permission</a></li></ul>
 
     </footer>
   </div>
@@ -328,10 +574,10 @@
 
 
   
-    <article id="post-android---broadcastReciever" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-android高级UI一:绘制流程" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/08/26/android---broadcastReciever/" class="article-date">
-  <time datetime="2019-08-26T08:16:01.479Z" itemprop="datePublished">2019-08-26</time>
+    <a href="/2019/07/23/android高级UI一:绘制流程/" class="article-date">
+  <time datetime="2019-07-23T05:07:05.197Z" itemprop="datePublished">2019-07-23</time>
 </a>
     
   </div>
@@ -342,7 +588,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---broadcastReciever/">android - broadcastReciever</a>
+      <a class="article-title" href="/2019/07/23/android高级UI一:绘制流程/">android setContentView源码分析</a>
     </h1>
   
 
@@ -350,90 +596,42 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h5 id="view是如何添加到屏幕上的？"><a href="#view是如何添加到屏幕上的？" class="headerlink" title="view是如何添加到屏幕上的？"></a>view是如何添加到屏幕上的？</h5><p>从setContentView出发-&gt;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(@LayoutRes <span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">       getWindow().setContentView(layoutResID);</span><br><span class="line">       initWindowDecorActionBar();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到调用的是getWindow的setContentView方法，</p>
+<p>那么getWindow是啥呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Window <span class="title">getWindow</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mWindow;d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着看Window</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> &lt;p&gt;The only existing implementation of <span class="keyword">this</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">is</span></span></span><br><span class="line"><span class="class"> * <span class="title">android</span>.<span class="title">view</span>.<span class="title">PhoneWindow</span>, <span class="title">which</span> <span class="title">you</span> <span class="title">should</span> <span class="title">instantiate</span> <span class="title">when</span> <span class="title">needing</span> <span class="title">a</span></span></span><br><span class="line"><span class="class"> * <span class="title">Window</span>.</span></span><br><span class="line"><span class="class"> */</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">abstract</span> <span class="title">class</span> <span class="title">Window</span> </span>&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意上面的注释，该类唯一的实现是phoneWindow，到这里我们就知道了这个的getWindow实质返回的是一个PhoneWindow的实例。</p>
+<p>接着看PhoneWindow的setContentView方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; </span><br><span class="line">    ...</span><br><span class="line">        mLayoutInflater.inflate(layoutResID, mContentParent);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只需要关注上面的几行代码，如果mContentParent是空，那么调用installDecor方法（如下）。这里的mContentParent是什么呢？看定义的地方它是一个ViewGroup，它里面具体是啥呢？我们继续往下跟。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">installDecor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">        <span class="keyword">if</span> (mDecor == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mDecor = generateDecor(-<span class="number">1</span>);</span><br><span class="line">        &#125; </span><br><span class="line">    ...</span><br><span class="line">        <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mContentParent = generateLayout(mDecor);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里又出现了mDecor，它又是个啥呢。跟踪generateDecor</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> DecorView <span class="title">generateDecor</span><span class="params">(<span class="keyword">int</span> featureId)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">   	<span class="keyword">return</span> <span class="keyword">new</span> DecorView(context, featureId, <span class="keyword">this</span>, getAttributes());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到mDecor是一个DecorView对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DecorView</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span></span></span><br></pre></td></tr></table></figure>
+<p>它其实就是一个FrameLayout，那么它里面具体是啥呢？我们往下跟</p>
+<p>回到installDecor方法，我们再跟下generateLayout方法是如何创建mContentParent的？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ViewGroup <span class="title">generateLayout</span><span class="params">(DecorView decor)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Apply data from current theme.</span></span><br><span class="line">    <span class="comment">//这里设置一些主题相关的</span></span><br><span class="line">    ...</span><br><span class="line">        <span class="comment">// Inflate the window decor.</span></span><br><span class="line">        <span class="keyword">int</span> layoutResource;</span><br><span class="line">    <span class="comment">// 给layoutResource 赋值（实质是找一个系统布局资源）</span></span><br><span class="line"></span><br><span class="line">    mDecor.onResourcesLoaded(mLayoutInflater, layoutResource);</span><br><span class="line">    ViewGroup contentParent = (ViewGroup)findViewById(ID_ANDROID_CONTENT);</span><br><span class="line">    ...··</span><br><span class="line">        <span class="keyword">return</span> contentParent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里有一个layoutResource，这个实质就是一个系统的layout  xml文件。会根据我们主题不同给它赋不同的值。</p>
+<p>接着我们看onResourcesLoaded方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">onResourcesLoaded</span><span class="params">(LayoutInflater inflater, <span class="keyword">int</span> layoutResource)</span> </span>&#123;</span><br><span class="line"> 	...</span><br><span class="line">    <span class="keyword">final</span> View root = inflater.inflate(layoutResource, <span class="keyword">null</span>);</span><br><span class="line">    ...</span><br><span class="line">    addView(root, <span class="number">0</span>, <span class="keyword">new</span> ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重点关注这两行代码，还记得我们之前分析过mDecor实质是一个frameLayout，这里会把系统的布局文件添加到DecorView里面。到这里我们就知道了DecorView里面具体是啥了。</p>
+<p>我们再回到generateLayout方法，会调用PhoneWindow的findViewById方法找一个id，赋值给contentParent返回。这里的findViewById方法实际是getDecorView().findViewById。实质是在mDecor中根据id找它的一个子view。到这里我们就知道了mContentParent具体是个啥了。</p>
+<p>我们回到PhoneWindow的setContentView方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; </span><br><span class="line">    ...</span><br><span class="line">        mLayoutInflater.inflate(layoutResID, mContentParent);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终会把我们传进来的布局文件填充到mContentParent中。至此，view添加结束。</p>
+<h5 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h5><p>PhoneWindow —&gt; DecorView(根据主题不同对应系统的不同布局文件)  — &gt;mContentParent（系统布局文件中中的一个子view）—&gt; 我们自己写的布局文件会被加载到mContentParent中。</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---broadcastReciever/" data-id="ck0ezg2ix0019tnuqo7dscjcu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/23/android高级UI一:绘制流程/" data-id="ck3pnm6a2001jp0uqopowaht7" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android---contentProvider" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/android---contentProvider/" class="article-date">
-  <time datetime="2019-08-26T08:15:41.210Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---contentProvider/">android - contentProvider</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---contentProvider/" data-id="ck0ezg2iz001dtnuqmxw4hz94" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android---service" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/android---service/" class="article-date">
-  <time datetime="2019-08-26T08:15:11.827Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/android---service/">android - service</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---service/" data-id="ck0ezg2j7001otnuqq9vjxqg3" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-ui/">android ui</a></li></ul>
 
     </footer>
   </div>
@@ -446,7 +644,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -460,7 +658,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
     </div>
   </div>
 
@@ -470,7 +668,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/android/" style="font-size: 17.5px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 15px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 17.5px;">JVM</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 17.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
     </div>
   </div>
 
@@ -479,7 +677,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -492,23 +690,23 @@
       <ul>
         
           <li>
+            <a href="/2019/12/03/android---ffmpeg(一)/">android - ffmpeg(一)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/24/前端-vue/">前端-vue</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/18/简历/">简历</a>
+          </li>
+        
+          <li>
             <a href="/2019/09/11/jvm---类加载器/">jvm - 类加载器</a>
           </li>
         
           <li>
             <a href="/2019/09/10/jvm-—-jvm加载机制/">jvm — jvm加载机制</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/10/jvm---字节码文件/">jvm - 字节码文件</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/03/JVM---jvm工具/">JVM - jvm工具</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/03/JVM---内存分配/">JVM - 内存分配</a>
           </li>
         
       </ul>
