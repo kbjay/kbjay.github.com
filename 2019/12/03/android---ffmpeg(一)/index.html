@@ -7,18 +7,18 @@
   
   <title>android - ffmpeg(一) | kb_jay的开发站台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="编译ffmpeg使用Mac：  下载ffmpeg：我这边下的是4.0  ​    https://github.com/FFmpeg/FFmpeg/tree/release/4.0  下载ndk：用的之前下好的r16 （r17也ok，但是不能比r17更高了，更高版本没有gcc） 将ndk加入环境变量（vim ~/.bash_profile）  在ffmpeg目录下新建一个shell脚本：build">
+  <meta name="description" content="编译ffmpeg使用Mac：  下载ffmpeg：我这边下的是4.0 &amp;lt;https://github.com/FFmpeg/FFmpeg/tree/release/4.0&amp;gt;  下载ndk：用的之前下好的r16 （r17也ok，但是不能比r17更高了，更高版本没有gcc而是clang） 将ndk加入环境变量（vim ~/.bash_profile）  在ffmpeg目录下新建一个shel">
 <meta name="keywords" content="音视频">
 <meta property="og:type" content="article">
 <meta property="og:title" content="android - ffmpeg(一)">
 <meta property="og:url" content="http://yoursite.com/2019/12/03/android---ffmpeg(一)/index.html">
 <meta property="og:site_name" content="kb_jay的开发站台">
-<meta property="og:description" content="编译ffmpeg使用Mac：  下载ffmpeg：我这边下的是4.0  ​    https://github.com/FFmpeg/FFmpeg/tree/release/4.0  下载ndk：用的之前下好的r16 （r17也ok，但是不能比r17更高了，更高版本没有gcc） 将ndk加入环境变量（vim ~/.bash_profile）  在ffmpeg目录下新建一个shell脚本：build">
+<meta property="og:description" content="编译ffmpeg使用Mac：  下载ffmpeg：我这边下的是4.0 &amp;lt;https://github.com/FFmpeg/FFmpeg/tree/release/4.0&amp;gt;  下载ndk：用的之前下好的r16 （r17也ok，但是不能比r17更高了，更高版本没有gcc而是clang） 将ndk加入环境变量（vim ~/.bash_profile）  在ffmpeg目录下新建一个shel">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-12-03T09:24:07.680Z">
+<meta property="og:updated_time" content="2019-12-26T09:39:56.208Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="android - ffmpeg(一)">
-<meta name="twitter:description" content="编译ffmpeg使用Mac：  下载ffmpeg：我这边下的是4.0  ​    https://github.com/FFmpeg/FFmpeg/tree/release/4.0  下载ndk：用的之前下好的r16 （r17也ok，但是不能比r17更高了，更高版本没有gcc） 将ndk加入环境变量（vim ~/.bash_profile）  在ffmpeg目录下新建一个shell脚本：build">
+<meta name="twitter:description" content="编译ffmpeg使用Mac：  下载ffmpeg：我这边下的是4.0 &amp;lt;https://github.com/FFmpeg/FFmpeg/tree/release/4.0&amp;gt;  下载ndk：用的之前下好的r16 （r17也ok，但是不能比r17更高了，更高版本没有gcc而是clang） 将ndk加入环境变量（vim ~/.bash_profile）  在ffmpeg目录下新建一个shel">
   
     <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
   
@@ -89,11 +89,10 @@
       
         <h4 id="编译ffmpeg"><a href="#编译ffmpeg" class="headerlink" title="编译ffmpeg"></a>编译ffmpeg</h4><p>使用Mac：</p>
 <ol>
-<li>下载ffmpeg：我这边下的是4.0</li>
-</ol>
-<p>​    <a href="https://github.com/FFmpeg/FFmpeg/tree/release/4.0" target="_blank" rel="noopener">https://github.com/FFmpeg/FFmpeg/tree/release/4.0</a></p>
-<ol start="2">
-<li><p>下载ndk：用的之前下好的r16 （r17也ok，但是不能比r17更高了，更高版本没有gcc）</p>
+<li><p>下载ffmpeg：我这边下的是4.0</p>
+<pre><code>&lt;https://github.com/FFmpeg/FFmpeg/tree/release/4.0&gt;
+</code></pre><ol start="2">
+<li><p>下载ndk：用的之前下好的r16 （r17也ok，但是不能比r17更高了，更高版本没有gcc而是clang）</p>
 <p>将ndk加入环境变量（vim ~/.bash_profile）</p>
 <ol start="3">
 <li>在ffmpeg目录下新建一个shell脚本：build.sh</li>
@@ -103,6 +102,8 @@
 <li><p>执行build.sh</p>
 </li>
 <li><p>在ffmpeg/android/armeabi-v7a下会有我们需要的头文件以及6个静态库</p>
+</li>
+</ol>
 </li>
 </ol>
 </li>
@@ -134,7 +135,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/03/android---ffmpeg(一)/" data-id="ck3pnsbmm0013qmuqmx1rxm8s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/03/android---ffmpeg(一)/" data-id="ck5no9i2y001tv4uqpi83gtcr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
@@ -144,6 +145,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2019/12/03/andriod---ffmpeg-(二)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          andriod - ffmpeg (二)
+        
+      </div>
+    </a>
   
   
     <a href="/2019/09/24/前端-vue/" id="article-nav-older" class="article-nav-link-wrap">
@@ -167,7 +177,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-源码/">android 源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
     </div>
   </div>
 
@@ -177,7 +187,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 17.5px;">JVM</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 17.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 17.5px;">JVM</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-源码/" style="font-size: 10px;">android 源码</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 17.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 12.5px;">设计模式</a> <a href="/tags/音视频/" style="font-size: 15px;">音视频</a>
     </div>
   </div>
 
@@ -186,7 +196,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -199,23 +209,23 @@
       <ul>
         
           <li>
-            <a href="/2019/12/03/android---ffmpeg(一)/">android - ffmpeg(一)</a>
+            <a href="/2020/01/21/设计模式--策略-观察者-装饰/">设计模式--策略 观察者 装饰</a>
           </li>
         
           <li>
-            <a href="/2019/09/24/前端-vue/">前端-vue</a>
+            <a href="/2020/01/21/2019年末总结/">2019年末总结</a>
           </li>
         
           <li>
-            <a href="/2019/09/11/jvm---类加载器/">jvm - 类加载器</a>
+            <a href="/2020/01/07/源码分析-glide/">源码分析-glide</a>
           </li>
         
           <li>
-            <a href="/2019/09/10/jvm-—-jvm加载机制/">jvm — jvm加载机制</a>
+            <a href="/2019/12/16/andriod---ffmpeg-(三)/">andriod - ffmpeg (三)</a>
           </li>
         
           <li>
-            <a href="/2019/09/10/jvm---字节码文件/">jvm - 字节码文件</a>
+            <a href="/2019/12/16/android---性能优化（内存）/">android - 性能优化（内存）</a>
           </li>
         
       </ul>
@@ -230,7 +240,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 kb_jay<br>
+      &copy; 2020 kb_jay<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

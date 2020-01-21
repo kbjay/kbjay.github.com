@@ -62,6 +62,349 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-设计模式-工厂" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/20/设计模式-工厂/" class="article-date">
+  <time datetime="2019-02-20T05:14:57.555Z" itemprop="datePublished">2019-02-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/20/设计模式-工厂/">设计模式-工厂模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>工厂模式是最常用的一类创建型设计模式，通常我们所说的工厂模式是指工厂方法模式，它也是使用频率最高的工厂模式。简单工厂模式是工厂方法模式的“小弟”，它不属于GoF 23种设计模式，但在软件开发中应用也较为频繁，通常将它作为学习其他工厂模式的入门。此外，工厂方法模式还有一位“大哥”——抽象工厂模式。这三种工厂模式各具特色，难度也逐个加大，在软件开发中它们都得到了广泛的应用，成为面向对象软件中常用的创建对象的工具。</p>
+<h4 id="简单工厂"><a href="#简单工厂" class="headerlink" title="简单工厂"></a>简单工厂</h4><h5 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h5><p>简单工厂模式(Simple Factory Pattern)：定义一个工厂类，它可以<strong>根据参数的不同返回不同类的实例</strong>，被创建的实例通常都具有共同的父类。因为在简单工厂模式中用于创建实例的方法是静态(static)方法，因此简单工厂模式又被称为<strong>静态工厂方法(Static Factory Method)模式</strong>，它属于类创建型模式。</p>
+<h5 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h5><p>在简单工厂模式结构图中包含如下几个角色：</p>
+<pre><code>● Factory（工厂角色）：工厂角色即工厂类，它是简单工厂模式的核心，负责实现创建所有产品实例的内部逻辑；工厂类可以被外界直接调用，创建所需的产品对象；在工厂类中提供了静态的工厂方法factoryMethod()，它的返回类型为抽象产品类型Product。
+
+● Product（抽象产品角色）：它是工厂类所创建的所有对象的父类，封装了各种产品对象的公有方法，它的引入将提高系统的灵活性，使得在工厂类中只需定义一个通用的工厂方法，因为所有创建的具体产品对象都是其子类对象。
+
+● ConcreteProduct（具体产品角色）：它是简单工厂模式的创建目标，所有被创建的对象都充当这个角色的某个具体类的实例。每一个具体产品角色都继承了抽象产品角色，需要实现在抽象产品中声明的抽象方法。
+</code></pre><h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">interface Car &#123;</span><br><span class="line">     void run();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class BenchiCar implements Car &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        Log.d(&quot;kb_jay&quot;,&quot;BenchiCar run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class BiyadiCar implements Car&#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        Log.d(&quot;kb_jay&quot;,&quot;BiyadiCar run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class SimpleFactory &#123;</span><br><span class="line">    public static final int TYPE_BENCHI = 1;</span><br><span class="line">    public static final int TYPE_BIYADI = 2;</span><br><span class="line"></span><br><span class="line">    public static Car createCar(int type) &#123;</span><br><span class="line">        Car car = null;</span><br><span class="line">        switch (type) &#123;</span><br><span class="line">            case TYPE_BENCHI:</span><br><span class="line">                car = new BenchiCar();</span><br><span class="line">                break;</span><br><span class="line">            case TYPE_BIYADI:</span><br><span class="line">                car = new BiyadiCar();</span><br><span class="line">                break;</span><br><span class="line">            default:</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">        return car;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端测试代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Client &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">       //1：简单工厂</span><br><span class="line">        Car car = SimpleFactory.createCar(SimpleFactory.TYPE_BENCHI);</span><br><span class="line">        car.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/kb_jay: BenchiCar run</span><br></pre></td></tr></table></figure>
+<h4 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h4><h5 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h5><p>定义一个用于创建对象的接口，让子类决定将哪一个类实例化。工厂方法模式让一个类的实例化延迟到其子类。工厂方法模式又简称为工厂模式(Factory Pattern)，又可称作虚拟构造器模式(Virtual Constructor Pattern)或多态工厂模式(Polymorphic Factory Pattern)。工厂方法模式是一种类创建型模式。</p>
+<p>工厂方法模式提供一个抽象工厂接口来声明抽象工厂方法，而由其子类来具体实现工厂方法，针对不同的产品提供不同的工厂。</p>
+<h5 id="角色-1"><a href="#角色-1" class="headerlink" title="角色"></a>角色</h5><p>  在工厂方法模式结构图中包含如下几个角色：</p>
+<pre><code>● Product（抽象产品）：它是定义产品的接口，是工厂方法模式所创建对象的超类型，也就是产品对象的公共父类。
+
+● ConcreteProduct（具体产品）：它实现了抽象产品接口，某种类型的具体产品由专门的具体工厂创建，具体工厂和具体产品之间一一对应。
+
+● Factory（抽象工厂）：在抽象工厂类中，声明了工厂方法(Factory Method)，用于返回一个产品。抽象工厂是工厂方法模式的核心，所有创建对象的工厂类都必须实现该接口。
+
+● ConcreteFactory（具体工厂）：它是抽象工厂类的子类，实现了抽象工厂中定义的工厂方法，并可由客户端调用，返回一个具体产品类的实例。
+</code></pre><h5 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">public interface Car &#123;</span><br><span class="line">    void run();</span><br><span class="line"></span><br><span class="line">    class BiyadiCar implements Car&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;,&quot;biyadi run!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    class BenchiCar implements Car&#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;,&quot;benchi run!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public interface CarFactory &#123;</span><br><span class="line">    Car createCar();</span><br><span class="line"></span><br><span class="line">    class BenchiFactory implements CarFactory &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Car createCar() &#123;</span><br><span class="line">            return new Car.BenchiCar();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class BiyadiFatory implements CarFactory &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Car createCar() &#123;</span><br><span class="line">            return new Car.BiyadiCar();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端测试代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">CarFactory carFactory = new CarFactory.BenchiFactory();</span><br><span class="line">Car car1 = carFactory.createCar();</span><br><span class="line">car1.run();</span><br></pre></td></tr></table></figure>
+<p>测试运行结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/kb_jay: benchi run!!</span><br></pre></td></tr></table></figure>
+<h4 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h4><h5 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h5><p>提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。抽象工厂模式又称为Kit模式，它是一种对象创建型模式。</p>
+<h5 id="角色-2"><a href="#角色-2" class="headerlink" title="角色"></a>角色</h5><p> 在抽象工厂模式结构图中包含如下几个角色：</p>
+<pre><code>● AbstractFactory（抽象工厂）：它声明了一组用于创建一族产品的方法，每一个方法对应一种产品。
+
+● ConcreteFactory（具体工厂）：它实现了在抽象工厂中声明的创建产品的方法，生成一组具体产品，这些产品构成了一个产品族，每一个产品都位于某个产品等级结构中。
+
+● AbstractProduct（抽象产品）：它为每种产品声明接口，在抽象产品中声明了产品所具有的业务方法。
+
+● ConcreteProduct（具体产品）：它定义具体工厂生产的具体产品对象，实现抽象产品接口中声明的业务方法。
+</code></pre><h5 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public interface Engine &#123;</span><br><span class="line">    void engine();</span><br><span class="line"></span><br><span class="line">    class GoodEngine implements Engine&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void engine() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;,&quot;good engine!!!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    class BadEngine implements Engine&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void engine() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;,&quot;bad engine!!!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public interface LingjianFactory &#123;</span><br><span class="line">    Engine createEngine();</span><br><span class="line">    Seater createSeater();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    class GoodLingjianFactory implements LingjianFactory&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Engine createEngine() &#123;</span><br><span class="line">            return new Engine.GoodEngine();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public Seater createSeater() &#123;</span><br><span class="line">            return new Seater.GoodSeater();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class BadLingjianFactory implements LingjianFactory&#123;</span><br><span class="line">        @Override</span><br><span class="line">        public Engine createEngine() &#123;</span><br><span class="line">            return new Engine.BadEngine();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public Seater createSeater() &#123;</span><br><span class="line">            return new Seater.BadSeater();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public interface Seater &#123;</span><br><span class="line">    void seat();</span><br><span class="line"></span><br><span class="line">    class GoodSeater implements Seater &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void seat() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;, &quot;good seater!!!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    class BadSeater implements Seater &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void seat() &#123;</span><br><span class="line">            Log.d(&quot;kb_jay&quot;, &quot;bad Seater!!!!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端测试代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//3：抽象工厂</span><br><span class="line">LingjianFactory lingjianFactory = new LingjianFactory.BadLingjianFactory();</span><br><span class="line">Engine engine = lingjianFactory.createEngine();</span><br><span class="line">engine.engine();</span><br></pre></td></tr></table></figure>
+<p>测试运行结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/kb_jay: bad engine!!!!</span><br></pre></td></tr></table></figure>
+<h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h4><ol>
+<li><p><strong>简单工厂（静态工厂）：</strong></p>
+<p>抽象产品，不抽象工厂</p>
+<p>一个汽车工厂，生产多种car（一对多）</p>
+<p>我想买一辆奔驰，那么我就到这个厂里告诉它我想要奔驰（type），之后它就给我奔驰；</p>
+<p>朋羽毛想买一辆比亚迪，他同样到这个厂子里告诉老板，他想要比亚迪（type），那么老板就给他一辆比亚迪</p>
+</li>
+<li><p><strong>工厂方法：</strong></p>
+<p>抽象产品，也抽象工厂</p>
+<p>一个工厂对应一个产品（一对一） 我想买一辆奔驰，那么我到奔驰专卖店买；</p>
+<p>朋羽毛想买一辆比亚迪，那么她到比亚迪专卖店去买；</p>
+</li>
+<li><p><strong>抽象工厂： </strong></p>
+<p>抽象工厂，也抽象产品 </p>
+<p>一个工厂对应一组不同但是相关的产品 产品簇，这些产品是相关的，</p>
+<p>比如：生产汽车零件的工厂</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/02/20/设计模式-工厂/" data-id="ck5no9i550047v4uqrii9qk2r" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-android-TextureView" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/15/android-TextureView/" class="article-date">
+  <time datetime="2019-02-15T09:57:03.403Z" itemprop="datePublished">2019-02-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/15/android-TextureView/">android-TextureView</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="为什么要有TextureView"><a href="#为什么要有TextureView" class="headerlink" title="为什么要有TextureView"></a>为什么要有TextureView</h5><p>它是在4.0之后出现的用于替代surfaceView。</p>
+<p>surfaceView的工作方式是创建一个自己的窗口，跟应用窗口是平级的，也就是说它不像Button之类的可以放在Relativelayout里面，这样surfaceView就有了一个自己的优势，它自己刷新的时候不需要重回应用窗口。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/02/15/android-TextureView/" data-id="ck5no9i390021v4uq9w0sg0ds" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-音视频/">android 音视频</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android-一次技术选型（webView跟h5（vue框架））" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/" class="article-date">
+  <time datetime="2019-02-15T05:12:24.534Z" itemprop="datePublished">2019-02-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/">一次技术选型（webView加载h5）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h5><p>公司有写好的前端，其中包括</p>
+<ol>
+<li>原生不太好实现的动画 </li>
+<li>动作跟情绪识别的model（利用的是tensorflow.js）</li>
+<li>音视频</li>
+</ol>
+<p>android端也希望可以实现相同的功能，此时想到的可能就是通过webview直接加载一个url就可以了，简单快捷。但是产品希望用户在没有网络的情况下也可以使用，直接加载url的方案肯定是行不通的。此时想到的方案是把前端的代码build到apk中，也就是把前端代码放在assets目录中。</p>
+<p>方案确定之后开始爬坑～</p>
+<h5 id="一：如何将vue前端代码添加到assets中"><a href="#一：如何将vue前端代码添加到assets中" class="headerlink" title="一：如何将vue前端代码添加到assets中"></a>一：如何将vue前端代码添加到assets中</h5><p>将前端build之后生成的dist文件夹copy到assets中，之后使用webview加载assets中的入口html。</p>
+<p><strong>加载之后webview一片空白</strong></p>
+<p>问题出在了前端build之后的引用资源（css，js等）路径上。前端配置文件中assetsPublic的属性为“/”，对应的是根目录，而引用的资源文件static/css/xx.css目录和index.html是同级的，去根目录下找自然就找不到资源。修改配置文件中的assetsPublic属性为“./”，再重新build解决问题。</p>
+<h5 id="二：如何使用chrome调试webview显示的h5页面"><a href="#二：如何使用chrome调试webview显示的h5页面" class="headerlink" title="二：如何使用chrome调试webview显示的h5页面"></a>二：如何使用chrome调试webview显示的h5页面</h5><p>加载webview空白的问题，我们是如何定位到的呢。其实chrome提供了调试andorid WebView的功能，inspect之后可以在console中看到报错信息。至于如何调试，过程非常简单，两三步就可以，想自己体验的可以百度下，个人感觉还是非常实用的～（注意在webView中设置debug模式为true）</p>
+<h5 id="三：webView如何加载具有音视频功能的h5页面"><a href="#三：webView如何加载具有音视频功能的h5页面" class="headerlink" title="三：webView如何加载具有音视频功能的h5页面"></a>三：webView如何加载具有音视频功能的h5页面</h5><p>有两种方案可以选择：</p>
+<ol>
+<li>通过原生跟前端交互实现（需要修改前端代码，android端也有一定的工作量）</li>
+<li>webView在5.0之后默认支持WebRtc（支持网页实时语音跟视频对话），需要新建一个WebChromeClient设置给webView，其中WebChromeClient需要重写onPermissionRequest（）方法赋予网页音视频权限。另外需要在manifest中声明使用的音视频权限。</li>
+</ol>
+<h5 id="四：跨域问题"><a href="#四：跨域问题" class="headerlink" title="四：跨域问题"></a>四：跨域问题</h5><p>webView加载assets中的静态html使用的是file协议，如果在index.html中再去加载http协议的页面或者发送ajax请求都会有跨域的问题。</p>
+<p>实际项目中加载model使用到了http协议。</p>
+<p>方案：可以使用NanoHttpd或者AndroidAsync在app中搭建本地服务器。</p>
+<p>webView使用loadUtl（http）的形式加载index.html，这样统一使用http协议。</p>
+<p>NanoHttpd不支持ttf以及woff等格式，最终使用了AndroidAsync跑通了demo。</p>
+<p>具体可以参考demo中的代码或者google 百度。</p>
+<h5 id="五：跨域问题备选方案"><a href="#五：跨域问题备选方案" class="headerlink" title="五：跨域问题备选方案"></a>五：跨域问题备选方案</h5><p>要求提供pb格式的model，之后使用tensorflowLite（tensorFlow对android的解决方案）去跟model交互，交互完成之后再去跟前端h5交互。</p>
+<h5 id="六：webView跟js交互"><a href="#六：webView跟js交互" class="headerlink" title="六：webView跟js交互"></a>六：webView跟js交互</h5><p>dist放在本地之后webview直接load一直担心vue build之后生成的dist中的js文件加了类似android的混淆，可能h5跟android交互会有问题，测试证明我的担心是多余的😓。交互跟直接load服务器中的h5是一样的。可以参考下：</p>
+<p><a href="https://juejin.im/post/5b7d30dfe51d4538b2046d63" target="_blank" rel="noopener">https://juejin.im/post/5b7d30dfe51d4538b2046d63</a></p>
+<h5 id="七：demo地址"><a href="#七：demo地址" class="headerlink" title="七：demo地址"></a>七：demo地址</h5><p><a href="https://github.com/kbjay/AndroidAsyncDemo" target="_blank" rel="noopener">https://github.com/kbjay/AndroidAsyncDemo</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/02/15/Android-一次技术选型（webView跟h5（vue框架））/" data-id="ck5no9i1v000gv4uqdz9frmep" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-okhttp拦截器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/30/okhttp拦截器/" class="article-date">
+  <time datetime="2019-01-30T03:01:31.035Z" itemprop="datePublished">2019-01-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>okhttp拦截器</p>
+<p>​    RetryAndFollowUpInterceptor</p>
+<pre><code>  1. 创建streamAllocation
+2. 调用proceed 进行网络请求
+3. 根据响应结果判断是否重新请求
+4. 调用下一个拦截器，对response处理，返回给上一个拦截器
+</code></pre><p>​    BridgeInterceptor</p>
+<ol>
+<li><p>修饰request，添加请求头</p>
+</li>
+<li><p>进行网络请求</p>
+</li>
+<li>修饰response</li>
+</ol>
+<p>​    CacheInterceptor</p>
+<ol>
+<li>目的：更快响应</li>
+<li>使用：.cache(new Cache(new File(“xxx”)))</li>
+<li><strong>DiskLruCache</strong></li>
+<li>只会缓存get方法</li>
+<li></li>
+</ol>
+<p>​    ConnectInterceptor</p>
+<ol>
+<li>连接池</li>
+<li>正式开启网络请求</li>
+<li>RealConnection </li>
+</ol>
+<p>​    CallServerInterceptor</p>
+<p>1.创建拦截器，放入list</p>
+<p>2.创建拦截器链RealInterceptorChain，执行proceed</p>
+<p><strong>getResponseWithInterceptorChain</strong></p>
+<p>proceed</p>
+<p>分发器：</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/30/okhttp拦截器/" data-id="ck5no9i4f003kv4uqhoce9dps" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-spring-boot---添加日志" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/14/spring-boot---添加日志/" class="article-date">
+  <time datetime="2019-01-14T09:46:29.721Z" itemprop="datePublished">2019-01-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/14/spring-boot---添加日志/">spring boot - 添加日志</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>配置参考如下：</p>
+<p><a href="https://blog.csdn.net/Inke88/article/details/75007649" target="_blank" rel="noopener">https://blog.csdn.net/Inke88/article/details/75007649</a></p>
+<p>git 代码：</p>
+<p><a href="https://github.com/lankydan/logback-with-springboot-config" target="_blank" rel="noopener">https://github.com/lankydan/logback-with-springboot-config</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/14/spring-boot---添加日志/" data-id="ck5no9i4n003qv4uql5rese2u" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-算法-回溯" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/14/算法-回溯/" class="article-date">
+  <time datetime="2018-12-14T10:21:51.186Z" itemprop="datePublished">2018-12-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/14/算法-回溯/">回溯算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id=""><a href="#" class="headerlink" title=" "></a> </h4>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/14/算法-回溯/" data-id="ck5no9i520045v4uqph60ug7k" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-python-爬虫图片" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/11/20/python-爬虫图片/" class="article-date">
@@ -88,7 +431,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/20/python-爬虫图片/" data-id="ck3pnsbnz002yqmuq607nxg4e" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/20/python-爬虫图片/" data-id="ck5no9i4g003mv4uqg4mxm772" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li></ul>
@@ -132,7 +475,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/20/leetcode-85.-最大矩形/" data-id="ck3pnsbn4001sqmuqdhvmfnxm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/20/leetcode-85.-最大矩形/" data-id="ck5no9i3k002gv4uqoljvselv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li></ul>
@@ -182,7 +525,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/19/leetcode-84.-柱状图中最大的矩形/" data-id="ck3pnsbn3001rqmuq5ihhxys7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/19/leetcode-84.-柱状图中最大的矩形/" data-id="ck5no9i3j002ev4uqmty1kvoy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li></ul>
@@ -228,382 +571,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/14/SVG图像处理/" data-id="ck3pnsbmp0017qmuq7chklptl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/14/SVG图像处理/" data-id="ck5no9i2u001lv4uq4v0kdmfq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/svg-java/">svg java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-图片实现类似素描的效果" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/11/08/Android-图片实现类似素描的效果/" class="article-date">
-  <time datetime="2018-11-08T04:34:30.346Z" itemprop="datePublished">2018-11-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/08/Android-图片实现类似素描的效果/">Android-图片实现类似素描的效果</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="核心思路"><a href="#核心思路" class="headerlink" title="核心思路"></a>核心思路</h5><ol>
-<li><p>使用openCV获取灰度图像：0（黑）～255（白）</p>
-</li>
-<li><p>将该图像按照灰度值分层，每一层是一个0，1二维数组：1表示绘制，0表示不绘制，之后绘制每一层</p>
-</li>
-<li><p>先绘制颜色最深的那一层。</p>
-<p>在二维数组中找一个随机点，从该点出发依次向上下左右四个方向探测，如果找到需要绘制的点，那么再去找该点所在的区域中所有的跟该点绘制次数相同的点，之后按照随机的mask去绘制找到的点（注意点的颜色由该位置的已经绘制的次数决定）。遍历完该点的4个方向之后，再遍历该点左下位置的点，直到超出边界，之后再去遍历该点右上位置的点，直到超出边界，这样就遍历完了一层。</p>
-<p>之后再遍历下一层，直到遍历完所有层。</p>
-</li>
-<li><p>上面提到的mask是预先生成的蒙板。具体可以去看源代码，非常简单。</p>
-</li>
-</ol>
-<h5 id="效果gif："><a href="#效果gif：" class="headerlink" title="效果gif："></a>效果gif：</h5><p><img src="/Users/kb_jay/Downloads/sumiao.gif" alt="sumiao"></p>
-<h5 id="最终效果图"><a href="#最终效果图" class="headerlink" title="最终效果图"></a>最终效果图</h5><p><img src="/Users/kb_jay/Desktop/sketch.png" alt="sketch"></p>
-<h5 id="代码地址"><a href="#代码地址" class="headerlink" title="代码地址"></a>代码地址</h5><p><a href="https://github.com/kbjay/KJ_Sketch" target="_blank" rel="noopener">https://github.com/kbjay/KJ_Sketch</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/08/Android-图片实现类似素描的效果/" data-id="ck3pnsbm0000dqmuqhbpsn13k" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-编辑距离(72)" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/29/leetcode-编辑距离(72)/" class="article-date">
-  <time datetime="2018-10-29T12:26:57.291Z" itemprop="datePublished">2018-10-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/29/leetcode-编辑距离(72)/">leetcode-编辑距离(72)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>给定两个单词 <em>word1</em> 和 <em>word2</em>，计算出将 <em>word1</em> 转换成 <em>word2</em> 所使用的最少操作数 。</p>
-<p>你可以对一个单词进行如下三种操作：</p>
-<ol>
-<li>插入一个字符</li>
-<li>删除一个字符</li>
-<li>替换一个字符</li>
-</ol>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入: word1 = &quot;horse&quot;, word2 = &quot;ros&quot;</span><br><span class="line">输出: 3</span><br><span class="line">解释: </span><br><span class="line">horse -&gt; rorse (将 &apos;h&apos; 替换为 &apos;r&apos;)</span><br><span class="line">rorse -&gt; rose (删除 &apos;r&apos;)</span><br><span class="line">rose -&gt; ros (删除 &apos;e&apos;)</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">输入: word1 = &quot;intention&quot;, word2 = &quot;execution&quot;</span><br><span class="line">输出: 5</span><br><span class="line">解释: </span><br><span class="line">intention -&gt; inention (删除 &apos;t&apos;)</span><br><span class="line">inention -&gt; enention (将 &apos;i&apos; 替换为 &apos;e&apos;)</span><br><span class="line">enention -&gt; exention (将 &apos;n&apos; 替换为 &apos;x&apos;)</span><br><span class="line">exention -&gt; exection (将 &apos;n&apos; 替换为 &apos;c&apos;)</span><br><span class="line">exection -&gt; execution (插入 &apos;u&apos;)</span><br></pre></td></tr></table></figure>
-<p><strong>思路：</strong></p>
-<p>背包问题，动态规划</p>
-<p>设dp(i , j) 表示word1的前i个字符组成word2的前j个字符需要的最小步数。</p>
-<p>那么结论如下：</p>
-<p>if( word1[i] ==word2[j] ){</p>
-<p>​    那么dp(i,j)=dp(i-1,j-1);</p>
-<p>}else{</p>
-<p>​    dp(i,j) =  min{     dp(i-1,j-1)        dp(i-1,j)           dp(i,j-1)         } + 1;</p>
-<p>}</p>
-<p>我们分析horse转ros</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left"></th>
-<th>“”</th>
-<th>h</th>
-<th>ho</th>
-<th>hor</th>
-<th>hors</th>
-<th>horse</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">“”</td>
-<td>0</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
-<td>5</td>
-</tr>
-<tr>
-<td style="text-align:left">r</td>
-<td>1</td>
-<td>1</td>
-<td>2</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
-</tr>
-<tr>
-<td style="text-align:left">ro</td>
-<td>2</td>
-<td>2</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
-</tr>
-<tr>
-<td style="text-align:left">ros</td>
-<td>3</td>
-<td>3</td>
-<td>2</td>
-<td>2</td>
-<td>2</td>
-<td>3</td>
-</tr>
-</tbody>
-</table>
-<p>我们很容易可以写出第一行跟第一列，之后一行一行的填充</p>
-<p>word1[i] ==word2[j] 这种 case 很容易理解，</p>
-<p>我们分析不等的case，比如 hor——》ros，</p>
-<p>我们可以知道</p>
-<ol>
-<li>ho   -&gt; ro 最少需要1步就可以，那么hor-&gt;ros 我们只需要<strong>替换</strong>最后一位即可，</li>
-<li>hor -&gt; ro最少需要2步，那么hor-&gt;ros，我们需要再<strong>插入</strong>最后一位</li>
-<li>ho  -&gt; ros最少需要2步，那么hor-&gt;ros,我们需要<strong>删除</strong>最后一位</li>
-</ol>
-<p>我们选择其中最小的步数+1即可。</p>
-<p><strong>代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minDistance</span><span class="params">(String word1, String word2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//初始化</span></span><br><span class="line">        <span class="keyword">if</span>(word1==<span class="keyword">null</span>||word2==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> len1 = word1.length();</span><br><span class="line">        <span class="keyword">int</span> len2 = word2.length();</span><br><span class="line">        <span class="comment">//算法开始</span></span><br><span class="line">        <span class="keyword">int</span> [][] re = <span class="keyword">new</span> <span class="keyword">int</span>[len1+<span class="number">1</span>][len2+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=len1;i++)&#123;</span><br><span class="line">            re[i][<span class="number">0</span>]=i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=len2;i++)&#123;</span><br><span class="line">            re[<span class="number">0</span>][i]=i;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=len1;i++)&#123;</span><br><span class="line">            <span class="keyword">char</span> temp1=word1.charAt(i-<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">1</span> ;j &lt;=len2;j++)&#123;</span><br><span class="line">                <span class="keyword">char</span> temp2=word2.charAt(j-<span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span>(temp1==temp2)&#123;</span><br><span class="line">                    re[i][j]=re[i-<span class="number">1</span>][j-<span class="number">1</span>];</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">int</span> s1=re[i-<span class="number">1</span>][j-<span class="number">1</span>]&gt;re[i-<span class="number">1</span>][j]?re[i-<span class="number">1</span>][j]:re[i-<span class="number">1</span>][j-<span class="number">1</span>];</span><br><span class="line">                    re[i][j]=(s1&gt;re[i][j-<span class="number">1</span>]?re[i][j-<span class="number">1</span>]:s1)+<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> re[len1][len2];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/29/leetcode-编辑距离(72)/" data-id="ck3pnsbnu002pqmuqowr1nmx5" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-分割等和子集(416)" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/22/leetcode-分割等和子集(416)/" class="article-date">
-  <time datetime="2018-10-22T06:58:37.651Z" itemprop="datePublished">2018-10-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/22/leetcode-分割等和子集(416)/">leetcode-分割等和子集(416)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>给定一个<strong>只包含正整数</strong>的<strong>非空</strong>数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。</p>
-<p><strong>注意:</strong></p>
-<ol>
-<li>每个数组中的元素不会超过 100</li>
-<li>数组的大小不会超过 200</li>
-</ol>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入: [1, 5, 11, 5]</span><br><span class="line"></span><br><span class="line">输出: true</span><br><span class="line"></span><br><span class="line">解释: 数组可以分割成 [1, 5, 5] 和 [11].</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入: [1, 2, 3, 5]</span><br><span class="line"></span><br><span class="line">输出: false</span><br><span class="line"></span><br><span class="line">解释: 数组不能分割成两个元素和相等的子集.</span><br></pre></td></tr></table></figure>
-<p><strong>思路</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>-<span class="number">1</span> 背包问题：</span><br><span class="line"></span><br><span class="line">首先计算出dp[<span class="number">0</span>][w]  w:<span class="number">0</span> ~ target-<span class="number">1</span>;</span><br><span class="line">之后计算出dp[i][<span class="number">0</span>]  i:<span class="number">0</span> ~ 数组len-<span class="number">1</span>；</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="number">1</span> :vi == j+<span class="number">1</span>   dp[i][j]=<span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">2</span> :vi &gt;j+<span class="number">1</span> 	dp[i][j]=dp[i-<span class="number">1</span>][j];</span><br><span class="line"><span class="keyword">case</span> <span class="number">3</span> :vi &lt;j+<span class="number">1</span>		dp[i][j]=dp[i-<span class="number">1</span>][j] || dp[i-<span class="number">1</span>][j-vi];</span><br></pre></td></tr></table></figure>
-<p><strong>代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">canPartition</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> len = nums.length;</span><br><span class="line">        <span class="keyword">int</span> total=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">            total+=nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(total%<span class="number">2</span>==<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> y=total/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">boolean</span>[][] dp = <span class="keyword">new</span> <span class="keyword">boolean</span>[len][y];</span><br><span class="line">        <span class="keyword">int</span> temp =nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;y;i++)&#123;</span><br><span class="line">            dp[<span class="number">0</span>][i]=(temp==(i+<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">boolean</span> containOne=<span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(containOne)&#123;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">               <span class="keyword">if</span>(nums[i]==<span class="number">1</span>)&#123;</span><br><span class="line">                   containOne=<span class="keyword">true</span>;</span><br><span class="line">               &#125; </span><br><span class="line">            &#125;</span><br><span class="line">            dp[i][<span class="number">0</span>]=containOne;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;len;i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> vi = nums[i];</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;y;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(vi==(j+<span class="number">1</span>))&#123;</span><br><span class="line">                    dp[i][j]=<span class="keyword">true</span>;  </span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(vi &gt; (j+<span class="number">1</span>))&#123;</span><br><span class="line">                    dp[i][j]=dp[i-<span class="number">1</span>][j];</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    dp[i][j]=dp[i-<span class="number">1</span>][j]||dp[i-<span class="number">1</span>][j-vi];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[len-<span class="number">1</span>][y-<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/22/leetcode-分割等和子集(416)/" data-id="ck3pnsbn90020qmuqi2vwwd92" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-最长上升子序列(300)" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/19/leetcode-最长上升子序列(300)/" class="article-date">
-  <time datetime="2018-10-19T06:29:32.955Z" itemprop="datePublished">2018-10-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/19/leetcode-最长上升子序列(300)/">leetcode-最长上升子序列(300)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>给定一个无序的整数数组，找到其中最长上升子序列的长度。</p>
-<p><strong>示例:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: [10,9,2,5,3,7,101,18]</span><br><span class="line">输出: 4 </span><br><span class="line">解释: 最长的上升子序列是 [2,3,7,101]，它的长度是 4。</span><br></pre></td></tr></table></figure>
-<p><strong>思路</strong></p>
-<p>dp[n]表示以nums[n]结尾的最长上升子序列；</p>
-<p>dp[n]=dp[往前走小于nums[n]的数] 中最大的值 + 1；</p>
-<p><strong>代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLIS</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//dp[n]=dp[往前走小于nums[n]的数]中最大的值+1；</span></span><br><span class="line">        <span class="keyword">int</span> len=nums.length;</span><br><span class="line">        <span class="keyword">if</span>(len==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> re =<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> []dp =<span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">            dp[i]=<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">int</span> temp = nums[i];</span><br><span class="line">            <span class="keyword">int</span> index=i;</span><br><span class="line">            index--;</span><br><span class="line">            <span class="keyword">while</span>(index&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(nums[index]&lt;temp)&#123;</span><br><span class="line">                    dp[i]=Math.max(dp[index]+<span class="number">1</span>,dp[i]);</span><br><span class="line">                &#125;</span><br><span class="line">                index--;</span><br><span class="line">            &#125;</span><br><span class="line">            re = (re &lt; dp[i] ? dp[i] : re);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> re;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/19/leetcode-最长上升子序列(300)/" data-id="ck3pnsbnj002gqmuq0xr6xnju" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-完全平方数(279)" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/19/leetcode-完全平方数(279)/" class="article-date">
-  <time datetime="2018-10-19T05:21:38.100Z" itemprop="datePublished">2018-10-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/19/leetcode-完全平方数(279)/">leetcode-完全平方数(279)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>给定正整数 <em>n</em>，找到若干个完全平方数（比如 <code>1, 4, 9, 16, ...</code>）使得它们的和等于 <em>n</em>。你需要让组成和的完全平方数的个数最少。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: n = 12</span><br><span class="line">输出: 3 </span><br><span class="line">解释: 12 = 4 + 4 + 4.</span><br></pre></td></tr></table></figure>
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: n = 13</span><br><span class="line">输出: 2</span><br><span class="line">解释: 13 = 4 + 9.</span><br></pre></td></tr></table></figure>
-<p><strong>思路</strong></p>
-<p>假设dp[i]表示i对应的完全平方数，考虑dp[12];</p>
-<p>那么</p>
-<p>Case1 : dp[12] = dp[12-1]+1;</p>
-<p>Case2 : dp[12]= dp[12-4]+1;</p>
-<p>Case3 : dp[12]= dp[12-9]+1;</p>
-<p>最终dp[12]= 3种case的最小值。</p>
-<p><strong>代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numSquares</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        ArrayList&lt;Integer&gt; al= <span class="keyword">new</span> ArrayList();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>;i*i&lt;=n;i++)&#123;</span><br><span class="line">            al.add(i*i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> [] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">        dp[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            dp[i]=Integer.MAX_VALUE;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">0</span>;j&lt;al.size();j++)&#123;</span><br><span class="line">                <span class="keyword">int</span> temp =al.get(j);</span><br><span class="line">                <span class="keyword">if</span>(temp&gt;i)&#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(dp[i-temp]+<span class="number">1</span>&lt;dp[i])&#123;</span><br><span class="line">                    dp[i]=dp[i-temp]+<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dp[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/19/leetcode-完全平方数(279)/" data-id="ck3pnsbne0028qmuqi2vnu8b7" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-判断子序列（392）" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/19/leetcode-判断子序列（392）/" class="article-date">
-  <time datetime="2018-10-19T03:24:00.917Z" itemprop="datePublished">2018-10-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/19/leetcode-判断子序列（392）/">leetcode-判断子序列（392）</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>给定字符串 <strong>s</strong> 和 <strong>t</strong> ，判断 <strong>s</strong> 是否为 <strong>t</strong> 的子序列。</p>
-<p>你可以认为 <strong>s</strong> 和 <strong>t</strong> 中仅包含英文小写字母。字符串 <strong>t</strong> 可能会很长（长度 ~= 500,000），而 <strong>s</strong> 是个短字符串（长度 &lt;=100）。</p>
-<p>字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，<code>&quot;ace&quot;</code>是<code>&quot;abcde&quot;</code>的一个子序列，而<code>&quot;aec&quot;</code>不是）。</p>
-<p><strong>示例 1:</strong><br><strong>s</strong> = <code>&quot;abc&quot;</code>, <strong>t</strong> = <code>&quot;ahbgdc&quot;</code></p>
-<p>返回 <code>true</code>.</p>
-<p><strong>示例 2:</strong><br><strong>s</strong> = <code>&quot;axc&quot;</code>, <strong>t</strong> = <code>&quot;ahbgdc&quot;</code></p>
-<p>返回 <code>false</code>.</p>
-<p><strong>代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSubsequence</span><span class="params">(String s, String t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(s==<span class="keyword">null</span> || t==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> i =<span class="number">0</span>, j =<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sLen=s.length();</span><br><span class="line">        <span class="keyword">int</span> tLen=t.length();</span><br><span class="line">        <span class="keyword">while</span> (i&lt;sLen &amp;&amp; j &lt; tLen)&#123;</span><br><span class="line">            <span class="keyword">char</span> temps=s.charAt(i);</span><br><span class="line">            <span class="keyword">char</span> tempt=t.charAt(j);</span><br><span class="line">            <span class="keyword">if</span>(temps==tempt)&#123;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> i==sLen;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/19/leetcode-判断子序列（392）/" data-id="ck3pnsbnb0024qmuq9desuw86" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
 
     </footer>
   </div>
@@ -616,7 +587,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -630,7 +601,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-源码/">android 源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
     </div>
   </div>
 
@@ -640,7 +611,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 17.5px;">JVM</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 17.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 17.5px;">JVM</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-源码/" style="font-size: 10px;">android 源码</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 17.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 12.5px;">设计模式</a> <a href="/tags/音视频/" style="font-size: 15px;">音视频</a>
     </div>
   </div>
 
@@ -649,7 +620,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -662,23 +633,23 @@
       <ul>
         
           <li>
-            <a href="/2019/12/03/android---ffmpeg(一)/">android - ffmpeg(一)</a>
+            <a href="/2020/01/21/设计模式--策略-观察者-装饰/">设计模式--策略 观察者 装饰</a>
           </li>
         
           <li>
-            <a href="/2019/09/24/前端-vue/">前端-vue</a>
+            <a href="/2020/01/21/2019年末总结/">2019年末总结</a>
           </li>
         
           <li>
-            <a href="/2019/09/11/jvm---类加载器/">jvm - 类加载器</a>
+            <a href="/2020/01/07/源码分析-glide/">源码分析-glide</a>
           </li>
         
           <li>
-            <a href="/2019/09/10/jvm-—-jvm加载机制/">jvm — jvm加载机制</a>
+            <a href="/2019/12/16/andriod---ffmpeg-(三)/">andriod - ffmpeg (三)</a>
           </li>
         
           <li>
-            <a href="/2019/09/10/jvm---字节码文件/">jvm - 字节码文件</a>
+            <a href="/2019/12/16/android---性能优化（内存）/">android - 性能优化（内存）</a>
           </li>
         
       </ul>
@@ -693,7 +664,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 kb_jay<br>
+      &copy; 2020 kb_jay<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

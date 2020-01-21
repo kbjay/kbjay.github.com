@@ -62,6 +62,1821 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-jvm---字节码文件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/10/jvm---字节码文件/" class="article-date">
+  <time datetime="2019-09-10T04:43:33.737Z" itemprop="datePublished">2019-09-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/10/jvm---字节码文件/">jvm - 字节码文件</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    java号称编译一次，到处运行；其实真正可以到处运行的是java编译器编译之后的字节码文件同时jvm针对不同平台都做了实现；</p>
+<p>​    除了平台无关性，字节码文件还有语言无关系；比如groovy，它用自己的编译器编译之后生成class文件同样可以运行在jvm之上。</p>
+<p>​    其实我们自己也可以定义一种属于我们自己的语言，然后再写一个编译器，只要编译之后的文件符合class文件的规范，同样可以在jvm上运行。</p>
+<p>​    盗图一张：</p>
+<p><img src="data:image/png;base64,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" alt="âjavaè¯­è¨æ å³æ§âçå¾çæç´¢ç»æ"></p>
+<h4 id="class字节码规范"><a href="#class字节码规范" class="headerlink" title="class字节码规范"></a>class字节码规范</h4><p>Class 文件是一组以 8 位字节为基础单位的二进制流，其本质就是一张表，如下图所示，u1、u2、u4 表示 1 个字节、2 个字节、4 个字节的<strong>无符号数</strong>，无符号数可以用来描述数字、索引引用、数量值或者按照 utf-8 编码构成的字符串值。_info 结尾的表示<strong>表</strong>，用以描述有层次关系的复合结构数据。</p>
+<table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>名称</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>u4</td>
+<td>magic</td>
+<td>魔数，用以标记文件类型，固定值0xCAFEBABE</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>minor_version</td>
+<td>次版本号，向上兼容</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>major_version</td>
+<td>主版本号</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>constant_pool_count</td>
+<td><strong>常量</strong>的个数</td>
+</tr>
+<tr>
+<td>cp_info</td>
+<td>constant_pool</td>
+<td>常量池，数量为（constant_pool_count - 1）</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>access_flags</td>
+<td>访问标识</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>this_class</td>
+<td>当前类索引</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>super_class</td>
+<td>父类索引</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>interfaces_count</td>
+<td>接口的个数</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>interfaces</td>
+<td>具体的接口内容，数量为 interfaces_count</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>fields_count</td>
+<td><strong>字段</strong>的个数</td>
+</tr>
+<tr>
+<td>field_info</td>
+<td>fields</td>
+<td>具体的字段内容，数量为 fields_count</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>methods_count</td>
+<td><strong>方法</strong>的个数</td>
+</tr>
+<tr>
+<td>method_info</td>
+<td>methods</td>
+<td>具体的方法内容，数量为 methods_count</td>
+</tr>
+<tr>
+<td>u2</td>
+<td>attribute_count</td>
+<td><strong>属性</strong>的个数</td>
+</tr>
+<tr>
+<td>attribute_info</td>
+<td>attributes</td>
+<td>具体的属性内容，数量为 attributes_count</td>
+</tr>
+</tbody>
+</table>
+<h5 id="常量池（Constant-pool）"><a href="#常量池（Constant-pool）" class="headerlink" title="常量池（Constant pool）"></a>常量池（Constant pool）</h5><p>常量池是Class文件空间最大的数据项之一，长度不固定，主要包含两类：字面量（Literal）和符号引用（Symbolic References），字面量比较接近 Java 语言层面的常量概念，如文本字符串，声明为 final 的常量值等；符号引用这属于编译原理方面的概念，主要包括下面三类常量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- 类和接口全限定名(Full Qualified Name)</span><br><span class="line"></span><br><span class="line">- 字段的名称和描述符(Descriptor)</span><br><span class="line"></span><br><span class="line">- 方法的名称和描述符</span><br></pre></td></tr></table></figure>
+<p>Java 是在虚拟机加载 Class 文件的时候进行的动态链接，因此 Class 文件不会保存各个方法字段的最终内存布局信息，关于动态链接部分，将在下一篇文章<a href="https://www.duyidong.com/2018/02/13/jvm-class-load-and-excute/" target="_blank" rel="noopener">Java系列（四）——类的加载与执行</a>介绍。</p>
+<p>常量池中的每一个数据项都有自己的类型，目前 Java 8一共有以下 14 种表结构数据支持不同的常量类型，具体结构可参见<a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html" target="_blank" rel="noopener">官方文档</a>。</p>
+<table>
+<thead>
+<tr>
+<th><strong>常量池中数据项类型</strong></th>
+<th><strong>类型标志</strong></th>
+<th><strong>类型描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CONSTANT_Utf8_info</td>
+<td>1</td>
+<td>UTF-8编码的Unicode字符串</td>
+</tr>
+<tr>
+<td>CONSTANT_Integer_info</td>
+<td>3</td>
+<td>int类型字面值</td>
+</tr>
+<tr>
+<td>CONSTANT_Float_info</td>
+<td>4</td>
+<td>float类型字面值</td>
+</tr>
+<tr>
+<td>CONSTANT_Long_info</td>
+<td>5</td>
+<td>long类型字面值</td>
+</tr>
+<tr>
+<td>CONSTANT_Double_info</td>
+<td>6</td>
+<td>double类型字面值</td>
+</tr>
+<tr>
+<td>CONSTANT_Class_info</td>
+<td>7</td>
+<td>对一个类或接口的符号引用</td>
+</tr>
+<tr>
+<td>CONSTANT_String_info</td>
+<td>8</td>
+<td>String类型字面值</td>
+</tr>
+<tr>
+<td>CONSTANT_Fieldref_info</td>
+<td>9</td>
+<td>对一个字段的符号引用</td>
+</tr>
+<tr>
+<td>CONSTANT_Methodref_info</td>
+<td>10</td>
+<td>对一个类中声明的方法的符号引用</td>
+</tr>
+<tr>
+<td>CONSTANT_InterfaceMethodref_info</td>
+<td>11</td>
+<td>对一个接口中声明的方法的符号引用</td>
+</tr>
+<tr>
+<td>CONSTANT_NameAndType_info</td>
+<td>12</td>
+<td>对一个字段或方法的部分符号引用</td>
+</tr>
+<tr>
+<td>CONSTANT_MethodHandle_info</td>
+<td>15</td>
+<td>表示方法句柄</td>
+</tr>
+<tr>
+<td>CONSTANT_MethodType_info</td>
+<td>16</td>
+<td>标示方法类型</td>
+</tr>
+<tr>
+<td>CONSTANT_InvokeDynamic_info</td>
+<td>18</td>
+<td>表示一个动态方法调用点</td>
+</tr>
+</tbody>
+</table>
+<p>可以使用 JDK 提供的 javap 工具，<code>javap -verbose ClassName</code>的方式查看 Class 中的常量。</p>
+<h5 id="访问标志（Access-flags）"><a href="#访问标志（Access-flags）" class="headerlink" title="访问标志（Access flags）"></a>访问标志（Access flags）</h5><p>2个字节代表，标示用于识别一些类或者接口层次的访问信息。</p>
+<table>
+<thead>
+<tr>
+<th>标识名</th>
+<th>标识值</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ACC_PUBLIC</td>
+<td>0x0001</td>
+<td>声明为public;可以从包外部访问</td>
+</tr>
+<tr>
+<td>ACC_FINAL</td>
+<td>0x0010</td>
+<td>被声明为final;不允许子类修改</td>
+</tr>
+<tr>
+<td>ACC_SUPER</td>
+<td>0x0020</td>
+<td>当被invokespecial指令调用时，将特殊对待父类的方法</td>
+</tr>
+<tr>
+<td>ACC_INTERFACE</td>
+<td>0x0200</td>
+<td>接口标识符</td>
+</tr>
+<tr>
+<td>ACC_ABSTRACT</td>
+<td>0x0400</td>
+<td>声明为abstract;不能被实例化</td>
+</tr>
+<tr>
+<td>ACC_SYNTHETIC</td>
+<td>0x1000</td>
+<td>声明为synthetic;不存在于源代码，由编译器生成</td>
+</tr>
+<tr>
+<td>ACC_ANNOTATION</td>
+<td>0x2000</td>
+<td>声明为注释类型</td>
+</tr>
+<tr>
+<td>ACC_ENUM</td>
+<td>0x4000</td>
+<td>声明为枚举类型</td>
+</tr>
+</tbody>
+</table>
+<h5 id="类索引、父类索引和接口索引"><a href="#类索引、父类索引和接口索引" class="headerlink" title="类索引、父类索引和接口索引"></a>类索引、父类索引和接口索引</h5><p>类索引（this_class）和父类索引（super_class）都是一个 u2 的数据类型，而接口索引（Interfaces）是一组长度为interfaces_count 的 u2 类型的数据集合，它们的值大多存放的是对常量池中 CONSTANT_Class_info 的引用， Class 文件中由这三项数据来确定这个类的继承关系。</p>
+<h5 id="字段表（Field-info）"><a href="#字段表（Field-info）" class="headerlink" title="字段表（Field info）"></a>字段表（Field info）</h5><p>字段表用于描述类或接口中声明的变量，格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">field_info &#123;</span><br><span class="line">    u2             access_flags; //访问标识</span><br><span class="line">    u2             name_index;  //名称索引</span><br><span class="line">    u2             descriptor_index; //描述符索引</span><br><span class="line">    u2             attributes_count; //属性个数</span><br><span class="line">    attribute_info attributes[attributes_count];  //属性表的具体内容</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>字段访问标识如下：(表中加粗项是字段独有的)：</p>
+<table>
+<thead>
+<tr>
+<th>标识名</th>
+<th>标识值</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ACC_PUBLIC</td>
+<td>0x0001</td>
+<td>声明为 public; 可以从包外部访问</td>
+</tr>
+<tr>
+<td>ACC_PRIVATE</td>
+<td>0x0002</td>
+<td>声明为 private; 只有定义的类可以访问</td>
+</tr>
+<tr>
+<td>ACC_PROTECTED</td>
+<td>0x0004</td>
+<td>声明为 protected;只有子类和相同package的类可访问</td>
+</tr>
+<tr>
+<td>ACC_STATIC</td>
+<td>0x0008</td>
+<td>声明为 static；属于类变量</td>
+</tr>
+<tr>
+<td>ACC_FINAL</td>
+<td>0x0010</td>
+<td>声明为 final; 对象构造后无法直接修改值</td>
+</tr>
+<tr>
+<td><strong>ACC_VOLATILE</strong></td>
+<td>0x0040</td>
+<td>声明为 volatile; 不会被缓存,直接刷新到主屏幕</td>
+</tr>
+<tr>
+<td><strong>ACC_TRANSIENT</strong></td>
+<td>0x0080</td>
+<td>声明为 transient; 不能被序列化</td>
+</tr>
+<tr>
+<td>ACC_SYNTHETIC</td>
+<td>0x1000</td>
+<td>声明为 synthetic; 不存在于源代码，由编译器生成</td>
+</tr>
+<tr>
+<td>ACC_ENUM</td>
+<td>0x4000</td>
+<td>声明为enum</td>
+</tr>
+</tbody>
+</table>
+<p>Java语法中，接口中的字段默认包含ACC_PUBLIC, ACC_STATIC, ACC_FINAL标识。ACC_FINAL，ACC_VOLATILE不能同时选择等规则。紧跟其后的name_index和descriptor_index是对常量池的引用，分别代表着字段的简单名和方法的描述符。</p>
+<h5 id="方法表（Method-info）"><a href="#方法表（Method-info）" class="headerlink" title="方法表（Method info）"></a>方法表（Method info）</h5><p>方法表用于描述类或接口中声明的方法，格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">method_info &#123;</span><br><span class="line">    u2             access_flags; //访问标识</span><br><span class="line">    u2             name_index;  //名称索引</span><br><span class="line">    u2             descriptor_index;  //描述符索引</span><br><span class="line">    u2             attributes_count;  //属性个数</span><br><span class="line">    attribute_info attributes[attributes_count]; //属性表的具体内容</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>方法访问标识如下：(表中加粗项是方法独有的)</p>
+<table>
+<thead>
+<tr>
+<th>标识名</th>
+<th>标识值</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ACC_PUBLIC</td>
+<td>0x0001</td>
+<td>声明为 public; 可以从包外部访问</td>
+</tr>
+<tr>
+<td>ACC_PRIVATE</td>
+<td>0x0002</td>
+<td>声明为 private; 只有定义的类可以访问</td>
+</tr>
+<tr>
+<td>ACC_PROTECTED</td>
+<td>0x0004</td>
+<td>声明为 protected;只有子类和相同package的类可访问</td>
+</tr>
+<tr>
+<td>ACC_STATIC</td>
+<td>0x0008</td>
+<td>声明为 static；属于类变量</td>
+</tr>
+<tr>
+<td>ACC_FINAL</td>
+<td>0x0010</td>
+<td>声明为 final; 不能被覆写</td>
+</tr>
+<tr>
+<td><strong>ACC_SYNCHRONIZED</strong></td>
+<td>0x0020</td>
+<td>声明为 synchronized; 同步锁包裹</td>
+</tr>
+<tr>
+<td>ACC_BRIDGE</td>
+<td>0x0040</td>
+<td>桥接方法, 由编译器生成</td>
+</tr>
+<tr>
+<td><strong>ACC_VARARGS</strong></td>
+<td>0x0080</td>
+<td>声明为 接收不定长参数</td>
+</tr>
+<tr>
+<td><strong>ACC_NATIVE</strong></td>
+<td>0x0100</td>
+<td>声明为 native; 由非Java语言来实现</td>
+</tr>
+<tr>
+<td><strong>ACC_ABSTRACT</strong></td>
+<td>0x0400</td>
+<td>声明为 abstract; 没有提供实现</td>
+</tr>
+<tr>
+<td><strong>ACC_STRICT</strong></td>
+<td>0x0800</td>
+<td>声明为 strictfp; 浮点模式是FP-strict</td>
+</tr>
+<tr>
+<td>ACC_SYNTHETIC</td>
+<td>0x1000</td>
+<td>声明为 synthetic; 不存在于源代码，由编译器生成</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>对于方法里的Java代码，进过编译器编译成字节码指令后，存放在方法属性表集合中“code”的属性内。</li>
+<li>当子类没有覆写父类方法，则方法集合中不会出现父类的方法信息。</li>
+<li>Java语言中重载方法，必须与原方法同名，且特征签名不同。特征签名是指方法中各个参数在常量池的字段符号引用的集合，不包括返回值。当时Class文件格式中，特征签名范围更广，允许方法名和特征签名都相同，但返回值不同的方法，合法地共存子啊同一个Class文件中。</li>
+</ul>
+<h5 id="属性表（Attribute-info）"><a href="#属性表（Attribute-info）" class="headerlink" title="属性表（Attribute info）"></a>属性表（Attribute info）</h5><p>属性表的基本结构，不同类型的属性表以此为基础各不相同：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">attribute_info &#123;</span><br><span class="line">    u2 attribute_name_index;</span><br><span class="line">    u4 attribute_length;</span><br><span class="line">    u1 info[attribute_length];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>属性表的限制相对宽松，不需要各个属性表有严格的顺序，只有不与已有的属性名重复，任何自定义的编译器都可以向属性表中写入自定义的属性信息，Java虚拟机运行时会忽略掉无法识别的属性。 关于虚拟机规范中预定义的属性，这里不展开讲了，列举几个常用的。</p>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>使用位置</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Code</td>
+<td>方法表</td>
+<td>方法体的内容</td>
+</tr>
+<tr>
+<td>ConstantValue</td>
+<td>字段表</td>
+<td>final关键字定义的常量值</td>
+</tr>
+<tr>
+<td>Deprecated</td>
+<td>类、方法表、字段表</td>
+<td>声明为deprecated</td>
+</tr>
+<tr>
+<td>InnerClasses</td>
+<td>类文件</td>
+<td>内部类的列表</td>
+</tr>
+<tr>
+<td>LineNumberTable</td>
+<td>Code属性</td>
+<td>Java源码的行号与字节码指令的对应关系</td>
+</tr>
+<tr>
+<td>LocalVariableTable</td>
+<td>Code属性</td>
+<td>方法的局部变量描述</td>
+</tr>
+<tr>
+<td>Signature</td>
+<td>类、方法表、字段表</td>
+<td>用于支持泛型的方法签名，由于Java的泛型采用擦除法，避免类型信息被擦除后导致签名混乱，Signature记录相关信息</td>
+</tr>
+</tbody>
+</table>
+<h5 id="理解："><a href="#理解：" class="headerlink" title="理解："></a>理解：</h5><p>​    class文件其实就是一种协议或者说是规范，它有自己的格式。java编译器读取java文件，按照class文件的规范生产对应的class文件，jvm根据class文件规范读取class文件之后运行。</p>
+<h4 id="解读工具javap"><a href="#解读工具javap" class="headerlink" title="解读工具javap"></a>解读工具javap</h4><p>​    我们自己根据字节码文件的规范，也可以读懂class文件。sun公司其实已经提供了读取class文件的工具javap。</p>
+<p>定义类如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> String name;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> age;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> a+b;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行javac之后运行javap</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">kb-jaydeMacBook-Air:Desktop kb_jay$ javac Student.java</span><br><span class="line">kb-jaydeMacBook-Air:Desktop kb_jay$ javap -verbose Student</span><br><span class="line">Classfile /Users/kb_jay/Desktop/Student.class</span><br><span class="line">  Last modified <span class="number">2019</span>-<span class="number">9</span>-<span class="number">10</span>; size <span class="number">298</span> bytes</span><br><span class="line">  MD5 checksum fec35654474a4425fb9a2abfbcc72a07</span><br><span class="line">  Compiled from <span class="string">"Student.java"</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span></span></span><br><span class="line">  minor version: 0      //副版本号</span><br><span class="line">  major version: <span class="number">52</span>		<span class="comment">//主版本号</span></span><br><span class="line">  flags: ACC_PUBLIC, ACC_SUPER   <span class="comment">//类访问标志</span></span><br><span class="line">Constant pool:          <span class="comment">//常量池，这里是类文件的资源池</span></span><br><span class="line">   #1 = Methodref          #3.#16         // java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">   #2 = Class              #17            // Student</span><br><span class="line">   #3 = Class              #18            // java/lang/Object</span><br><span class="line">   #4 = Utf8               name</span><br><span class="line">   #5 = Utf8               Ljava/lang/String;</span><br><span class="line">   #6 = Utf8               age</span><br><span class="line">   #7 = Utf8               I</span><br><span class="line">   #8 = Utf8               &lt;init&gt;</span><br><span class="line">   #9 = Utf8               ()V</span><br><span class="line">  #10 = Utf8               Code</span><br><span class="line">  #11 = Utf8               LineNumberTable</span><br><span class="line">  #12 = Utf8               add</span><br><span class="line">  #13 = Utf8               (II)I</span><br><span class="line">  #14 = Utf8               SourceFile</span><br><span class="line">  #15 = Utf8               Student.java</span><br><span class="line">  #16 = NameAndType        #8:#9          // "&lt;init&gt;":()V</span><br><span class="line">  #17 = Utf8               Student</span><br><span class="line">  #18 = Utf8               java/lang/Object</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//字段表，这里的描述符，如果做过ndk，应该很熟悉了</span></span><br><span class="line">  <span class="keyword">public</span> java.lang.String name;</span><br><span class="line">    descriptor: Ljava/lang/String;</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">int</span> age;</span><br><span class="line">    descriptor: I</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line"></span><br><span class="line">	<span class="comment">//方法表</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span></span>;</span><br><span class="line">  	<span class="comment">//方法描述符，ndk开发常用</span></span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    <span class="comment">//code是属性表中的一个，</span></span><br><span class="line">    Code:</span><br><span class="line">    	<span class="comment">//操作数栈，局部变量表，参数个数，这里是this</span></span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">1</span>, args_size=<span class="number">1</span></span><br><span class="line">      	<span class="comment">//字节码指令</span></span><br><span class="line">         <span class="number">0</span>: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">         <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line">      <span class="comment">//LineNumberTable是属性表中的一个，抛出异常的时的异常代码的位置</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">1</span>: <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span>;</span><br><span class="line">    descriptor: (II)I</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">2</span>, locals=<span class="number">3</span>, args_size=<span class="number">3</span></span><br><span class="line">         <span class="number">0</span>: iload_1</span><br><span class="line">         <span class="number">1</span>: iload_2</span><br><span class="line">         <span class="number">2</span>: iadd</span><br><span class="line">         <span class="number">3</span>: ireturn</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">6</span>: <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line">SourceFile: <span class="string">"Student.java"</span></span><br></pre></td></tr></table></figure>
+<h4 id="字节码指令"><a href="#字节码指令" class="headerlink" title="字节码指令"></a>字节码指令</h4><p>tip：如下表（转自网络）</p>
+<table>
+<thead>
+<tr>
+<th>字节码</th>
+<th>助记符</th>
+<th>指令含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x00</td>
+<td>nop</td>
+<td>None</td>
+</tr>
+<tr>
+<td>0x01</td>
+<td>aconst_null</td>
+<td>将null推送至栈顶</td>
+</tr>
+<tr>
+<td>0x02</td>
+<td>iconst_m1</td>
+<td>将int型-1推送至栈顶</td>
+</tr>
+<tr>
+<td>0x03</td>
+<td>iconst_0</td>
+<td>将int型0推送至栈顶</td>
+</tr>
+<tr>
+<td>0x04</td>
+<td>iconst_1</td>
+<td>将int型1推送至栈顶</td>
+</tr>
+<tr>
+<td>0x05</td>
+<td>iconst_2</td>
+<td>将int型2推送至栈顶</td>
+</tr>
+<tr>
+<td>0x06</td>
+<td>iconst_3</td>
+<td>将int型3推送至栈顶</td>
+</tr>
+<tr>
+<td>0x07</td>
+<td>iconst_4</td>
+<td>将int型4推送至栈顶</td>
+</tr>
+<tr>
+<td>0x08</td>
+<td>iconst_5</td>
+<td>将int型5推送至栈顶</td>
+</tr>
+<tr>
+<td>0x09</td>
+<td>lconst_0</td>
+<td>将long型0推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0a</td>
+<td>lconst_1</td>
+<td>将long型1推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0b</td>
+<td>fconst_0</td>
+<td>将float型0推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0c</td>
+<td>fconst_1</td>
+<td>将float型1推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0d</td>
+<td>fconst_2</td>
+<td>将float型2推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0e</td>
+<td>dconst_0</td>
+<td>将double型0推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0f</td>
+<td>dconst_1</td>
+<td>将double型1推送至栈顶</td>
+</tr>
+<tr>
+<td>0x10</td>
+<td>bipush</td>
+<td>将单字节的常量值(-128~127)推送至栈顶</td>
+</tr>
+<tr>
+<td>0x11</td>
+<td>sipush</td>
+<td>将一个短整型常量(-32768~32767)推送至栈顶</td>
+</tr>
+<tr>
+<td>0x12</td>
+<td>ldc</td>
+<td>将int,float或String型常量值从常量池中推送至栈顶</td>
+</tr>
+<tr>
+<td>0x13</td>
+<td>ldc_w</td>
+<td>将int,float或String型常量值从常量池中推送至栈顶(宽索引)</td>
+</tr>
+<tr>
+<td>0x14</td>
+<td>ldc2_w</td>
+<td>将long或double型常量值从常量池中推送至栈顶(宽索引)</td>
+</tr>
+<tr>
+<td>0x15</td>
+<td>iload</td>
+<td>将指定的int型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x16</td>
+<td>lload</td>
+<td>将指定的long型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x17</td>
+<td>fload</td>
+<td>将指定的float型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x18</td>
+<td>dload</td>
+<td>将指定的double型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x19</td>
+<td>aload</td>
+<td>将指定的引用类型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1a</td>
+<td>iload_0</td>
+<td>将第一个int型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1b</td>
+<td>iload_1</td>
+<td>将第二个int型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1c</td>
+<td>iload_2</td>
+<td>将第三个int型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1d</td>
+<td>iload_3</td>
+<td>将第四个int型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1e</td>
+<td>lload_0</td>
+<td>将第一个long型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1f</td>
+<td>lload_1</td>
+<td>将第二个long型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x20</td>
+<td>lload_2</td>
+<td>将第三个long型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x21</td>
+<td>lload_3</td>
+<td>将第四个long型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x22</td>
+<td>fload_0</td>
+<td>将第一个float型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x23</td>
+<td>fload_1</td>
+<td>将第二个float型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x24</td>
+<td>fload_2</td>
+<td>将第三个float型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x25</td>
+<td>fload_3</td>
+<td>将第四个float型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x26</td>
+<td>dload_0</td>
+<td>将第一个double型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x27</td>
+<td>dload_1</td>
+<td>将第二个double型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x28</td>
+<td>dload_2</td>
+<td>将第三个double型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x29</td>
+<td>dload_3</td>
+<td>将第四个double型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2a</td>
+<td>aload_0</td>
+<td>将第一个引用类型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2b</td>
+<td>aload_1</td>
+<td>将第二个引用类型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2c</td>
+<td>aload_2</td>
+<td>将第三个引用类型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2d</td>
+<td>aload_3</td>
+<td>将第四个引用类型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2e</td>
+<td>iaload</td>
+<td>将int型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2f</td>
+<td>laload</td>
+<td>将long型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0x30</td>
+<td>faload</td>
+<td>将float型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0x31</td>
+<td>daload</td>
+<td>将double型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0x32</td>
+<td>aaload</td>
+<td>将引用类型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0x33</td>
+<td>baload</td>
+<td>将boolean或byte型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0x34</td>
+<td>caload</td>
+<td>将char型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0x35</td>
+<td>saload</td>
+<td>将short型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0x36</td>
+<td>istore</td>
+<td>将栈顶int型数值存入指定本地变量</td>
+</tr>
+<tr>
+<td>0x37</td>
+<td>lstore</td>
+<td>将栈顶long型数值存入指定本地变量</td>
+</tr>
+<tr>
+<td>0x38</td>
+<td>fstore</td>
+<td>将栈顶float型数值存入指定本地变量</td>
+</tr>
+<tr>
+<td>0x39</td>
+<td>dstore</td>
+<td>将栈顶double型数值存入指定本地变量</td>
+</tr>
+<tr>
+<td>0x3a</td>
+<td>astore</td>
+<td>将栈顶引用类型数值存入指定本地变量</td>
+</tr>
+<tr>
+<td>0x3b</td>
+<td>istore_0</td>
+<td>将栈顶int型数值存入第一个本地变量</td>
+</tr>
+<tr>
+<td>0x3c</td>
+<td>istore_1</td>
+<td>将栈顶int型数值存入第二个本地变量</td>
+</tr>
+<tr>
+<td>0x3d</td>
+<td>istore_2</td>
+<td>将栈顶int型数值存入第三个本地变量</td>
+</tr>
+<tr>
+<td>0x3e</td>
+<td>istore_3</td>
+<td>将栈顶int型数值存入第四个本地变量</td>
+</tr>
+<tr>
+<td>0x3f</td>
+<td>lstore_0</td>
+<td>将栈顶long型数值存入第一个本地变量</td>
+</tr>
+<tr>
+<td>0x40</td>
+<td>lstore_1</td>
+<td>将栈顶long型数值存入第二个本地变量</td>
+</tr>
+<tr>
+<td>0x41</td>
+<td>lstore_2</td>
+<td>将栈顶long型数值存入第三个本地变量</td>
+</tr>
+<tr>
+<td>0x42</td>
+<td>lstore_3</td>
+<td>将栈顶long型数值存入第四个本地变量</td>
+</tr>
+<tr>
+<td>0x43</td>
+<td>fstore_0</td>
+<td>将栈顶float型数值存入第一个本地变量</td>
+</tr>
+<tr>
+<td>0x44</td>
+<td>fstore_1</td>
+<td>将栈顶float型数值存入第二个本地变量</td>
+</tr>
+<tr>
+<td>0x45</td>
+<td>fstore_2</td>
+<td>将栈顶float型数值存入第三个本地变量</td>
+</tr>
+<tr>
+<td>0x46</td>
+<td>fstore_3</td>
+<td>将栈顶float型数值存入第四个本地变量</td>
+</tr>
+<tr>
+<td>0x47</td>
+<td>dstore_0</td>
+<td>将栈顶double型数值存入第一个本地变量</td>
+</tr>
+<tr>
+<td>0x48</td>
+<td>dstore_1</td>
+<td>将栈顶double型数值存入第二个本地变量</td>
+</tr>
+<tr>
+<td>0x49</td>
+<td>dstore_2</td>
+<td>将栈顶double型数值存入第三个本地变量</td>
+</tr>
+<tr>
+<td>0x4a</td>
+<td>dstore_3</td>
+<td>将栈顶double型数值存入第四个本地变量</td>
+</tr>
+<tr>
+<td>0x4b</td>
+<td>astore_0</td>
+<td>将栈顶引用型数值存入第一个本地变量</td>
+</tr>
+<tr>
+<td>0x4c</td>
+<td>astore_1</td>
+<td>将栈顶引用型数值存入第二个本地变量</td>
+</tr>
+<tr>
+<td>0x4d</td>
+<td>astore_2</td>
+<td>将栈顶引用型数值存入第三个本地变量</td>
+</tr>
+<tr>
+<td>0x4e</td>
+<td>astore_3</td>
+<td>将栈顶引用型数值存入第四个本地变量</td>
+</tr>
+<tr>
+<td>0x4f</td>
+<td>iastore</td>
+<td>将栈顶int型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0x50</td>
+<td>lastore</td>
+<td>将栈顶long型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0x51</td>
+<td>fastore</td>
+<td>将栈顶float型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0x52</td>
+<td>dastore</td>
+<td>将栈顶double型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0x53</td>
+<td>aastore</td>
+<td>将栈顶引用型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0x54</td>
+<td>bastore</td>
+<td>将栈顶boolean或byte型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0x55</td>
+<td>castore</td>
+<td>将栈顶char型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0x56</td>
+<td>sastore</td>
+<td>将栈顶short型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0x57</td>
+<td>pop</td>
+<td>将栈顶数值弹出(数值不能是long或double类型的)</td>
+</tr>
+<tr>
+<td>0x58</td>
+<td>pop2</td>
+<td>将栈顶的一个(对于非long或double类型)或两个数值(对于非long或double的其他类型)弹出</td>
+</tr>
+<tr>
+<td>0x59</td>
+<td>dup</td>
+<td>复制栈顶数值并将复制值压入栈顶</td>
+</tr>
+<tr>
+<td>0x5a</td>
+<td>dup_x1</td>
+<td>复制栈顶数值并将两个复制值压入栈顶</td>
+</tr>
+<tr>
+<td>0x5b</td>
+<td>dup_x2</td>
+<td>复制栈顶数值并将三个(或两个)复制值压入栈顶</td>
+</tr>
+<tr>
+<td>0x5c</td>
+<td>dup2</td>
+<td>复制栈顶一个(对于long或double类型)或两个(对于非long或double的其他类型)数值并将复制值压入栈顶</td>
+</tr>
+<tr>
+<td>0x5d</td>
+<td>dup2_x1</td>
+<td>dup_x1指令的双倍版本</td>
+</tr>
+<tr>
+<td>0x5e</td>
+<td>dup2_x2</td>
+<td>dup_x2指令的双倍版本</td>
+</tr>
+<tr>
+<td>0x5f</td>
+<td>swap</td>
+<td>将栈顶最顶端的两个数值互换(数值不能是long或double类型)</td>
+</tr>
+<tr>
+<td>0x60</td>
+<td>iadd</td>
+<td>将栈顶两int型数值相加并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x61</td>
+<td>ladd</td>
+<td>将栈顶两long型数值相加并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x62</td>
+<td>fadd</td>
+<td>将栈顶两float型数值相加并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x63</td>
+<td>dadd</td>
+<td>将栈顶两double型数值相加并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x64</td>
+<td>isub</td>
+<td>将栈顶两int型数值相减并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x65</td>
+<td>lsub</td>
+<td>将栈顶两long型数值相减并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x66</td>
+<td>fsub</td>
+<td>将栈顶两float型数值相减并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x67</td>
+<td>dsub</td>
+<td>将栈顶两double型数值相减并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x68</td>
+<td>imul</td>
+<td>将栈顶两int型数值相乘并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x69</td>
+<td>lmul</td>
+<td>将栈顶两long型数值相乘并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6a</td>
+<td>fmul</td>
+<td>将栈顶两float型数值相乘并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6b</td>
+<td>dmul</td>
+<td>将栈顶两double型数值相乘并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6c</td>
+<td>idiv</td>
+<td>将栈顶两int型数值相除并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6d</td>
+<td>ldiv</td>
+<td>将栈顶两long型数值相除并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6e</td>
+<td>fdiv</td>
+<td>将栈顶两float型数值相除并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6f</td>
+<td>ddiv</td>
+<td>将栈顶两double型数值相除并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x70</td>
+<td>irem</td>
+<td>将栈顶两int型数值作取模运算并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x71</td>
+<td>lrem</td>
+<td>将栈顶两long型数值作取模运算并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x72</td>
+<td>frem</td>
+<td>将栈顶两float型数值作取模运算并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x73</td>
+<td>drem</td>
+<td>将栈顶两double型数值作取模运算并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x74</td>
+<td>ineg</td>
+<td>将栈顶int型数值取负并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x75</td>
+<td>lneg</td>
+<td>将栈顶long型数值取负并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x76</td>
+<td>fneg</td>
+<td>将栈顶float型数值取负并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x77</td>
+<td>dneg</td>
+<td>将栈顶double型数值取负并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x78</td>
+<td>ishl</td>
+<td>将int型数值左移指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x79</td>
+<td>lshl</td>
+<td>将long型数值左移指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7a</td>
+<td>ishr</td>
+<td>将int型数值右(带符号)移指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7b</td>
+<td>lshr</td>
+<td>将long型数值右(带符号)移指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7c</td>
+<td>iushr</td>
+<td>将int型数值右(无符号)移指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7d</td>
+<td>lushr</td>
+<td>将long型数值右(无符号)移指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7e</td>
+<td>iand</td>
+<td>将栈顶两int型数值”按位与”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7f</td>
+<td>land</td>
+<td>将栈顶两long型数值”按位与”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x80</td>
+<td>ior</td>
+<td>将栈顶两int型数值”按位或”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x81</td>
+<td>lor</td>
+<td>将栈顶两long型数值”按位或”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x82</td>
+<td>ixor</td>
+<td>将栈顶两int型数值”按位异或”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x83</td>
+<td>lxor</td>
+<td>将栈顶两long型数值”按位异或”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x84</td>
+<td>iinc</td>
+<td>将指定int型变量增加指定值(如i++, i–, i+=2等)</td>
+</tr>
+<tr>
+<td>0x85</td>
+<td>i2l</td>
+<td>将栈顶int型数值强制转换为long型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x86</td>
+<td>i2f</td>
+<td>将栈顶int型数值强制转换为float型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x87</td>
+<td>i2d</td>
+<td>将栈顶int型数值强制转换为double型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x88</td>
+<td>l2i</td>
+<td>将栈顶long型数值强制转换为int型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x89</td>
+<td>l2f</td>
+<td>将栈顶long型数值强制转换为float型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8a</td>
+<td>l2d</td>
+<td>将栈顶long型数值强制转换为double型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8b</td>
+<td>f2i</td>
+<td>将栈顶float型数值强制转换为int型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8c</td>
+<td>f2l</td>
+<td>将栈顶float型数值强制转换为long型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8d</td>
+<td>f2d</td>
+<td>将栈顶float型数值强制转换为double型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8e</td>
+<td>d2i</td>
+<td>将栈顶double型数值强制转换为int型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8f</td>
+<td>d2l</td>
+<td>将栈顶double型数值强制转换为long型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x90</td>
+<td>d2f</td>
+<td>将栈顶double型数值强制转换为float型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x91</td>
+<td>i2b</td>
+<td>将栈顶int型数值强制转换为byte型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x92</td>
+<td>i2c</td>
+<td>将栈顶int型数值强制转换为char型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x93</td>
+<td>i2s</td>
+<td>将栈顶int型数值强制转换为short型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x94</td>
+<td>lcmp</td>
+<td>比较栈顶两long型数值大小, 并将结果(1, 0或-1)压入栈顶</td>
+</tr>
+<tr>
+<td>0x95</td>
+<td>fcmpl</td>
+<td>比较栈顶两float型数值大小, 并将结果(1, 0或-1)压入栈顶; 当其中一个数值为<code>NaN</code>时, 将-1压入栈顶</td>
+</tr>
+<tr>
+<td>0x96</td>
+<td>fcmpg</td>
+<td>比较栈顶两float型数值大小, 并将结果(1, 0或-1)压入栈顶; 当其中一个数值为<code>NaN</code>时, 将1压入栈顶</td>
+</tr>
+<tr>
+<td>0x97</td>
+<td>dcmpl</td>
+<td>比较栈顶两double型数值大小, 并将结果(1, 0或-1)压入栈顶; 当其中一个数值为<code>NaN</code>时, 将-1压入栈顶</td>
+</tr>
+<tr>
+<td>0x98</td>
+<td>dcmpg</td>
+<td>比较栈顶两double型数值大小, 并将结果(1, 0或-1)压入栈顶; 当其中一个数值为<code>NaN</code>时, 将1压入栈顶</td>
+</tr>
+<tr>
+<td>0x99</td>
+<td>ifeq</td>
+<td>当栈顶int型数值等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9a</td>
+<td>ifne</td>
+<td>当栈顶int型数值不等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9b</td>
+<td>iflt</td>
+<td>当栈顶int型数值小于0时跳转</td>
+</tr>
+<tr>
+<td>0x9c</td>
+<td>ifge</td>
+<td>当栈顶int型数值大于等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9d</td>
+<td>ifgt</td>
+<td>当栈顶int型数值大于0时跳转</td>
+</tr>
+<tr>
+<td>0x9e</td>
+<td>ifle</td>
+<td>当栈顶int型数值小于等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9f</td>
+<td>if_icmpeq</td>
+<td>比较栈顶两int型数值大小, 当结果等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa0</td>
+<td>if_icmpne</td>
+<td>比较栈顶两int型数值大小, 当结果不等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa1</td>
+<td>if_icmplt</td>
+<td>比较栈顶两int型数值大小, 当结果小于0时跳转</td>
+</tr>
+<tr>
+<td>0xa2</td>
+<td>if_icmpge</td>
+<td>比较栈顶两int型数值大小, 当结果大于等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa3</td>
+<td>if_icmpgt</td>
+<td>比较栈顶两int型数值大小, 当结果大于0时跳转</td>
+</tr>
+<tr>
+<td>0xa4</td>
+<td>if_icmple</td>
+<td>比较栈顶两int型数值大小, 当结果小于等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa5</td>
+<td>if_acmpeq</td>
+<td>比较栈顶两引用型数值, 当结果相等时跳转</td>
+</tr>
+<tr>
+<td>0xa6</td>
+<td>if_acmpne</td>
+<td>比较栈顶两引用型数值, 当结果不相等时跳转</td>
+</tr>
+<tr>
+<td>0xa7</td>
+<td>goto</td>
+<td>无条件跳转</td>
+</tr>
+<tr>
+<td>0xa8</td>
+<td>jsr</td>
+<td>跳转至指定的16位offset位置, 并将jsr的下一条指令地址压入栈顶</td>
+</tr>
+<tr>
+<td>0xa9</td>
+<td>ret</td>
+<td>返回至本地变量指定的index的指令位置(一般与jsr或jsr_w联合使用)</td>
+</tr>
+<tr>
+<td>0xaa</td>
+<td>tableswitch</td>
+<td>用于switch条件跳转, case值连续(可变长度指令)</td>
+</tr>
+<tr>
+<td>0xab</td>
+<td>lookupswitch</td>
+<td>用于switch条件跳转, case值不连续(可变长度指令)</td>
+</tr>
+<tr>
+<td>0xac</td>
+<td>ireturn</td>
+<td>从当前方法返回int</td>
+</tr>
+<tr>
+<td>0xad</td>
+<td>lreturn</td>
+<td>从当前方法返回long</td>
+</tr>
+<tr>
+<td>0xae</td>
+<td>freturn</td>
+<td>从当前方法返回float</td>
+</tr>
+<tr>
+<td>0xaf</td>
+<td>dreturn</td>
+<td>从当前方法返回double</td>
+</tr>
+<tr>
+<td>0xb0</td>
+<td>areturn</td>
+<td>从当前方法返回对象引用</td>
+</tr>
+<tr>
+<td>0xb1</td>
+<td>return</td>
+<td>从当前方法返回void</td>
+</tr>
+<tr>
+<td>0xb2</td>
+<td>getstatic</td>
+<td>获取指定类的静态域, 并将其压入栈顶</td>
+</tr>
+<tr>
+<td>0xb3</td>
+<td>putstatic</td>
+<td>为指定类的静态域赋值</td>
+</tr>
+<tr>
+<td>0xb4</td>
+<td>getfield</td>
+<td>获取指定类的实例域, 并将其压入栈顶</td>
+</tr>
+<tr>
+<td>0xb5</td>
+<td>putfield</td>
+<td>为指定类的实例域赋值</td>
+</tr>
+<tr>
+<td>0xb6</td>
+<td>invokevirtual</td>
+<td>调用实例方法</td>
+</tr>
+<tr>
+<td>0xb7</td>
+<td>invokespecial</td>
+<td>调用超类构建方法, 实例初始化方法, 私有方法</td>
+</tr>
+<tr>
+<td>0xb8</td>
+<td>invokestatic</td>
+<td>调用静态方法</td>
+</tr>
+<tr>
+<td>0xb9</td>
+<td>invokeinterface</td>
+<td>调用接口方法</td>
+</tr>
+<tr>
+<td>0xba</td>
+<td>invokedynamic</td>
+<td>调用动态方法</td>
+</tr>
+<tr>
+<td>0xbb</td>
+<td>new</td>
+<td>创建一个对象, 并将其引用引用值压入栈顶</td>
+</tr>
+<tr>
+<td>0xbc</td>
+<td>newarray</td>
+<td>创建一个指定的原始类型(如int, float, char等)的数组, 并将其引用值压入栈顶</td>
+</tr>
+<tr>
+<td>0xbd</td>
+<td>anewarray</td>
+<td>创建一个引用型(如类, 接口, 数组)的数组, 并将其引用值压入栈顶</td>
+</tr>
+<tr>
+<td>0xbe</td>
+<td>arraylength</td>
+<td>获取数组的长度值并压入栈顶</td>
+</tr>
+<tr>
+<td>0xbf</td>
+<td>athrow</td>
+<td>将栈顶的异常抛出</td>
+</tr>
+<tr>
+<td>0xc0</td>
+<td>checkcast</td>
+<td>检验类型转换, 检验未通过将抛出 ClassCastException</td>
+</tr>
+<tr>
+<td>0xc1</td>
+<td>instanceof</td>
+<td>检验对象是否是指定类的实际, 如果是将1压入栈顶, 否则将0压入栈顶</td>
+</tr>
+<tr>
+<td>0xc2</td>
+<td>monitorenter</td>
+<td>获得对象的锁, 用于同步方法或同步块</td>
+</tr>
+<tr>
+<td>0xc3</td>
+<td>monitorexit</td>
+<td>释放对象的锁, 用于同步方法或同步块</td>
+</tr>
+<tr>
+<td>0xc4</td>
+<td>wide</td>
+<td>扩展本地变量的宽度</td>
+</tr>
+<tr>
+<td>0xc5</td>
+<td>multianewarray</td>
+<td>创建指定类型和指定维度的多维数组(执行该指令时, 操作栈中必须包含各维度的长度值), 并将其引用压入栈顶</td>
+</tr>
+<tr>
+<td>0xc6</td>
+<td>ifnull</td>
+<td>为null时跳转</td>
+</tr>
+<tr>
+<td>0xc7</td>
+<td>ifnonnull</td>
+<td>不为null时跳转</td>
+</tr>
+<tr>
+<td>0xc8</td>
+<td>goto_w</td>
+<td>无条件跳转(宽索引)</td>
+</tr>
+<tr>
+<td>0xc9</td>
+<td>jsr_w</td>
+<td>跳转至指定的32位offset位置, 并将jsr_w的下一条指令地址压入栈顶</td>
+</tr>
+</tbody>
+</table>
+<p>参考：深入理解java虚拟机</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/10/jvm---字节码文件/" data-id="ck5no9i3f0028v4uq5hwu24lm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM---jvm工具" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/03/JVM---jvm工具/" class="article-date">
+  <time datetime="2019-09-03T11:15:38.638Z" itemprop="datePublished">2019-09-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/03/JVM---jvm工具/">JVM - jvm工具</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="jvm工具简介"><a href="#jvm工具简介" class="headerlink" title="jvm工具简介"></a>jvm工具简介</h4><h5 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h5><ol>
+<li><p>jps（查看jvm进程id）</p>
+</li>
+<li><p>jstat （查看jvm进程的运行时内存状态）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kb-jaydeMacBook-Air:tree kb_jay$ jstat -gcutil <span class="number">5552</span></span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line"> <span class="number">66.70</span>   <span class="number">0.00</span>  <span class="number">79.02</span>   <span class="number">0.16</span>  <span class="number">97.32</span>  <span class="number">93.78</span>      <span class="number">2</span>    <span class="number">0.013</span>     <span class="number">0</span>    <span class="number">0.000</span>    <span class="number">0.013</span></span><br></pre></td></tr></table></figure>
+<p>对应的信息。survivor0，1，eden，老年代，元数据，压缩类信息，新生代gc次数，新生代gc时间。。。</p>
+</li>
+<li><p>jinfo （查看jvm配置）</p>
+</li>
+<li><p>jstack （查看线程运行信息）</p>
+</li>
+<li><p>jMap (堆转储)</p>
+</li>
+</ol>
+<h5 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h5><ol>
+<li><p>jconsole （查看cpu，内存，线程等）</p>
+</li>
+<li><p>VisualVm （多和一，想看啥看啥，支持安装插件）</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/03/JVM---jvm工具/" data-id="ck5no9i2m001cv4uq8pg9hn08" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM---内存分配" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/03/JVM---内存分配/" class="article-date">
+  <time datetime="2019-09-03T03:27:59.983Z" itemprop="datePublished">2019-09-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/03/JVM---内存分配/">JVM - 内存分配</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>jvm内存管理分为内存回收跟内存分配两个大部分，内存分配时本篇的主题。</p>
+<h4 id="分配规则"><a href="#分配规则" class="headerlink" title="分配规则"></a>分配规则</h4><ol>
+<li>对象优先在eden区域申请空间</li>
+<li>大对象直接进入老年代</li>
+<li>长期存活的对象进入老年代</li>
+<li>内存分配担保（老年代对survivor区域的担保）</li>
+</ol>
+<p>前三个很好理解，我们分析下第四个，堆分为老年代跟新生代，新生代有一块eden跟两块survivor，eden跟survivor占新生代空间大小是可以通过jvm运行参数配置的，一般8:1；</p>
+<p>假设我们配置了新生代跟老年代分别10M，eden跟survivor8:1；我们依次创建2M，2M，2M，4M的对象，那么情况如下：</p>
+<ol>
+<li>前三个对象进入eden区域</li>
+<li>第四个对象发现空间不够了（eden区域剩下2M，survivorA 1M），触发GC</li>
+<li>GC时前三个对象都是不可回收对象，需要放入survivorB，但是survivorB空间不够，此时就会触发分配担保，这样这三个对象就直接放入了老年代。此时老年代使用了6M，eden跟两个survivor区域都是空，</li>
+<li>将4M的对象放入eden区域</li>
+</ol>
+<h4 id="所有的对象都会在堆上申请空间吗？"><a href="#所有的对象都会在堆上申请空间吗？" class="headerlink" title="所有的对象都会在堆上申请空间吗？"></a>所有的对象都会在堆上申请空间吗？</h4><p>大部分是的，但也会有在栈上申请空间的对象。</p>
+<p>这里涉及内存逃逸跟栈内存分配。</p>
+<p>我们先回顾下虚拟机栈的内容，它可以用来描述方法执行过程，每个方法对应一个栈帧，栈帧中有局部变量表等。</p>
+<p>如果在一个方法中有一个变量的作用域只是该方法，那么就会在栈上给它申请空间（包含在方法栈帧中），此时该变量对方法来说就是没有逃逸的，也就是被方法栈帧“捉”住了。当方法执行完毕之后随着栈帧的释放会释放该变量的内存。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/03/JVM---内存分配/" data-id="ck5no9i2o001ev4uq0q5f1ecf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM---GC" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/02/JVM---GC/" class="article-date">
+  <time datetime="2019-09-02T06:19:17.958Z" itemprop="datePublished">2019-09-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/02/JVM---GC/">JVM - GC</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="Q：如何确认那些对象的可以回收的"><a href="#Q：如何确认那些对象的可以回收的" class="headerlink" title="Q：如何确认那些对象的可以回收的"></a>Q：如何确认那些对象的可以回收的</h4><ol>
+<li><p>引用计数</p>
+<p><img src="data:image/png;base64,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" alt="âjvmå¼ç¨è®¡æ°âçå¾çæç´¢ç»æ"></p>
+<p>如上图，左边为堆，右边为虚拟机栈中的局部变量表，如果堆中的对象相互引用了，那么使用这种方式，即使将引用1跟2断开，对象的引用数量不为0，此时两个堆中的对象无法回收，所以现有的主流jvm虚拟机实现基本不会采用这种方式。</p>
+</li>
+<li><p>GCRoot（可达性分析）</p>
+<p>从如下的GCRoot节点开始向下搜索，当一个对象跟GCRoot节点没有任何引用链的时候，这个对象就是可以回收的。</p>
+</li>
+</ol>
+<p>   可以作为GCRoot的有</p>
+<ul>
+<li>虚拟机栈中的局部变量表中的引用</li>
+<li>本地方法栈。。</li>
+<li>方法区中类静态变量引用的对象</li>
+<li>方法区中常量引用的对象</li>
+</ul>
+<h4 id="Q：怎么回收"><a href="#Q：怎么回收" class="headerlink" title="Q：怎么回收"></a>Q：怎么回收</h4><ol>
+<li><p>标记-清除：通过GCRoot找到可回收对象，标记之后清除掉。</p>
+<p>会有空间碎片</p>
+</li>
+<li><p>标记-整理：找到可回收对象之后将它拼接到内存空间的首部</p>
+</li>
+<li><p>复制：将空间分为两部分A跟B，当A需要回收时，将不回收的对象copy到B，之后清除A。</p>
+<p>空间浪费</p>
+</li>
+<li><p>分代算法：将堆空间分为新生代跟老年代，新生代中的对象在GC的时候有很大一部分需要被回收（IBM-98%），对新生代的GC我们可以改进下复制算法，将区域分为eden（80%）跟两个survivor  A跟B（20%）；申请空间的时候我们从优先从eden申请，之后从A申请，回收的时候将eden跟A中的不回收对象copy到B，之后清理掉eden跟A。如此。。</p>
+<p>对于老年代，每次GC都会有很大部分对象不需要被回收掉，所以更加适合标记-整理算法。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/02/JVM---GC/" data-id="ck5no9i2l001av4uqqaf81epv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM---对象的创建" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/30/JVM---对象的创建/" class="article-date">
+  <time datetime="2019-08-30T08:22:30.862Z" itemprop="datePublished">2019-08-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/30/JVM---对象的创建/">JVM - 对象的创建</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ol>
+<li>new 对象之后，先看方法区的常量池中是否有类的符号引用</li>
+<li>如果没有，那么加载类（todo），完成之后就知道我们需要申请多少空间了</li>
+<li>堆中申请空间</li>
+<li>初始化，基本对象为0，引用对象为null</li>
+<li>调用&lt; init &gt; 构造方法</li>
+</ol>
+<h5 id="内存分配问题"><a href="#内存分配问题" class="headerlink" title="内存分配问题"></a>内存分配问题</h5><p>两种方案</p>
+<ol>
+<li>使用指针碰撞：可用内存跟不可用内存之间有个指针，可用跟不可用内存是规整的</li>
+<li>使用空闲列表：空闲区域的指针放入链表中</li>
+</ol>
+<h5 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h5><p>假如线程1有个a对象，线程2有个b对象，a正在申请的时候，b也开始申请，堆是共享的，会有线程安全问题。</p>
+<p>两种方案：</p>
+<ol>
+<li>每次分配内存都加锁</li>
+<li>堆中按线程分区域（线程缓存区），申请线程缓存区的时候加锁</li>
+</ol>
+<h4 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h4><ol>
+<li>对象头 <ul>
+<li>运行时数据（对象的hashcode，gc年代，锁状态等）</li>
+<li>类指针（指向方法区中的类信息，表明该对象是哪个类）</li>
+</ul>
+</li>
+<li>实例数据</li>
+<li>对齐填充padding</li>
+</ol>
+<h5 id="Hotspot对象访问定位"><a href="#Hotspot对象访问定位" class="headerlink" title="Hotspot对象访问定位"></a>Hotspot对象访问定位</h5><p>栈中有堆对象的引用，堆对象中有方法区中对象类型数据（class）的引用</p>
+<p>tip：还有一种是句柄的方式</p>
+<p>堆中有句柄池跟对象池，栈中有句柄池的引用，句柄池中有对象的引用跟对象类型数据（class）的引用</p>
+<p>参考 《深入理解jvm》49页</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/30/JVM---对象的创建/" data-id="ck5no9i2r001iv4uqygcps8ve" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM---内存区域" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/30/JVM---内存区域/" class="article-date">
+  <time datetime="2019-08-30T02:39:09.972Z" itemprop="datePublished">2019-08-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/30/JVM---内存区域/">JVM - 内存区域</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="全貌"><a href="#全貌" class="headerlink" title="全貌"></a>全貌</h4><p>盗图一张如下：</p>
+<p><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1567143038993&amp;di=728787914453f7c702ce0038fb1a16b8&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2Fe26275cf8c88f16ed498a3563ba6ad90.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="img"></p>
+<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><ol>
+<li>记录字节码文件当前的执行行数</li>
+<li>是每个线程私有的，共有的话，切换线程会懵逼掉的</li>
+<li>如果执行native方法的话，它的值是undifined。因为native方法是java通过JNI直接调用本地C/C++库，可以近似的认为native方法相当于C/C++暴露给java的一个接口，java通过调用这个接口从而调用到C/C++方法。由于该方法是通过C/C++而不是java进行实现。那么自然无法产生相应的字节码，并且C/C++执行时的内存分配是由自己语言决定的，而不是由JVM决定的。</li>
+<li>不会oom。因为它的空间很小并且不是我们申请的，是jvm自己管理的。</li>
+</ol>
+<h4 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h4><ol>
+<li>它是跟方法对应的，是用来描述方法调用过程中的内存模型。（方法区是跟class对应的）</li>
+<li>栈帧：他的数据结构是个栈，每个方法对应一个栈帧，假如执行a方法，a方法中又调用了b方法，那么会先把a 压栈，执行到b的时候把b压栈，b执行完b出栈，之后接着执行a，a执行完a出栈。</li>
+<li>局部方法表：每个方法执行需要的内存大小在编译的时候就确定了，局部方法表存放执行方法需要的变量，如果该变量是个对象的话，存放的是引用。局部方法表是在栈帧中的。（所有对象的真实存放区域是堆）</li>
+<li>虚拟机的栈的深度是有最大值的，如果栈太深会报stackoverflow</li>
+<li>如果方法执行没有到达栈的最大值，但是没有内存空间可用了，那么会报oom</li>
+<li>线程私有的</li>
+</ol>
+<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><ol>
+<li>虚拟机栈跟本地方法栈基本一致，只不过不是java方法，而是对应native方法</li>
+<li>线程私有的</li>
+<li>会有oom跟stackoverflow</li>
+</ol>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ol>
+<li>存放对象的</li>
+<li>线程共享的</li>
+<li>gc主要的目标</li>
+<li>会oom</li>
+</ol>
+<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><ol>
+<li>存放类信息（跟class对应），存放常量（常量池，1.8 将常量池放入了堆），存放静态变量等</li>
+<li>线程共享的</li>
+<li>会oom</li>
+<li>在java8中被移除了，取而代之的是metaspace（元数据空间）</li>
+</ol>
+<h4 id="eg："><a href="#eg：" class="headerlink" title="eg："></a>eg：</h4><p>运行如下代码：以下只分析1.8</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">"123"</span>;</span><br><span class="line">String b = <span class="string">"123"</span>;</span><br><span class="line"><span class="comment">//true  两个都是常量池中 123 的地址</span></span><br><span class="line">System.out.println(a == b);</span><br><span class="line"></span><br><span class="line">String c = <span class="keyword">new</span> String(<span class="string">"123"</span>);</span><br><span class="line"><span class="comment">//一个堆 一个常量池，不一样 false</span></span><br><span class="line">System.out.println(a == c);</span><br><span class="line"></span><br><span class="line"><span class="comment">//java 1.8 因为常量池已经有 123 了，所以返回常量池中的123的地址</span></span><br><span class="line">String d = c.intern();</span><br><span class="line"><span class="comment">//所以true</span></span><br><span class="line">System.out.println(a == d);</span><br><span class="line"></span><br><span class="line"><span class="comment">//下面的代码将 "我是wzq" 放入常量池，并创建了一个堆对象e</span></span><br><span class="line">String e = <span class="keyword">new</span> String(<span class="string">"我是wzq"</span>);</span><br><span class="line"><span class="comment">//java 1.8 因为常量池有 我是wzq ，所以将 我是wzq 在常量池中的地址返回，</span></span><br><span class="line">String f = e.intern();</span><br><span class="line"><span class="comment">//e是堆地址，f是常量池地址 false</span></span><br><span class="line">System.out.println(e == f);</span><br><span class="line"></span><br><span class="line"><span class="comment">//往常量池中放入 我是wzq，以为已经有了，所有返回 我是wzq 在常量池中的地址，所以是true</span></span><br><span class="line">String g = <span class="string">"我是wzq"</span>;</span><br><span class="line">System.out.println(f == g);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="ck5no9i2q001gv4uq7kuh30o1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-URL参数的sign签名认证" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/08/28/URL参数的sign签名认证/" class="article-date">
@@ -129,7 +1944,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck3pnsbmq0019qmuqtf7id815" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ck5no9i2v001ov4uqa5y9erzz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络，安全/">网络，安全</a></li></ul>
@@ -167,7 +1982,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck3pnsbmu001fqmuqym6jpyds" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ck5no9i33001zv4uqq0lg4kl0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -205,7 +2020,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck3pnsbms001bqmuqghcltntx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ck5no9i2z001vv4uqkjrtm7s8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
@@ -255,347 +2070,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/数据结构---图/" data-id="ck3pnsbo5003aqmuq8yb3sc2z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/数据结构---图/" data-id="ck5no9i4u003xv4uqjsxo4vbp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-数据结构---树" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/数据结构---树/" class="article-date">
-  <time datetime="2019-08-26T08:01:38.968Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/数据结构---树/">数据结构 - 树</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="二叉树遍历"><a href="#二叉树遍历" class="headerlink" title="二叉树遍历"></a>二叉树遍历</h4><ol>
-<li><p>定义二叉树</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> kb_jay</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@time</span> 2019/8/26</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> T data;</span><br><span class="line">    <span class="keyword">public</span> Node leftChild;</span><br><span class="line">    <span class="keyword">public</span> Node rightChild;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(T data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(data, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(T data, Node leftChild, Node rightChild)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        <span class="keyword">this</span>.leftChild = leftChild;</span><br><span class="line">        <span class="keyword">this</span>.rightChild = rightChild;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>遍历二叉树</p>
-<ul>
-<li><p>前序遍历（递归跟非递归）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//递归</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">firstRoot</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(root.data);</span><br><span class="line">    firstRoot(root.leftChild);</span><br><span class="line">    firstRoot(root.rightChild);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//非递归</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">firstRootStack</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span> || stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//输出并压栈左孩子</span></span><br><span class="line">        <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.println(root.data);</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root = root.leftChild;</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="comment">//出栈遍历右孩子</span></span><br><span class="line">        <span class="keyword">if</span> (stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            Node node = stack.pop();</span><br><span class="line">            root = node.rightChild;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>中序遍历（递归跟非递归）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">centerRoot</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    centerRoot(root.leftChild);</span><br><span class="line">    System.out.println(root.data);</span><br><span class="line">    centerRoot(root.rightChild);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">centerRootStack</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span> || stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root = root.leftChild;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            root = stack.pop();</span><br><span class="line">            System.out.println(root.data);</span><br><span class="line">            root = root.rightChild;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>后序遍历（递归跟非递归）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lastRoot</span><span class="params">(Node node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    lastRoot(node.leftChild);</span><br><span class="line">    lastRoot(node.rightChild);</span><br><span class="line">    System.out.println(node.data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lastRootStack</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    <span class="comment">//记录前一个输出的node</span></span><br><span class="line">    Node pre = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span> || stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root = root.leftChild;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (stack.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            Node temp = stack.peek().rightChild;</span><br><span class="line">            <span class="keyword">if</span> (temp == <span class="keyword">null</span> || temp == pre) &#123;</span><br><span class="line">                pre = stack.pop();</span><br><span class="line">                System.out.println(pre.data);</span><br><span class="line">                root = <span class="keyword">null</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                root = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>层序遍历</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">layerOut</span><span class="params">(Node root)</span> </span>&#123;</span><br><span class="line">    Queue&lt;Node&gt; queue = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">        System.out.println(root.data);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root.leftChild != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.offer(root.leftChild);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root.rightChild != <span class="keyword">null</span>) &#123;</span><br><span class="line">            queue.offer(root.rightChild);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果队列为空，返回null， 栈的pop方法，如果栈为空，则报异常</span></span><br><span class="line">        root = queue.poll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ol>
-<h4 id="二分搜索树"><a href="#二分搜索树" class="headerlink" title="二分搜索树"></a>二分搜索树</h4><ol>
-<li><p>任意一个节点的值大于左边的所有节点的值，小于右边的所有节点的值。</p>
-<ol start="2">
-<li>中序遍历是有序的。</li>
-</ol>
-</li>
-</ol>
-<h4 id="2-3-树"><a href="#2-3-树" class="headerlink" title="2-3 树"></a>2-3 树</h4><ol>
-<li>满足二分搜索树</li>
-<li>一个节点可以存放1个或者2个元素</li>
-<li>二三树是绝对平衡树</li>
-<li>二三树添加元素不会往空节点添加，第一步肯定是跟叶子节点合并</li>
-</ol>
-<h4 id="AVL树"><a href="#AVL树" class="headerlink" title="AVL树"></a>AVL树</h4><ol>
-<li>平衡二叉树</li>
-<li>任何一个节点的左右孩子到叶子节点的距离相差不超过1</li>
-<li>它是为了解决二分搜索树的退化问题</li>
-<li>每次更新数据都需要通过旋转来维持平衡，所以实际开发中用红黑树会更多</li>
-</ol>
-<h4 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h4><ol>
-<li>红黑树是一个自平衡的二叉搜索树，并不是严格的avl树。</li>
-<li>它是为了解决二分搜索树在数据更新的过程中复杂度退化的问题。</li>
-<li>红黑树高度近似log2n，近似平衡，红黑树是有2-3-4树演变过来的，因为2-3-4树有绝对平衡性，所以将红色节点去掉之后的高度&lt;=log2n，而红色节点的儿子不能是黑色节点，所以红黑树中从跟节点到叶子节点有一个黑色就最多有一个红色，我们将红色加回来之后的高度&lt;2*log2n</li>
-<li>插入查找删除时间复杂度是log2n</li>
-<li>是由2-3-4树演变过来的我们将红黑树中的红色节点跟父亲节点合并之后就是一个绝对平衡的2-3-4树</li>
-<li>红黑树的平衡过程其实跟魔方复原差不多，记住规则就行（变色跟旋转）</li>
-<li>四条性质：根黑；叶子节点的子节点是黑色；红色节点不相邻；根节点到叶子节点的路径上黑色节点个数一致。   通过234树理解这个还是很好理解的。</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/数据结构---树/" data-id="ck3pnsbo6003cqmuqi4utdpe8" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-https" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/https/" class="article-date">
-  <time datetime="2019-08-26T07:29:23.791Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/https/">https</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>​    假设甲跟乙需要通信，他们之间隔着若干个中间人（路由，网关）。他们说什么这些中间人都可以截取到。</p>
-<p>​    如果是http的方式，甲跟乙的通话都是明文，那么这些中间人可以非常轻易的获取到甲跟乙的通话内容，如果这些通话内容涉及一些隐私内容，那么这种方式就不太合适了。</p>
-<p>​    对于这个问题，我们对明文加密就可以了。这样即使中间人看到了甲乙的通话内容，也没有关系。下面考虑选择什么方式进行加密呢？对称还是非对称？</p>
-<p>​    首先考虑对称加密，对称加密需要甲跟乙有相同的秘钥才行。那这个秘钥要怎么传输呢？（鸡生蛋，蛋生鸡）。甲跟乙当然可以私下约定一个秘钥，只有他两个知道。但是甲跟丙通信，甲跟丁通信，等等呢。在只有一对一通信的场景下，私下约定也可以作为一个不错的选择。但是实际情况大多都不是一对一的。对称加密不太合适。</p>
-<p>​    那我们考虑使用非对称加密。甲跟乙都有自己的公钥跟私钥，甲跟乙通信的时候都用对方的公钥加密。这样解决了使用对称加密的问题。但是非对称加密耗时且对加密的长度有限制，在实际情况中也并不十分合适。</p>
-<p>​    https对明文加密这块选择的是非对称跟对称结合的方式。</p>
-<p>​    甲跟乙说我要跟你对话，乙将自己的公钥发给甲，甲生成一个随机的字符串作为对称加密的秘钥，然后用乙的公钥对该秘钥加密之后发送给乙。乙解密之后就有了对称加密的秘钥。之后的通信内容都用该秘钥进行加密。</p>
-<p>​    以上解决明文传输的问题。</p>
-<p>再考虑一个新的问题，乙将自己的公钥发给甲的过程中，中间人也收到了乙的公钥，假如中间人把自己的公钥发给甲，然后甲同样生成一个随机的字符串作为对称加密的秘钥，之后用中间人发的公钥对对称加密的秘钥加密之后发给中间人，中间人再用自己的私钥解密，此时中间人就获取了对称加密的秘钥，之后它再用乙的公钥对对称加密的秘钥加密之后转发给乙。在整个过程中甲跟乙都没有办法check到有个中间人修改了通信内容。</p>
-<p>其实这个问题说的底是甲没有办法确认自己收到的公钥是乙的公钥而不是其他人的。</p>
-<p>为了解决上面的问题，我们需要引入如下概念：</p>
-<p>​    <strong>ca</strong></p>
-<p>​    <strong>数字签名</strong></p>
-<p>​    <strong>数字证书</strong></p>
-<p>​    ca在网络通信中扮演的角色相当于现实世界中的公证处，它拥有自己的公钥跟私钥。我们可以认为这个私钥只有该公证处知道，那些中间人是不可能知道的。</p>
-<p>​    数字签名跟现实生活中的签名作用是一样的。可以唯一标识一个“人”。</p>
-<p>​    数字证书在现实生活中相当于身份证，它有你的个人信息，还有你的签名（身份证号），还有公钥。</p>
-<p>​    它们三者之间的关系是这样的，ca会给乙颁发数字证书，该证书中包含乙的公钥，乙的个人信息以及乙的数字签名。签名制作过程是这样的，ca会对数字证书中的个人信息，以及公钥做个hash，算出信息摘要，之后用自己的私钥对该信息摘要加密生成数字签名。</p>
-<p>​    我们接着思考上述问题，首先甲跟乙说我要跟你对话，之后乙不是将公钥而是将ca给自己的证书发给甲，首先中间人会收到该证书，假设中间人用自己的公钥替换了证书中的公钥，（因为它没有ca的私钥，所以它没有办法修改证书中的签名），之后他把伪造的证书转给甲。甲收到证书之后首先会对证书中的信息做同样的hash运行获取信息摘要。之后用ca的公钥对证书中的签名做解密，获得另一个信息摘要，之后比对这两个信息摘要，因为中间人对证书中的公钥做了修改，所以这两个信息摘要肯定是不一致的，这样甲就知道了我即将使用到的公钥是伪造的。</p>
-<p>​    或者中间人也跟ca申请到了自己的证书，然后它将自己的证书给了甲，这种情况下，甲会对证书中的个人信息做一个检查，很轻易的甲就会发现我想要访问的跟我真实访问的并不是同一个对象。</p>
-<h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>HTTPS是以安全为目标的HTTP通道，简单讲是HTTP的安全版。即HTTP下加入SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。</p>
-<h4 id="解决什么问题"><a href="#解决什么问题" class="headerlink" title="解决什么问题"></a>解决什么问题</h4><ol>
-<li>通信过程中明文传输问题</li>
-<li>通信过程中中间人攻击问题</li>
-</ol>
-<h4 id="怎么解决的"><a href="#怎么解决的" class="headerlink" title="怎么解决的"></a>怎么解决的</h4><ol>
-<li>数据加密传输，对称跟非对称加密</li>
-<li>服务端身份认证，证书（数字签名）</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/https/" data-id="ck3pnsbmx001kqmuqgiop7yci" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/net/">net</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-ArrayMap vs HashMap" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/21/ArrayMap vs HashMap/" class="article-date">
-  <time datetime="2019-08-21T10:52:30.970Z" itemprop="datePublished">2019-08-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/ArrayMap vs HashMap/">ArrayMap vs HashMap</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h5><p>Java 8 对接口做了进一步的增强。</p>
-<p><strong>a.</strong> 在接口中可以添加使用 default 关键字修饰的非抽象方法。即：默认方法（或扩展方法）</p>
-<p><strong>b.</strong> 接口里可以声明静态方法，并且可以实现。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TTT</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hhhh"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">sayHi</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hhh"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/21/ArrayMap vs HashMap/" data-id="ck3pnsbmf000uqmuqsplh6fbc" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-AndPermission" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/08/Android-AndPermission/" class="article-date">
-  <time datetime="2019-08-08T07:59:03.585Z" itemprop="datePublished">2019-08-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/08/Android-AndPermission/">Android-AndPermission</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/08/Android-AndPermission/" data-id="ck3pnsbls0004qmuqe4cxzfia" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-permission/">android permission</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android高级UI一:绘制流程" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/23/android高级UI一:绘制流程/" class="article-date">
-  <time datetime="2019-07-23T05:07:05.197Z" itemprop="datePublished">2019-07-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/23/android高级UI一:绘制流程/">android setContentView源码分析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="view是如何添加到屏幕上的？"><a href="#view是如何添加到屏幕上的？" class="headerlink" title="view是如何添加到屏幕上的？"></a>view是如何添加到屏幕上的？</h5><p>从setContentView出发-&gt;</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(@LayoutRes <span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">       getWindow().setContentView(layoutResID);</span><br><span class="line">       initWindowDecorActionBar();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到调用的是getWindow的setContentView方法，</p>
-<p>那么getWindow是啥呢？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Window <span class="title">getWindow</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mWindow;d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>接着看Window</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> &lt;p&gt;The only existing implementation of <span class="keyword">this</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">is</span></span></span><br><span class="line"><span class="class"> * <span class="title">android</span>.<span class="title">view</span>.<span class="title">PhoneWindow</span>, <span class="title">which</span> <span class="title">you</span> <span class="title">should</span> <span class="title">instantiate</span> <span class="title">when</span> <span class="title">needing</span> <span class="title">a</span></span></span><br><span class="line"><span class="class"> * <span class="title">Window</span>.</span></span><br><span class="line"><span class="class"> */</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">abstract</span> <span class="title">class</span> <span class="title">Window</span> </span>&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意上面的注释，该类唯一的实现是phoneWindow，到这里我们就知道了这个的getWindow实质返回的是一个PhoneWindow的实例。</p>
-<p>接着看PhoneWindow的setContentView方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; </span><br><span class="line">    ...</span><br><span class="line">        mLayoutInflater.inflate(layoutResID, mContentParent);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>只需要关注上面的几行代码，如果mContentParent是空，那么调用installDecor方法（如下）。这里的mContentParent是什么呢？看定义的地方它是一个ViewGroup，它里面具体是啥呢？我们继续往下跟。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">installDecor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">        <span class="keyword">if</span> (mDecor == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mDecor = generateDecor(-<span class="number">1</span>);</span><br><span class="line">        &#125; </span><br><span class="line">    ...</span><br><span class="line">        <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mContentParent = generateLayout(mDecor);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里又出现了mDecor，它又是个啥呢。跟踪generateDecor</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> DecorView <span class="title">generateDecor</span><span class="params">(<span class="keyword">int</span> featureId)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">   	<span class="keyword">return</span> <span class="keyword">new</span> DecorView(context, featureId, <span class="keyword">this</span>, getAttributes());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到mDecor是一个DecorView对象</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DecorView</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span></span></span><br></pre></td></tr></table></figure>
-<p>它其实就是一个FrameLayout，那么它里面具体是啥呢？我们往下跟</p>
-<p>回到installDecor方法，我们再跟下generateLayout方法是如何创建mContentParent的？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ViewGroup <span class="title">generateLayout</span><span class="params">(DecorView decor)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Apply data from current theme.</span></span><br><span class="line">    <span class="comment">//这里设置一些主题相关的</span></span><br><span class="line">    ...</span><br><span class="line">        <span class="comment">// Inflate the window decor.</span></span><br><span class="line">        <span class="keyword">int</span> layoutResource;</span><br><span class="line">    <span class="comment">// 给layoutResource 赋值（实质是找一个系统布局资源）</span></span><br><span class="line"></span><br><span class="line">    mDecor.onResourcesLoaded(mLayoutInflater, layoutResource);</span><br><span class="line">    ViewGroup contentParent = (ViewGroup)findViewById(ID_ANDROID_CONTENT);</span><br><span class="line">    ...··</span><br><span class="line">        <span class="keyword">return</span> contentParent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里有一个layoutResource，这个实质就是一个系统的layout  xml文件。会根据我们主题不同给它赋不同的值。</p>
-<p>接着我们看onResourcesLoaded方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">onResourcesLoaded</span><span class="params">(LayoutInflater inflater, <span class="keyword">int</span> layoutResource)</span> </span>&#123;</span><br><span class="line"> 	...</span><br><span class="line">    <span class="keyword">final</span> View root = inflater.inflate(layoutResource, <span class="keyword">null</span>);</span><br><span class="line">    ...</span><br><span class="line">    addView(root, <span class="number">0</span>, <span class="keyword">new</span> ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>重点关注这两行代码，还记得我们之前分析过mDecor实质是一个frameLayout，这里会把系统的布局文件添加到DecorView里面。到这里我们就知道了DecorView里面具体是啥了。</p>
-<p>我们再回到generateLayout方法，会调用PhoneWindow的findViewById方法找一个id，赋值给contentParent返回。这里的findViewById方法实际是getDecorView().findViewById。实质是在mDecor中根据id找它的一个子view。到这里我们就知道了mContentParent具体是个啥了。</p>
-<p>我们回到PhoneWindow的setContentView方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; </span><br><span class="line">    ...</span><br><span class="line">        mLayoutInflater.inflate(layoutResID, mContentParent);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最终会把我们传进来的布局文件填充到mContentParent中。至此，view添加结束。</p>
-<h5 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h5><p>PhoneWindow —&gt; DecorView(根据主题不同对应系统的不同布局文件)  — &gt;mContentParent（系统布局文件中中的一个子view）—&gt; 我们自己写的布局文件会被加载到mContentParent中。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/23/android高级UI一:绘制流程/" data-id="ck3pnsbmw001jqmuqmoqk67pg" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-ui/">android ui</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-数据结构系列-数组" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/06/01/数据结构系列-数组/" class="article-date">
-  <time datetime="2019-06-01T02:06:22.630Z" itemprop="datePublished">2019-06-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/01/数据结构系列-数组/">数据结构系列-数组</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/01/数据结构系列-数组/" data-id="ck3pnsbo7003eqmuq4arwhi96" class="article-share-link">Share</a>
-      
-      
     </footer>
   </div>
   
@@ -607,7 +2086,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -621,7 +2100,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-源码/">android 源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
     </div>
   </div>
 
@@ -631,7 +2110,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 17.5px;">JVM</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 17.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a> <a href="/tags/音视频/" style="font-size: 10px;">音视频</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 17.5px;">JVM</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-源码/" style="font-size: 10px;">android 源码</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 17.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 12.5px;">设计模式</a> <a href="/tags/音视频/" style="font-size: 15px;">音视频</a>
     </div>
   </div>
 
@@ -640,7 +2119,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -653,23 +2132,23 @@
       <ul>
         
           <li>
-            <a href="/2019/12/03/android---ffmpeg(一)/">android - ffmpeg(一)</a>
+            <a href="/2020/01/21/设计模式--策略-观察者-装饰/">设计模式--策略 观察者 装饰</a>
           </li>
         
           <li>
-            <a href="/2019/09/24/前端-vue/">前端-vue</a>
+            <a href="/2020/01/21/2019年末总结/">2019年末总结</a>
           </li>
         
           <li>
-            <a href="/2019/09/11/jvm---类加载器/">jvm - 类加载器</a>
+            <a href="/2020/01/07/源码分析-glide/">源码分析-glide</a>
           </li>
         
           <li>
-            <a href="/2019/09/10/jvm-—-jvm加载机制/">jvm — jvm加载机制</a>
+            <a href="/2019/12/16/andriod---ffmpeg-(三)/">andriod - ffmpeg (三)</a>
           </li>
         
           <li>
-            <a href="/2019/09/10/jvm---字节码文件/">jvm - 字节码文件</a>
+            <a href="/2019/12/16/android---性能优化（内存）/">android - 性能优化（内存）</a>
           </li>
         
       </ul>
@@ -684,7 +2163,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 kb_jay<br>
+      &copy; 2020 kb_jay<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
