@@ -62,6 +62,535 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-JVM---jvm工具" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/03/JVM---jvm工具/" class="article-date">
+  <time datetime="2019-09-03T11:15:38.638Z" itemprop="datePublished">2019-09-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/03/JVM---jvm工具/">JVM - jvm工具</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="jvm工具简介"><a href="#jvm工具简介" class="headerlink" title="jvm工具简介"></a>jvm工具简介</h4><h5 id="命令行"><a href="#命令行" class="headerlink" title="命令行"></a>命令行</h5><ol>
+<li><p>jps（查看jvm进程id）</p>
+</li>
+<li><p>jstat （查看jvm进程的运行时内存状态）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kb-jaydeMacBook-Air:tree kb_jay$ jstat -gcutil <span class="number">5552</span></span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line"> <span class="number">66.70</span>   <span class="number">0.00</span>  <span class="number">79.02</span>   <span class="number">0.16</span>  <span class="number">97.32</span>  <span class="number">93.78</span>      <span class="number">2</span>    <span class="number">0.013</span>     <span class="number">0</span>    <span class="number">0.000</span>    <span class="number">0.013</span></span><br></pre></td></tr></table></figure>
+<p>对应的信息。survivor0，1，eden，老年代，元数据，压缩类信息，新生代gc次数，新生代gc时间。。。</p>
+</li>
+<li><p>jinfo （查看jvm配置）</p>
+</li>
+<li><p>jstack （查看线程运行信息）</p>
+</li>
+<li><p>jMap (堆转储)</p>
+</li>
+</ol>
+<h5 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h5><ol>
+<li><p>jconsole （查看cpu，内存，线程等）</p>
+</li>
+<li><p>VisualVm （多和一，想看啥看啥，支持安装插件）</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/03/JVM---jvm工具/" data-id="ckfncji9x001elyuq17qsel30" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM---内存分配" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/03/JVM---内存分配/" class="article-date">
+  <time datetime="2019-09-03T03:27:59.983Z" itemprop="datePublished">2019-09-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/03/JVM---内存分配/">JVM - 内存分配</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>jvm内存管理分为内存回收跟内存分配两个大部分，内存分配时本篇的主题。</p>
+<h4 id="分配规则"><a href="#分配规则" class="headerlink" title="分配规则"></a>分配规则</h4><ol>
+<li>对象优先在eden区域申请空间</li>
+<li>大对象直接进入老年代</li>
+<li>长期存活的对象进入老年代</li>
+<li>内存分配担保（老年代对survivor区域的担保）</li>
+</ol>
+<p>前三个很好理解，我们分析下第四个，堆分为老年代跟新生代，新生代有一块eden跟两块survivor，eden跟survivor占新生代空间大小是可以通过jvm运行参数配置的，一般8:1；</p>
+<p>假设我们配置了新生代跟老年代分别10M，eden跟survivor8:1；我们依次创建2M，2M，2M，4M的对象，那么情况如下：</p>
+<ol>
+<li>前三个对象进入eden区域</li>
+<li>第四个对象发现空间不够了（eden区域剩下2M，survivorA 1M），触发GC</li>
+<li>GC时前三个对象都是不可回收对象，需要放入survivorB，但是survivorB空间不够，此时就会触发分配担保，这样这三个对象就直接放入了老年代。此时老年代使用了6M，eden跟两个survivor区域都是空，</li>
+<li>将4M的对象放入eden区域</li>
+</ol>
+<h4 id="所有的对象都会在堆上申请空间吗？"><a href="#所有的对象都会在堆上申请空间吗？" class="headerlink" title="所有的对象都会在堆上申请空间吗？"></a>所有的对象都会在堆上申请空间吗？</h4><p>大部分是的，但也会有在栈上申请空间的对象。</p>
+<p>这里涉及内存逃逸跟栈内存分配。</p>
+<p>我们先回顾下虚拟机栈的内容，它可以用来描述方法执行过程，每个方法对应一个栈帧，栈帧中有局部变量表等。</p>
+<p>如果在一个方法中有一个变量的作用域只是该方法，那么就会在栈上给它申请空间（包含在方法栈帧中），此时该变量对方法来说就是没有逃逸的，也就是被方法栈帧“捉”住了。当方法执行完毕之后随着栈帧的释放会释放该变量的内存。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/03/JVM---内存分配/" data-id="ckfncjia4001plyuq7ybv4qlr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM---GC" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/02/JVM---GC/" class="article-date">
+  <time datetime="2019-09-02T06:19:17.958Z" itemprop="datePublished">2019-09-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/02/JVM---GC/">JVM - GC</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="Q：如何确认那些对象的可以回收的"><a href="#Q：如何确认那些对象的可以回收的" class="headerlink" title="Q：如何确认那些对象的可以回收的"></a>Q：如何确认那些对象的可以回收的</h4><ol>
+<li><p>引用计数</p>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ0AAAC7CAMAAABIKDvmAAABU1BMVEX///9bW1v39/d3d3fx8fGAgIDf39+ZmZnb29udnZ22trbT09PFxcWmpqbt7e2GhoZvb2//W1sAAAC8vLzNzc2/4OmIoq7/7u709PTIqp/u7u5eXl48PDxnZ2dRUVFISEj/19f/39/25tz//eaurq4sLCyQkJD/ODj/v7/m5uYgICD/t7f/Jib/z8//ZWX/p6f/mJj/dnb/NjbA1/P/f38UMFX/U1M3Nzf/oKD///b/RUX/iIj/9PT/ExPR2N3k7Pc/MERthJSCeF+xvs2hknKpw+K8s5vr+v/ZyKPu28p5ZF+EjZybin6lsL3PrpNUZmCIhntmWVWknIfO2+u9rYyGd2pob4l+j6sDKVGyoZVEMiyQeVvUvahEWVnPcXGrx9aRiZbp0LorExH27NB7hJ9vYXJtdoI/b5e3lnyXl4qnh2CEpsRRXnQlRmVcgpz/AAAaOjpMBaTuAAAJTElEQVR4nO2d6X/bthmAIYqiblIS2ZqlLjuWFdOx4zjpfMWrl2NLXa9dl25t0yvd2mXd2nX7/z8NBHW8JCBClBgd1PskliiA4PH8AAIgIYgQBEGmpbhsCjEP2NYTwwlvW8lohWWimfmYNjpGYhzYYRvZmAeTNFpcG5nk9m2ooYCNtpFDGwC0AUEbELQBQRsQtAFBGxC0AUEbELQBQRsQtAFBGxC0AUEbELQBSZGNcjczE53qaFMpslExZ9uhkhstpslGabYdOsZoce1s3LsKh2yWjcPA+f+WS7BZNo7ugw/3HnAJNssGqR+Nl+9yBWXTbFw9HC3u3A9HTrRx9QF90RWPO9dRO1wzG+R4VDxOtvkEnI07pZL5O3LnCV18WrGePrOe/z5qh+tmg1xu+e8gl4wR5o0sufMufaMn+ocX5MNHLOzmiXCHMW045beJO4WNnVP//fzeVDY+Ms1b38YfS+bTj83nzMYnf/pNEjaKRvUtUpvCBnl/n73dFZ0NZ2P31ntlNj4FeUPZTcaGJtxKQkxlg7AicvS+KKpJ/1StVLSGNm5uTfPP174NV3/5mf4Xv6QkZCPu+JJYTGdj3xNR3+HClYLZqnW6GaNqWYLrxl8L2svPtNTZIJc7ZOsUfFbKZr/dPcsYva6rsBB4Fb34nNnY/YKQl9fDq+jul8Itr6ONrUPymLXCnHLJaJ/tNXM9y78ANwdrABuvvnrEbHxDGxrPr62vmY1vmtnmC8GW19EGOT9+2KMazppGydJhhKiG/cBvfXkH7hAS3dVfMxtuuddvtr49/K5khY/WY8Et82XZUHSr2m92O+1+r6wq5PREvIFU23CLRHGsntHsdKmGgq4MwndOTo7CaRlptOHvV6/0snvdVq1fKoTbqCfbV8LGVxptaI1sLrNHNZiTxosewt4bJIU2co1O2S8TE+qU42My7r0FSKENQqqD9v8EG4fey86pICaVNoaIbQy6KIPeW4ANtHF/0EXhbxJvoI2ty8HCPt+N3TwbD0Yl5JLrx85rQ107G+OWxhZ3M3BkI1eZiVK8J4/Lt7EPGhoPjkORQxtOaUbGp7ceNgLtjPAjlQWPWFi6jeBTlKPQM5VNsxHqrp0HM8em2RC1x8dsmo1o0AYEbUDQBgRtQNAGBG1AFm1jBZ5KR7BoG5ns26OWnA13tgEkIOdPNbZHiSAy0osvyFZIzEa22JuFs5g2oqhY0fGFRrztzWODMzsVzfHi3DaKktHdrUY1eoUwc9gIz54RM30CNvKVyGirmG3H2+Ba2+hLSooaU8Z62zDK0fFuuM6QsdY2spKmmRZ3/Ola26hJmmaFJdhwNO3mGXnvNSEX35tm1TSzUUOrE7WhR8eXjeh4jgRsqK77t1/Je++w0XDklpB/+eG6sApO0kZbkj2tfrztJWFDsZSbL5gN8j25uFWUT73Qi4+Mv7+OSp+AjaYkvrIEGz/8WLau/bzxD8t6Y1nDc/rkn1HpE7DRkcRXivG2F21jWxDG2/jp3Uqlx2zs/ghLCvn3z1HpE7DRksSbMZui0Taixm+Aq+gLsvu5b+MX03xjmoNa/sP/iLaZpI0zSbzZi7e9aBt1QZiwhr35mdm4eQ3yxg9CGYna2JPEl+I+OU/ChqL/9IjZeHVNLt4MbOw2nuRFxXaRNnrR/RieOWyMKlDl61+JZ+PiGb2Qfnzx6hcW6mpaeKBhIP0CbFSTsLE1fC4faSMXnBCTuuG/EhiVfgE2JH1cHmHeGI5hibJhHsStzIPpyQKuorI+LofQxs5gpNNEG3b+oBi3twzT+8xtoyuJNxKxQR7732ibYKNQ65or0WuTtb5ykh4/R9R4UaGNdqVbYx3p5dtQZC1zWY+fY4KNffYNBN6Gmm/kB+ewfBvSW1uyHj/HpBr2dJvwNmgRqazQ/Q3pra22qIqPYpKNK6+sBG2YrXZhpe72SG9ttSX3P/gtTmp9nZ8HbNBaJM+aWytko5CTrNCMe4iT26IPt8Y2Cu3u8NHFCtmQ3trKxH3kM9nGdn1ow+yCy9EK2ZDe2pLVwBwR/ZQTNjhS7bfy8KhXyEZFdqdK1jrjiLBxdXk6aGhBVsiG9GaO7G4QR1Qfdv+/39a49ssq2ZDdzJH1Yzgm27D7/zvkv0kPbMTdVSj9/DZKsinHErNRaLdMUr/kI0Zn05ttLjhwwnPa6BVlOmQ9fg6xDbPFapH7D/j5SFZnnsBSoyHpoyZhw6G1iH9NqEfM95UA85aUPVnLfP6SAmuROjnivj++QjaE3/OHzJs3zC6sRWjrq74dSrBCNqTEvb0RsGH3D/KBarMumNdpnWzEZmyD1SJBvJa513uDLNhGdcZpTKeiE97f0EapJbg1wvopoe+Pp3/07LgWCcJsbAfvcqR7ZHWRFpHOhFaM7+Ek8P3xdNvIdPi+yBDfxtUhDEuxDVqL1CLuiAzKyL3HICy1NmgtUnGjBnwMrxh3wYU0pTZKZ14tMtVT6S3Qe0ufjaKu9s+KrIhM94wePG9OnY3yQbYzfHo9+4iF+VkJG0qjMS4vG2+DuJo5Og60AUEbkNnHBM7Pmtl4LAjbXBsi0AYEbUDQBgRtQNAGBG1A0AYEbUDQBgRtQNAGBG1A0AYEbUDQBgRtQBZtozrbhL/TsW423Fkn/J2K8OCfVbexWNAGBG1A0AYEbUDQBgRtQNAGBG1A0AYEbUDQBgRtQNAGBG1A0AYEbUDQBgRtQNAGBG1A0AYEbUDQBgRtQNAGBG1A0AYEbUDQBgRtQNAGBG1A0AYEbUDQBgRtQNAGBG1A0AYEbUDciTYU8ZyE3jzQiuLNDiaeLFyYSlEUhyi2TRz2gYU5AhsHzbc489sUdCfP7av7f3Zw0qc2PRtdcen5ubboB2jDobaueAkUTdF13dG8EH8Nx87K5oBcJVzVJi4VohLX1olO84Pnp8p+g9gwstkc/c/+ct6PEnuvhlGjEV6cv0otZ9D/XiRb24vLDpc8NLp93Zntd2YXjUP/0fNXFfqqKrbLjtorIor3pnuLXtb3M77qp1BpkOp/oG/st4r9/3R9+kFV/eSqX8yoY+LEnZ1/OdDSoNNcQRSHZnQvb6heTlF9IS69DlA9NNB2dS/c9jISXVV1FZemoqu57LO3KvOlEdVxbG+bjpeUvek2zRv2euSNMcGfmggePRUgOx0+Pu5vV6SbdcsOCLIq/B8B99zt5Cz/5gAAAABJRU5ErkJggg==" alt="âjvmå¼ç¨è®¡æ°âçå¾çæç´¢ç»æ"></p>
+<p>如上图，左边为堆，右边为虚拟机栈中的局部变量表，如果堆中的对象相互引用了，那么使用这种方式，即使将引用1跟2断开，对象的引用数量不为0，此时两个堆中的对象无法回收，所以现有的主流jvm虚拟机实现基本不会采用这种方式。</p>
+</li>
+<li><p>GCRoot（可达性分析）</p>
+<p>从如下的GCRoot节点开始向下搜索，当一个对象跟GCRoot节点没有任何引用链的时候，这个对象就是可以回收的。</p>
+</li>
+</ol>
+<p>   可以作为GCRoot的有</p>
+<ul>
+<li>虚拟机栈中的局部变量表中的引用</li>
+<li>本地方法栈。。</li>
+<li>方法区中类静态变量引用的对象</li>
+<li>方法区中常量引用的对象</li>
+</ul>
+<h4 id="Q：怎么回收"><a href="#Q：怎么回收" class="headerlink" title="Q：怎么回收"></a>Q：怎么回收</h4><ol>
+<li><p>标记-清除：通过GCRoot找到可回收对象，标记之后清除掉。</p>
+<p>会有空间碎片</p>
+</li>
+<li><p>标记-整理：找到可回收对象之后将它拼接到内存空间的首部</p>
+</li>
+<li><p>复制：将空间分为两部分A跟B，当A需要回收时，将不回收的对象copy到B，之后清除A。</p>
+<p>空间浪费</p>
+</li>
+<li><p>分代算法：将堆空间分为新生代跟老年代，新生代中的对象在GC的时候有很大一部分需要被回收（IBM-98%），对新生代的GC我们可以改进下复制算法，将区域分为eden（80%）跟两个survivor  A跟B（20%）；申请空间的时候我们从优先从eden申请，之后从A申请，回收的时候将eden跟A中的不回收对象copy到B，之后清理掉eden跟A。如此。。</p>
+<p>对于老年代，每次GC都会有很大部分对象不需要被回收掉，所以更加适合标记-整理算法。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/02/JVM---GC/" data-id="ckfncji9v001alyuq48j7ji4c" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM---对象的创建" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/30/JVM---对象的创建/" class="article-date">
+  <time datetime="2019-08-30T08:22:30.862Z" itemprop="datePublished">2019-08-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/30/JVM---对象的创建/">JVM - 对象的创建</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ol>
+<li>new 对象之后，先看方法区的常量池中是否有类的符号引用</li>
+<li>如果没有，那么加载类（todo），完成之后就知道我们需要申请多少空间了</li>
+<li>堆中申请空间</li>
+<li>初始化，基本对象为0，引用对象为null</li>
+<li>调用&lt; init &gt; 构造方法</li>
+</ol>
+<h5 id="内存分配问题"><a href="#内存分配问题" class="headerlink" title="内存分配问题"></a>内存分配问题</h5><p>两种方案</p>
+<ol>
+<li>使用指针碰撞：可用内存跟不可用内存之间有个指针，可用跟不可用内存是规整的</li>
+<li>使用空闲列表：空闲区域的指针放入链表中</li>
+</ol>
+<h5 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h5><p>假如线程1有个a对象，线程2有个b对象，a正在申请的时候，b也开始申请，堆是共享的，会有线程安全问题。</p>
+<p>两种方案：</p>
+<ol>
+<li>每次分配内存都加锁</li>
+<li>堆中按线程分区域（线程缓存区），申请线程缓存区的时候加锁</li>
+</ol>
+<h4 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h4><ol>
+<li>对象头 <ul>
+<li>运行时数据（对象的hashcode，gc年代，锁状态等）</li>
+<li>类指针（指向方法区中的类信息，表明该对象是哪个类）</li>
+</ul>
+</li>
+<li>实例数据</li>
+<li>对齐填充padding</li>
+</ol>
+<h5 id="Hotspot对象访问定位"><a href="#Hotspot对象访问定位" class="headerlink" title="Hotspot对象访问定位"></a>Hotspot对象访问定位</h5><p>栈中有堆对象的引用，堆对象中有方法区中对象类型数据（class）的引用</p>
+<p>tip：还有一种是句柄的方式</p>
+<p>堆中有句柄池跟对象池，栈中有句柄池的引用，句柄池中有对象的引用跟对象类型数据（class）的引用</p>
+<p>参考 《深入理解jvm》49页</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/30/JVM---对象的创建/" data-id="ckfncji9z001ilyuqke6db0bf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM---内存区域" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/30/JVM---内存区域/" class="article-date">
+  <time datetime="2019-08-30T02:39:09.972Z" itemprop="datePublished">2019-08-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/30/JVM---内存区域/">JVM - 内存区域</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="全貌"><a href="#全貌" class="headerlink" title="全貌"></a>全貌</h4><p>盗图一张如下：</p>
+<p><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1567143038993&amp;di=728787914453f7c702ce0038fb1a16b8&amp;imgtype=0&amp;src=http%3A%2F%2Faliyunzixunbucket.oss-cn-beijing.aliyuncs.com%2Fjpg%2Fe26275cf8c88f16ed498a3563ba6ad90.jpg%3Fx-oss-process%3Dimage%2Fresize%2Cp_100%2Fauto-orient%2C1%2Fquality%2Cq_90%2Fformat%2Cjpg%2Fwatermark%2Cimage_eXVuY2VzaGk%3D%2Ct_100" alt="img"></p>
+<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><ol>
+<li>记录字节码文件当前的执行行数</li>
+<li>是每个线程私有的，共有的话，切换线程会懵逼掉的</li>
+<li>如果执行native方法的话，它的值是undifined。因为native方法是java通过JNI直接调用本地C/C++库，可以近似的认为native方法相当于C/C++暴露给java的一个接口，java通过调用这个接口从而调用到C/C++方法。由于该方法是通过C/C++而不是java进行实现。那么自然无法产生相应的字节码，并且C/C++执行时的内存分配是由自己语言决定的，而不是由JVM决定的。</li>
+<li>不会oom。因为它的空间很小并且不是我们申请的，是jvm自己管理的。</li>
+</ol>
+<h4 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h4><ol>
+<li>它是跟方法对应的，是用来描述方法调用过程中的内存模型。（方法区是跟class对应的）</li>
+<li>栈帧：他的数据结构是个栈，每个方法对应一个栈帧，假如执行a方法，a方法中又调用了b方法，那么会先把a 压栈，执行到b的时候把b压栈，b执行完b出栈，之后接着执行a，a执行完a出栈。</li>
+<li>局部方法表：每个方法执行需要的内存大小在编译的时候就确定了，局部方法表存放执行方法需要的变量，如果该变量是个对象的话，存放的是引用。局部方法表是在栈帧中的。（所有对象的真实存放区域是堆）</li>
+<li>虚拟机的栈的深度是有最大值的，如果栈太深会报stackoverflow</li>
+<li>如果方法执行没有到达栈的最大值，但是没有内存空间可用了，那么会报oom</li>
+<li>线程私有的</li>
+</ol>
+<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><ol>
+<li>虚拟机栈跟本地方法栈基本一致，只不过不是java方法，而是对应native方法</li>
+<li>线程私有的</li>
+<li>会有oom跟stackoverflow</li>
+</ol>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><ol>
+<li>存放对象的</li>
+<li>线程共享的</li>
+<li>gc主要的目标</li>
+<li>会oom</li>
+</ol>
+<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><ol>
+<li>存放类信息（跟class对应），存放常量（常量池，1.8 将常量池放入了堆），存放静态变量等</li>
+<li>线程共享的</li>
+<li>会oom</li>
+<li>在java8中被移除了，取而代之的是metaspace（元数据空间）</li>
+</ol>
+<h4 id="eg："><a href="#eg：" class="headerlink" title="eg："></a>eg：</h4><p>运行如下代码：以下只分析1.8</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">"123"</span>;</span><br><span class="line">String b = <span class="string">"123"</span>;</span><br><span class="line"><span class="comment">//true  两个都是常量池中 123 的地址</span></span><br><span class="line">System.out.println(a == b);</span><br><span class="line"></span><br><span class="line">String c = <span class="keyword">new</span> String(<span class="string">"123"</span>);</span><br><span class="line"><span class="comment">//一个堆 一个常量池，不一样 false</span></span><br><span class="line">System.out.println(a == c);</span><br><span class="line"></span><br><span class="line"><span class="comment">//java 1.8 因为常量池已经有 123 了，所以返回常量池中的123的地址</span></span><br><span class="line">String d = c.intern();</span><br><span class="line"><span class="comment">//所以true</span></span><br><span class="line">System.out.println(a == d);</span><br><span class="line"></span><br><span class="line"><span class="comment">//下面的代码将 "我是wzq" 放入常量池，并创建了一个堆对象e</span></span><br><span class="line">String e = <span class="keyword">new</span> String(<span class="string">"我是wzq"</span>);</span><br><span class="line"><span class="comment">//java 1.8 因为常量池有 我是wzq ，所以将 我是wzq 在常量池中的地址返回，</span></span><br><span class="line">String f = e.intern();</span><br><span class="line"><span class="comment">//e是堆地址，f是常量池地址 false</span></span><br><span class="line">System.out.println(e == f);</span><br><span class="line"></span><br><span class="line"><span class="comment">//往常量池中放入 我是wzq，以为已经有了，所有返回 我是wzq 在常量池中的地址，所以是true</span></span><br><span class="line">String g = <span class="string">"我是wzq"</span>;</span><br><span class="line">System.out.println(f == g);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/30/JVM---内存区域/" data-id="ckfncjia1001klyuqi3hnknq6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-URL参数的sign签名认证" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/28/URL参数的sign签名认证/" class="article-date">
+  <time datetime="2019-08-28T09:27:13.238Z" itemprop="datePublished">2019-08-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/28/URL参数的sign签名认证/">URL参数的sign签名认证</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="在写开放的API接口时是如何保证数据的安全性的？"><a href="#在写开放的API接口时是如何保证数据的安全性的？" class="headerlink" title="在写开放的API接口时是如何保证数据的安全性的？"></a>在写开放的API接口时是如何保证数据的安全性的？</h4><p>tip：以下内容非原创，</p>
+<p>原文：<a href="https://blog.csdn.net/qq_15901351/article/details/80175169" target="_blank" rel="noopener">https://blog.csdn.net/qq_15901351/article/details/80175169</a></p>
+<p>先来看看有哪些安全性问题在开放的api接口中，我们通过http Post或者Get方式请求服务器的时候，会面临着许多的安全性问题，例如：</p>
+<ol>
+<li><p>请求来源(身份)是否合法？</p>
+</li>
+<li><p>请求参数被篡改？</p>
+</li>
+<li><p>请求的唯一性(不可复制)</p>
+</li>
+</ol>
+<p>解决方案：为了保证数据在通信时的安全性，我们可以采用参数签名的方式来进行相关验证。</p>
+<h5 id="案列分析"><a href="#案列分析" class="headerlink" title="案列分析"></a>案列分析</h5><p>我们通过给某 [移动端(app)] 写 [后台接口(api)] 的案例进行分析：     </p>
+<p>   客户端：以下简称app   </p>
+<p>  后台接口：以下简称api </p>
+<p>我们通过app查询产品列表这个操作来进行分析：</p>
+<p>app中点击查询按钮==》调用api进行查询==》返回查询结果==&gt;显示在app中</p>
+<p>一、不进行验证的方式</p>
+<p>api查询接口：</p>
+<p>app调用：<a href="http://api.test.com/getproducts?参数1=value1......" target="_blank" rel="noopener">http://api.test.com/getproducts?参数1=value1......</a>.</p>
+<p>如上，这种方式简单粗暴，通过调用getproducts方法即可获取产品列表信息了，但是这样的方式会存在很严重的安全性问题，没有进行任何的验证，大家都可以通过这个方法获取到产品列表，导致产品信息泄露。</p>
+<p>那么，如何验证调用者身份呢？如何防止参数被篡改呢？</p>
+<p>二、MD5参数签名的方式</p>
+<p>我们对api查询产品接口进行优化：</p>
+<p>1.给app分配对应的key、secret</p>
+<p>2.Sign签名，调用API 时需要对请求参数进行签名验证，签名方式如下： </p>
+<p>   a. 按照请求参数名称将所有请求参数按照字母先后顺序排序得到：keyvaluekeyvalue…keyvalue  字符串如：将arong=1,mrong=2,crong=3 排序为：arong=1, crong=3,mrong=2  然后将参数名和参数值进行拼接得到参数字符串：arong1crong3mrong2。 </p>
+<p>   b. 将secret加在参数字符串的头部后进行MD5加密 ,加密后的字符串需大写。即得到签名Sign</p>
+<p>新api接口代码:</p>
+<p>app调用：<a href="http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;参数1=value1&amp;参数2=value2......" target="_blank" rel="noopener">http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;参数1=value1&amp;参数2=value2......</a>.</p>
+<p>注：secret 仅作加密使用, 为了保证数据安全请不要在请求参数中使用。</p>
+<p>如上，优化后的请求多了key和sign参数，这样请求的时候就需要合法的key和正确签名sign才可以获取产品数据。这样就解决了身份验证和防止参数篡改问题，如果请求参数被人拿走，没事，他们永远也拿不到secret,因为secret是不传递的。再也无法伪造合法的请求。</p>
+<p>但是…这样就够了吗？细心的同学可能会发现，如果我获取了你完整的链接，一直使用你的key和sign和一样的参数不就可以正常获取数据了…-_-!是的，仅仅是如上的优化是不够的。。。。。。</p>
+<p>请求的唯一性：</p>
+<p>为了防止别人重复使用请求参数问题，我们需要保证请求的唯一性，就是对应请求只能使用一次，这样就算别人拿走了请求的完整链接也是无效的。<br>唯一性的实现：在如上的请求参数中，我们加入时间戳：timestamp（yyyyMMddHHmmss），同样，时间戳作为请求参数之一，也加入sign算法中进行加密。</p>
+<p>新的api接口：</p>
+<p>app调用：<br><a href="http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;timestamp=201603261407&amp;参数1=value1&amp;参数2=value2......" target="_blank" rel="noopener">http://api.test.com/getproducts?key=app_key&amp;sign=BCC7C71CF93F9CDBDB88671B701D8A35&amp;timestamp=201603261407&amp;参数1=value1&amp;参数2=value2......</a>.<br>如上，我们通过timestamp时间戳用来验证请求是否过期。这样就算被人拿走完整的请求链接也是无效的。</p>
+<p>Sign签名安全性分析： </p>
+<p>通过上面的案例，我们可以看出，安全的关键在于参与签名的secret，整个过程中secret是不参与通信的，所以只要保证secret不泄露，请求就不会被伪造。</p>
+<p>总结</p>
+<p>上述的Sign签名的方式能够在一定程度上防止信息被篡改和伪造，保障通信的安全，这里使用的是MD5进行加密，当然实际使用中大家可以根据实际需求进行自定义签名算法，比如：RSA，SHA等加密算法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/28/URL参数的sign签名认证/" data-id="ckfncjia5001rlyuq6136dsym" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络，安全/">网络，安全</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-android---线程通信" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/26/android---线程通信/" class="article-date">
+  <time datetime="2019-08-26T08:20:18.198Z" itemprop="datePublished">2019-08-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/26/android---线程通信/">android - 线程通信</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/26/android---线程通信/" data-id="ckfncjiae0022lyuqky9wf106" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-android---事件传递" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/26/android---事件传递/" class="article-date">
+  <time datetime="2019-08-26T08:19:39.835Z" itemprop="datePublished">2019-08-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/26/android---事件传递/">android - 事件传递</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/26/android---事件传递/" data-id="ckfncjiab001zlyuqx1vm0uk3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-数据结构---图" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/26/数据结构---图/" class="article-date">
+  <time datetime="2019-08-26T08:02:50.008Z" itemprop="datePublished">2019-08-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/26/数据结构---图/">数据结构 - 图</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="存储方式"><a href="#存储方式" class="headerlink" title="存储方式"></a>存储方式</h4><ol>
+<li>矩阵（二维数组）</li>
+<li>临接表</li>
+</ol>
+<h4 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h4><ol>
+<li>深度优先</li>
+<li>广度优先</li>
+</ol>
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><ol>
+<li>灰度图</li>
+<li>gradle 中task是个有向图</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/08/26/数据结构---图/" data-id="ckfncjicf004dlyuq2j76m24f" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-数据结构---树" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/08/26/数据结构---树/" class="article-date">
@@ -137,572 +666,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/数据结构---树/" data-id="ck5nonpap003xwsuqqjy890ol" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/08/26/数据结构---树/" data-id="ckfncjici004hlyuq0wikyjfz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-https" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/26/https/" class="article-date">
-  <time datetime="2019-08-26T07:29:23.791Z" itemprop="datePublished">2019-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/26/https/">https</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>​    假设甲跟乙需要通信，他们之间隔着若干个中间人（路由，网关）。他们说什么这些中间人都可以截取到。</p>
-<p>​    如果是http的方式，甲跟乙的通话都是明文，那么这些中间人可以非常轻易的获取到甲跟乙的通话内容，如果这些通话内容涉及一些隐私内容，那么这种方式就不太合适了。</p>
-<p>​    对于这个问题，我们对明文加密就可以了。这样即使中间人看到了甲乙的通话内容，也没有关系。下面考虑选择什么方式进行加密呢？对称还是非对称？</p>
-<p>​    首先考虑对称加密，对称加密需要甲跟乙有相同的秘钥才行。那这个秘钥要怎么传输呢？（鸡生蛋，蛋生鸡）。甲跟乙当然可以私下约定一个秘钥，只有他两个知道。但是甲跟丙通信，甲跟丁通信，等等呢。在只有一对一通信的场景下，私下约定也可以作为一个不错的选择。但是实际情况大多都不是一对一的。对称加密不太合适。</p>
-<p>​    那我们考虑使用非对称加密。甲跟乙都有自己的公钥跟私钥，甲跟乙通信的时候都用对方的公钥加密。这样解决了使用对称加密的问题。但是非对称加密耗时且对加密的长度有限制，在实际情况中也并不十分合适。</p>
-<p>​    https对明文加密这块选择的是非对称跟对称结合的方式。</p>
-<p>​    甲跟乙说我要跟你对话，乙将自己的公钥发给甲，甲生成一个随机的字符串作为对称加密的秘钥，然后用乙的公钥对该秘钥加密之后发送给乙。乙解密之后就有了对称加密的秘钥。之后的通信内容都用该秘钥进行加密。</p>
-<p>​    以上解决明文传输的问题。</p>
-<p>再考虑一个新的问题，乙将自己的公钥发给甲的过程中，中间人也收到了乙的公钥，假如中间人把自己的公钥发给甲，然后甲同样生成一个随机的字符串作为对称加密的秘钥，之后用中间人发的公钥对对称加密的秘钥加密之后发给中间人，中间人再用自己的私钥解密，此时中间人就获取了对称加密的秘钥，之后它再用乙的公钥对对称加密的秘钥加密之后转发给乙。在整个过程中甲跟乙都没有办法check到有个中间人修改了通信内容。</p>
-<p>其实这个问题说的底是甲没有办法确认自己收到的公钥是乙的公钥而不是其他人的。</p>
-<p>为了解决上面的问题，我们需要引入如下概念：</p>
-<p>​    <strong>ca</strong></p>
-<p>​    <strong>数字签名</strong></p>
-<p>​    <strong>数字证书</strong></p>
-<p>​    ca在网络通信中扮演的角色相当于现实世界中的公证处，它拥有自己的公钥跟私钥。我们可以认为这个私钥只有该公证处知道，那些中间人是不可能知道的。</p>
-<p>​    数字签名跟现实生活中的签名作用是一样的。可以唯一标识一个“人”。</p>
-<p>​    数字证书在现实生活中相当于身份证，它有你的个人信息，还有你的签名（身份证号），还有公钥。</p>
-<p>​    它们三者之间的关系是这样的，ca会给乙颁发数字证书，该证书中包含乙的公钥，乙的个人信息以及乙的数字签名。签名制作过程是这样的，ca会对数字证书中的个人信息，以及公钥做个hash，算出信息摘要，之后用自己的私钥对该信息摘要加密生成数字签名。</p>
-<p>​    我们接着思考上述问题，首先甲跟乙说我要跟你对话，之后乙不是将公钥而是将ca给自己的证书发给甲，首先中间人会收到该证书，假设中间人用自己的公钥替换了证书中的公钥，（因为它没有ca的私钥，所以它没有办法修改证书中的签名），之后他把伪造的证书转给甲。甲收到证书之后首先会对证书中的信息做同样的hash运行获取信息摘要。之后用ca的公钥对证书中的签名做解密，获得另一个信息摘要，之后比对这两个信息摘要，因为中间人对证书中的公钥做了修改，所以这两个信息摘要肯定是不一致的，这样甲就知道了我即将使用到的公钥是伪造的。</p>
-<p>​    或者中间人也跟ca申请到了自己的证书，然后它将自己的证书给了甲，这种情况下，甲会对证书中的个人信息做一个检查，很轻易的甲就会发现我想要访问的跟我真实访问的并不是同一个对象。</p>
-<h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>HTTPS是以安全为目标的HTTP通道，简单讲是HTTP的安全版。即HTTP下加入SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。</p>
-<h4 id="解决什么问题"><a href="#解决什么问题" class="headerlink" title="解决什么问题"></a>解决什么问题</h4><ol>
-<li>通信过程中明文传输问题</li>
-<li>通信过程中中间人攻击问题</li>
-</ol>
-<h4 id="怎么解决的"><a href="#怎么解决的" class="headerlink" title="怎么解决的"></a>怎么解决的</h4><ol>
-<li>数据加密传输，对称跟非对称加密</li>
-<li>服务端身份认证，证书（数字签名）</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/26/https/" data-id="ck5nonp990028wsuq0yoap8ug" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/net/">net</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-ArrayMap vs HashMap" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/21/ArrayMap vs HashMap/" class="article-date">
-  <time datetime="2019-08-21T10:52:30.970Z" itemprop="datePublished">2019-08-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/21/ArrayMap vs HashMap/">ArrayMap vs HashMap</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h5><p>Java 8 对接口做了进一步的增强。</p>
-<p><strong>a.</strong> 在接口中可以添加使用 default 关键字修饰的非抽象方法。即：默认方法（或扩展方法）</p>
-<p><strong>b.</strong> 接口里可以声明静态方法，并且可以实现。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TTT</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hhhh"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">sayHi</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hhh"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/21/ArrayMap vs HashMap/" data-id="ck5nonp8b0014wsuqorh1ntbl" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-AndPermission" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/08/08/Android-AndPermission/" class="article-date">
-  <time datetime="2019-08-08T07:59:03.585Z" itemprop="datePublished">2019-08-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/08/Android-AndPermission/">Android-AndPermission</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/08/08/Android-AndPermission/" data-id="ck5nonp790006wsuqj1govufo" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-permission/">android permission</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-android高级UI一:绘制流程" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/23/android高级UI一:绘制流程/" class="article-date">
-  <time datetime="2019-07-23T05:07:05.197Z" itemprop="datePublished">2019-07-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/23/android高级UI一:绘制流程/">android setContentView源码分析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="view是如何添加到屏幕上的？"><a href="#view是如何添加到屏幕上的？" class="headerlink" title="view是如何添加到屏幕上的？"></a>view是如何添加到屏幕上的？</h5><p>从setContentView出发-&gt;</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(@LayoutRes <span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">       getWindow().setContentView(layoutResID);</span><br><span class="line">       initWindowDecorActionBar();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到调用的是getWindow的setContentView方法，</p>
-<p>那么getWindow是啥呢？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Window <span class="title">getWindow</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mWindow;d</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>接着看Window</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> &lt;p&gt;The only existing implementation of <span class="keyword">this</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">is</span></span></span><br><span class="line"><span class="class"> * <span class="title">android</span>.<span class="title">view</span>.<span class="title">PhoneWindow</span>, <span class="title">which</span> <span class="title">you</span> <span class="title">should</span> <span class="title">instantiate</span> <span class="title">when</span> <span class="title">needing</span> <span class="title">a</span></span></span><br><span class="line"><span class="class"> * <span class="title">Window</span>.</span></span><br><span class="line"><span class="class"> */</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">abstract</span> <span class="title">class</span> <span class="title">Window</span> </span>&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意上面的注释，该类唯一的实现是phoneWindow，到这里我们就知道了这个的getWindow实质返回的是一个PhoneWindow的实例。</p>
-<p>接着看PhoneWindow的setContentView方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; </span><br><span class="line">    ...</span><br><span class="line">        mLayoutInflater.inflate(layoutResID, mContentParent);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>只需要关注上面的几行代码，如果mContentParent是空，那么调用installDecor方法（如下）。这里的mContentParent是什么呢？看定义的地方它是一个ViewGroup，它里面具体是啥呢？我们继续往下跟。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">installDecor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">        <span class="keyword">if</span> (mDecor == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mDecor = generateDecor(-<span class="number">1</span>);</span><br><span class="line">        &#125; </span><br><span class="line">    ...</span><br><span class="line">        <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mContentParent = generateLayout(mDecor);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里又出现了mDecor，它又是个啥呢。跟踪generateDecor</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> DecorView <span class="title">generateDecor</span><span class="params">(<span class="keyword">int</span> featureId)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">   	<span class="keyword">return</span> <span class="keyword">new</span> DecorView(context, featureId, <span class="keyword">this</span>, getAttributes());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到mDecor是一个DecorView对象</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DecorView</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span></span></span><br></pre></td></tr></table></figure>
-<p>它其实就是一个FrameLayout，那么它里面具体是啥呢？我们往下跟</p>
-<p>回到installDecor方法，我们再跟下generateLayout方法是如何创建mContentParent的？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> ViewGroup <span class="title">generateLayout</span><span class="params">(DecorView decor)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Apply data from current theme.</span></span><br><span class="line">    <span class="comment">//这里设置一些主题相关的</span></span><br><span class="line">    ...</span><br><span class="line">        <span class="comment">// Inflate the window decor.</span></span><br><span class="line">        <span class="keyword">int</span> layoutResource;</span><br><span class="line">    <span class="comment">// 给layoutResource 赋值（实质是找一个系统布局资源）</span></span><br><span class="line"></span><br><span class="line">    mDecor.onResourcesLoaded(mLayoutInflater, layoutResource);</span><br><span class="line">    ViewGroup contentParent = (ViewGroup)findViewById(ID_ANDROID_CONTENT);</span><br><span class="line">    ...··</span><br><span class="line">        <span class="keyword">return</span> contentParent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里有一个layoutResource，这个实质就是一个系统的layout  xml文件。会根据我们主题不同给它赋不同的值。</p>
-<p>接着我们看onResourcesLoaded方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">onResourcesLoaded</span><span class="params">(LayoutInflater inflater, <span class="keyword">int</span> layoutResource)</span> </span>&#123;</span><br><span class="line"> 	...</span><br><span class="line">    <span class="keyword">final</span> View root = inflater.inflate(layoutResource, <span class="keyword">null</span>);</span><br><span class="line">    ...</span><br><span class="line">    addView(root, <span class="number">0</span>, <span class="keyword">new</span> ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>重点关注这两行代码，还记得我们之前分析过mDecor实质是一个frameLayout，这里会把系统的布局文件添加到DecorView里面。到这里我们就知道了DecorView里面具体是啥了。</p>
-<p>我们再回到generateLayout方法，会调用PhoneWindow的findViewById方法找一个id，赋值给contentParent返回。这里的findViewById方法实际是getDecorView().findViewById。实质是在mDecor中根据id找它的一个子view。到这里我们就知道了mContentParent具体是个啥了。</p>
-<p>我们回到PhoneWindow的setContentView方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        installDecor();</span><br><span class="line">    &#125; </span><br><span class="line">    ...</span><br><span class="line">        mLayoutInflater.inflate(layoutResID, mContentParent);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最终会把我们传进来的布局文件填充到mContentParent中。至此，view添加结束。</p>
-<h5 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h5><p>PhoneWindow —&gt; DecorView(根据主题不同对应系统的不同布局文件)  — &gt;mContentParent（系统布局文件中中的一个子view）—&gt; 我们自己写的布局文件会被加载到mContentParent中。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/23/android高级UI一:绘制流程/" data-id="ck5nonp950022wsuq9gl1jzsj" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-ui/">android ui</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-数据结构系列-数组" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/06/01/数据结构系列-数组/" class="article-date">
-  <time datetime="2019-06-01T02:06:22.630Z" itemprop="datePublished">2019-06-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/01/数据结构系列-数组/">数据结构系列-数组</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/01/数据结构系列-数组/" data-id="ck5nonpas0041wsuq1jcaf8cj" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-traceView ：展示执行时间。" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/05/19/traceView ：展示执行时间。/" class="article-date">
-  <time datetime="2019-05-18T18:04:44.448Z" itemprop="datePublished">2019-05-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>android- 性能优化</p>
-<hr>
-<p>traceView ：展示执行时间。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/19/traceView ：展示执行时间。/" data-id="ck5nonpar0040wsuq5vxos1u4" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-gradle" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/04/30/Android-gradle/" class="article-date">
-  <time datetime="2019-04-30T09:01:05.848Z" itemprop="datePublished">2019-04-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/30/Android-gradle/">Android-gradle</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="VS-maven-ant"><a href="#VS-maven-ant" class="headerlink" title="VS maven ant"></a>VS maven ant</h4><p>gradle 是基于groovy的编程语言，比maven，ant强大很多。</p>
-<h4 id="groovy"><a href="#groovy" class="headerlink" title="groovy"></a>groovy</h4><h5 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h5><p>属于领域特定语言 （eg： matlab（计算） html（网页））解决特定问题的语言；</p>
-<p>基于jvm，可以将groovy编译成.class在jvm上执行，也可以直接解释执行（js）；</p>
-<p>结合了python，ruby等脚本语言的特性；</p>
-<p>可以跟java完美结合，可以使用java库；</p>
-<p>支持动态类型，闭包；</p>
-<p>支持面向对象，也支持面向过程（写脚本）；</p>
-<h5 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h5><p>官网下载groovy—sdk；</p>
-<p>安装jdk；</p>
-<p>安装idea；</p>
-<h5 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h5><p>idea中new project，选择groovy，指定groovy sdk即可；</p>
-<h5 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h5><ol>
-<li><p>基本语法</p>
-<p>变量类型：跟java一致，没有基本类型，自动装箱；</p>
-<p>变量定义：def  + 强定义  自己用的话使用def，提供给外界用的话，使用强定义</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x = <span class="number">10</span></span><br><span class="line">println x.<span class="keyword">class</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> y = <span class="number">2.3</span></span><br><span class="line">println y.<span class="keyword">class</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> name = <span class="string">"name"</span></span><br><span class="line">println name.<span class="keyword">class</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">结果：</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Integer</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">java</span>.<span class="title">math</span>.<span class="title">BigDecimal</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">String</span></span></span><br></pre></td></tr></table></figure>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> variable;</span><br><span class="line"><span class="comment">/***********字符串定义**********/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//三引号</span></span><br><span class="line"><span class="keyword">def</span> s = <span class="string">'''\</span></span><br><span class="line"><span class="string">line one</span></span><br><span class="line"><span class="string">line two</span></span><br><span class="line"><span class="string">line three '''</span></span><br><span class="line">println s</span><br><span class="line"><span class="comment">//可扩展字符串 GString</span></span><br><span class="line"><span class="keyword">def</span> s_1 = <span class="string">"this is a common String"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> temp = <span class="string">"temp"</span></span><br><span class="line"><span class="keyword">def</span> s_2 = <span class="string">"hello: $&#123;temp&#125;"</span></span><br><span class="line"></span><br><span class="line">println s_1.<span class="keyword">class</span></span><br><span class="line">println s_2.<span class="keyword">class</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> sum2 = <span class="string">"2+3=$&#123;2 + 3&#125;"</span></span><br><span class="line">println sum2</span><br><span class="line"><span class="comment">//不需要强转</span></span><br><span class="line"><span class="keyword">def</span> result1 = echo(sum2)</span><br><span class="line">println result1</span><br><span class="line"></span><br><span class="line">String echo(String msg) &#123;</span><br><span class="line">    <span class="keyword">return</span> msg</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**********字符串方法*************/</span></span><br><span class="line"><span class="keyword">def</span> str = <span class="string">"groovy"</span></span><br><span class="line">println str.center(<span class="number">8</span>, <span class="string">'a'</span>)</span><br><span class="line">println str.padLeft(<span class="number">8</span>, <span class="string">'a'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> str2 = <span class="string">'vy'</span></span><br><span class="line">println str &gt; str2</span><br><span class="line"></span><br><span class="line">println str[<span class="number">2</span>]</span><br><span class="line">println str2[<span class="number">0.</span><span class="number">.1</span>]</span><br><span class="line"></span><br><span class="line">println str.minus(str2)</span><br><span class="line">println str-str2</span><br><span class="line"></span><br><span class="line">println str.reverse()</span><br><span class="line"></span><br><span class="line">println str.capitalize()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> str3=<span class="string">"1"</span></span><br><span class="line">println str3.isInteger()</span><br><span class="line">println str3.toInteger()</span><br><span class="line"></span><br><span class="line"><span class="comment">/**********swith case***********/</span></span><br><span class="line"><span class="keyword">def</span> x = <span class="number">1.23</span></span><br><span class="line"><span class="keyword">def</span> result</span><br><span class="line"><span class="keyword">switch</span> (x) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"foo"</span>:</span><br><span class="line">        result = <span class="string">'found foo'</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> [<span class="number">4</span>, <span class="number">5</span>, <span class="string">'123'</span>]:</span><br><span class="line">        result = <span class="string">'list'</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">1.</span><span class="number">.4</span>:</span><br><span class="line">        result = <span class="string">'range'</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">case</span> <span class="string">Integer:</span></span><br><span class="line">        result = <span class="string">'integer'</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">case</span> <span class="string">BigDecimal:</span></span><br><span class="line">        result = <span class="string">'big decimal'</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"><span class="symbol">    default:</span></span><br><span class="line">        result = <span class="string">'default'</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line">println result</span><br><span class="line"></span><br><span class="line"><span class="comment">/**********for ***********/</span></span><br><span class="line"><span class="keyword">def</span> sum = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">0.</span><span class="number">.9</span>) &#123;</span><br><span class="line">    sum += i</span><br><span class="line">&#125;</span><br><span class="line">println sum</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]) &#123;</span><br><span class="line">    sum += i</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">println sum</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (i <span class="keyword">in</span> [<span class="string">'lili'</span>: <span class="number">1</span>, <span class="string">'zs'</span>: <span class="number">3</span>]) &#123;</span><br><span class="line">    sum += i.value</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">println sum</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>闭包</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> variable</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 闭包</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/***************基础****************/</span></span><br><span class="line"><span class="comment">//箭头前面是参数，后面是方法体</span></span><br><span class="line">def clouser = &#123; String params, <span class="keyword">int</span> age -&gt;</span><br><span class="line">    println <span class="string">"hello $&#123;params&#125; , $&#123;age&#125;"</span></span><br><span class="line">&#125;</span><br><span class="line">clouser.call(<span class="string">'clousure'</span>, <span class="number">3</span>)</span><br><span class="line">clouser(<span class="string">'clousure'</span>, <span class="number">7</span>)</span><br><span class="line"></span><br><span class="line">def it = &#123;</span><br><span class="line">    println <span class="string">"hello $&#123;it&#125;"</span></span><br><span class="line">&#125;</span><br><span class="line">it(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">def re = &#123; String name -&gt;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"hello $&#123;name&#125;"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function">println <span class="title">re</span><span class="params">(<span class="string">"clousure"</span>)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">/**************进阶********************/</span></span></span><br><span class="line"><span class="function"><span class="comment">//求10的阶乘</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fab</span><span class="params">(<span class="keyword">int</span> number)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> result = <span class="number">1</span></span><br><span class="line">    <span class="number">1</span>.upto(number, &#123; num -&gt; result *= num &#125;)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">println <span class="title">fab</span><span class="params">(<span class="number">5</span>)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fab2</span><span class="params">(<span class="keyword">int</span> number)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> result = <span class="number">1</span></span><br><span class="line">    number.downto(<span class="number">1</span>) &#123;</span><br><span class="line">        num -&gt;</span><br><span class="line">            result *= num</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">println <span class="title">fab2</span><span class="params">(<span class="number">5</span>)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">//累加</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">cal</span><span class="params">(<span class="keyword">int</span> number)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> result = <span class="number">0</span></span><br><span class="line">    number.times &#123;</span><br><span class="line">        num -&gt; result += num</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">println <span class="title">cal</span><span class="params">(<span class="number">5</span>)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">def tes </span>= <span class="string">"a.b.c"</span></span><br><span class="line">println tes.substring(tes.lastIndexOf(<span class="string">"."</span>))</span><br><span class="line"><span class="comment">/***********字符串跟clousure结合**************/</span></span><br><span class="line">String wzq = <span class="string">"wzq and zpy 1"</span></span><br><span class="line">wzq.each &#123;</span><br><span class="line">    String temp -&gt;</span><br><span class="line">        print temp</span><br><span class="line">&#125;</span><br><span class="line">println()</span><br><span class="line"></span><br><span class="line">println wzq.find &#123;</span><br><span class="line">    String temp -&gt;</span><br><span class="line">        (temp == <span class="string">"d"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">println wzq.findAll &#123;</span><br><span class="line">    String temp -&gt;</span><br><span class="line">        temp == <span class="string">"z"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">println wzq.any &#123;</span><br><span class="line">    String s -&gt; s.isNumber()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">println wzq.every &#123;</span><br><span class="line">    String s -&gt; s.isNumber()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">def collect = wzq.collect &#123;</span><br><span class="line">    it.toUpperCase()</span><br><span class="line">&#125;</span><br><span class="line">println collect.toListString()</span><br><span class="line"><span class="comment">/************进阶2*************/</span></span><br><span class="line"><span class="comment">//this owner delegate</span></span><br><span class="line">def wzqClouser = &#123;</span><br><span class="line">    println <span class="keyword">this</span></span><br><span class="line">    println owner</span><br><span class="line">    println delegate</span><br><span class="line">&#125;</span><br><span class="line">wzqClouser.call()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    def  pClousure = &#123;</span><br><span class="line">        println <span class="keyword">this</span></span><br><span class="line">        println owner</span><br><span class="line">        println delegate</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">def  <span class="title">say</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        def pClousure = &#123;</span><br><span class="line">            println <span class="keyword">this</span></span><br><span class="line">            println owner</span><br><span class="line">            println delegate</span><br><span class="line">        &#125;</span><br><span class="line">        pClousure.call()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">def person = <span class="keyword">new</span> Person()</span><br><span class="line">person.pClousure.call()</span><br><span class="line">person.say()</span><br><span class="line"></span><br><span class="line">def outClousure=&#123;</span><br><span class="line">    def innerClousure=&#123;</span><br><span class="line">        println <span class="keyword">this</span> <span class="comment">//clousure</span></span><br><span class="line">        println owner  <span class="comment">//outClousure</span></span><br><span class="line">        println delegate <span class="comment">//outClousure</span></span><br><span class="line">    &#125;</span><br><span class="line">    innerClousure.call()</span><br><span class="line">&#125;</span><br><span class="line">outClousure.call()</span><br><span class="line"><span class="comment">//委托策略</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;</span><br><span class="line">    String name</span><br><span class="line">    def pretty =&#123;<span class="string">"My name is $&#123;name&#125;"</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        pretty.call()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Teacher</span></span>&#123;</span><br><span class="line">    String name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">def stu=<span class="keyword">new</span> Student(name: <span class="string">"wzq"</span>)</span><br><span class="line">def tea=<span class="keyword">new</span> Teacher(name: <span class="string">"zpy"</span>)</span><br><span class="line">stu.pretty.delegate=tea</span><br><span class="line">stu.pretty.resolveStrategy=Closure.DELEGATE_FIRST</span><br><span class="line">println stu.toString()</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>数据结构</p>
-<p>List:</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> variable</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义list</span></span><br><span class="line"><span class="keyword">def</span> list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="comment">//定义数组</span></span><br><span class="line"><span class="keyword">def</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] <span class="keyword">as</span> <span class="keyword">int</span>[]</span><br><span class="line"><span class="keyword">int</span>[] array2 = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">//排序</span></span><br><span class="line"><span class="keyword">def</span> sortList=[<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">-3</span>]</span><br><span class="line">Comparator mc=&#123;</span><br><span class="line">    a,b-&gt;</span><br><span class="line">        a==b?0:Math.abs(a)&lt;Math.abs(b)?-1:<span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Collections.sort(sortList,mc)</span><br><span class="line">println(sortList)</span><br><span class="line"></span><br><span class="line">sortList.sort &#123;</span><br><span class="line">    a,b-&gt;</span><br><span class="line">        a==b?0:Math.abs(a)&lt;Math.abs(b)?-1:<span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line">println(sortList)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> stringList=[<span class="string">"w"</span>,<span class="string">"wa"</span>,<span class="string">"f"</span>,<span class="string">"fdaf"</span>,<span class="string">""</span>]</span><br><span class="line">stringList.sort&#123;</span><br><span class="line">    it.size()</span><br><span class="line">&#125;</span><br><span class="line">println stringList</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//查找</span></span><br><span class="line"><span class="keyword">def</span> findList=[<span class="number">-1</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">5</span>]</span><br><span class="line"><span class="keyword">def</span> find = findList.find &#123; a -&gt;</span><br><span class="line">    a &gt; <span class="number">3</span></span><br><span class="line">&#125;</span><br><span class="line">println find</span><br><span class="line"><span class="keyword">def</span> all = findList.findAll &#123;</span><br><span class="line">    it &gt; <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line">println all.toListString()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> any = findList.any &#123;</span><br><span class="line">    it &gt; <span class="number">7</span></span><br><span class="line">&#125;</span><br><span class="line">println any</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> min = findList.min()</span><br><span class="line">println min</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> count = findList.count &#123;</span><br><span class="line">    it &gt; <span class="number">4</span></span><br><span class="line">&#125;</span><br><span class="line">println(count)</span><br></pre></td></tr></table></figure>
-<p>Map:</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> variable</span><br><span class="line"><span class="comment">//映射</span></span><br><span class="line"><span class="keyword">def</span> colors=[<span class="string">red:</span><span class="string">"ff0000"</span>,<span class="string">green:</span><span class="string">"00ff00"</span>]</span><br><span class="line"></span><br><span class="line">println colors[<span class="string">'red'</span>]</span><br><span class="line">println colors.green</span><br><span class="line">colors.yellow=<span class="string">"ffff00"</span></span><br><span class="line">colors.temp=[<span class="string">a:</span><span class="number">1</span>,<span class="string">b:</span><span class="number">2</span>]</span><br><span class="line">println colors.toMapString()</span><br><span class="line">println colors.getClass()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//遍历</span></span><br><span class="line"><span class="keyword">def</span> students=[<span class="number">1</span>:[<span class="string">name:</span><span class="string">'wzq'</span>,<span class="string">age:</span><span class="number">18</span>],</span><br><span class="line"><span class="symbol">            2:</span>[<span class="string">name:</span><span class="string">'zpy'</span>,<span class="string">age:</span><span class="number">17</span>],</span><br><span class="line"><span class="symbol">            3:</span>[<span class="string">name:</span><span class="string">'wrr'</span>,<span class="string">age:</span> <span class="number">20</span>]]</span><br><span class="line"></span><br><span class="line">students.each &#123;key,value-&gt;</span><br><span class="line">    println <span class="string">"$&#123;key&#125;-&gt;$&#123;value&#125;"</span></span><br><span class="line">&#125;</span><br><span class="line">students.eachWithIndex&#123; entry, <span class="keyword">int</span> i -&gt;</span><br><span class="line">    println <span class="string">"$&#123;i&#125;-&gt;$&#123;entry.key&#125;-&gt;$&#123;entry.value&#125;"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//查找</span></span><br><span class="line"><span class="keyword">def</span> find = students.find &#123; student -&gt;</span><br><span class="line">    <span class="keyword">return</span> student.value.age &gt; <span class="number">17</span></span><br><span class="line">&#125;</span><br><span class="line">println(find)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> all = students.findAll &#123; student -&gt;</span><br><span class="line">    <span class="keyword">return</span> student.value.age &gt; <span class="number">10</span></span><br><span class="line">&#125;</span><br><span class="line">println(all.toMapString())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> collect = students.findAll &#123; student -&gt;</span><br><span class="line">    <span class="keyword">return</span> student.value.age &gt; <span class="number">10</span></span><br><span class="line">&#125;.collect &#123; student -&gt;</span><br><span class="line">    <span class="keyword">return</span> student.value.name</span><br><span class="line">&#125;</span><br><span class="line">println(collect.toListString())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> by = students.groupBy &#123; student -&gt;</span><br><span class="line">    <span class="keyword">return</span> student.value.age &gt; <span class="number">17</span> ? "good" : <span class="string">"bad"</span></span><br><span class="line">&#125;</span><br><span class="line">println(by.toMapString())</span><br><span class="line"><span class="comment">//排序</span></span><br><span class="line"><span class="keyword">def</span> sort = students.sort &#123;</span><br><span class="line">    student1, student2 -&gt;</span><br><span class="line">        <span class="keyword">return</span> student1.value.age == student2.value.age ? 0 : student1.value.age &lt; student2.value.age ? -1 : <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line">println(sort.toMapString())</span><br></pre></td></tr></table></figure>
-<p>range：</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> variable</span><br><span class="line"><span class="comment">//定义</span></span><br><span class="line"><span class="keyword">def</span> range= <span class="number">1.</span><span class="number">.10</span></span><br><span class="line"></span><br><span class="line">println range[<span class="number">0</span>]</span><br><span class="line"><span class="comment">//遍历</span></span><br><span class="line">range.each &#123;</span><br><span class="line">    print(it)</span><br><span class="line">&#125;</span><br><span class="line">println()</span><br><span class="line"><span class="comment">//swith-case</span></span><br><span class="line">println(test(<span class="number">10</span>))</span><br><span class="line"><span class="keyword">def</span> test(Number number)&#123;</span><br><span class="line">    <span class="keyword">def</span> result</span><br><span class="line">    <span class="keyword">switch</span> (number)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">0.</span>.&lt;<span class="number">60</span>:</span><br><span class="line">            result=<span class="string">"不及格"</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">60.</span><span class="number">.100</span>:</span><br><span class="line">            result=<span class="string">"及格"</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"><span class="symbol">        default:</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>面向对象</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> variable.clazz.study</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> <span class="doctag">@author</span> kb_jay</span></span><br><span class="line"><span class="comment"> <span class="doctag">@time</span> 2019/4/18</span></span><br><span class="line"><span class="comment">  * */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Action</span> &#123;</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> sayHello() &#123;</span><br><span class="line">        println(<span class="string">"$&#123;name&#125;-&gt;$&#123;age&#125; say hello"</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">void</span> play() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">void</span> eat() &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//运行时 1</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    Object invokeMethod(String s, Object o) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"method-&gt;$&#123;s&#125;,args-&gt;$&#123;o&#125;"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//类的使用！！！！！！！</span></span><br><span class="line"><span class="keyword">package</span> variable.clazz.study</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> person = <span class="keyword">new</span> Person(<span class="string">name:</span> <span class="string">"wzq"</span>, <span class="string">age:</span> <span class="number">18</span>)</span><br><span class="line"></span><br><span class="line">println(person.name)</span><br><span class="line"></span><br><span class="line">person.sayHello()</span><br><span class="line"></span><br><span class="line"><span class="comment">//metaClass</span></span><br><span class="line"><span class="keyword">def</span> cry = person.cry()</span><br><span class="line">println(cry)</span><br><span class="line"></span><br><span class="line"><span class="comment">//为类动态添加属性</span></span><br><span class="line">Person.metaClass.sex=<span class="string">'male'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> person1 = <span class="keyword">new</span> Person(<span class="string">name:</span> <span class="string">"wzq"</span>, <span class="string">age:</span> <span class="number">18</span>)</span><br><span class="line">println(person1.sex)</span><br><span class="line"></span><br><span class="line"><span class="comment">//动态添加方法</span></span><br><span class="line">Person.metaClass.newMethod=&#123;<span class="keyword">return</span> <span class="string">"$&#123;name&#125;"</span>&#125;</span><br><span class="line"></span><br><span class="line">println(person1.newMethod())</span><br><span class="line"><span class="comment">//动态添加静态方法</span></span><br><span class="line">Person.metaClass.<span class="keyword">static</span>.newStaticMethod=&#123;String name,<span class="keyword">int</span> age-&gt;</span><br><span class="line">    <span class="keyword">new</span> Person(<span class="string">name:</span>name,<span class="string">age:</span>age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> person2=Person.newStaticMethod(<span class="string">"zpy"</span>,<span class="number">17</span>)</span><br><span class="line">println person2.name</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h5 id="进阶语法"><a href="#进阶语法" class="headerlink" title="进阶语法"></a>进阶语法</h5><ol>
-<li><p>json文件操作</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> variable</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> groovy.json.JsonOutput</span><br><span class="line"><span class="keyword">import</span> groovy.json.JsonParser</span><br><span class="line"><span class="keyword">import</span> groovy.json.JsonSlurper</span><br><span class="line"></span><br><span class="line"><span class="comment">//object -&gt; jsonString</span></span><br><span class="line"><span class="keyword">def</span> list = [<span class="keyword">new</span> Test(<span class="string">name:</span> <span class="string">"wzq"</span>, <span class="string">age:</span> <span class="number">16</span>), <span class="keyword">new</span> Test(<span class="string">name:</span> <span class="string">"zpy"</span>, <span class="string">age:</span> <span class="number">15</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> json = JsonOutput.toJson(list)</span><br><span class="line"><span class="keyword">def</span> print = JsonOutput.prettyPrint(json)</span><br><span class="line">println(print)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> &#123;</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//jsonString 2 object</span></span><br><span class="line"><span class="keyword">def</span> slurper = <span class="keyword">new</span> JsonSlurper()</span><br><span class="line"><span class="keyword">def</span> text = slurper.parseText(json)</span><br><span class="line">println text[<span class="number">0</span>].name</span><br><span class="line"></span><br><span class="line"><span class="comment">//call net</span></span><br><span class="line"><span class="keyword">def</span> response=callNet(<span class="string">'http://yuexibo.top/yxApp/course_detail.json'</span>)</span><br><span class="line">println response.data.head.name </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> callNet(String path) &#123;</span><br><span class="line">    <span class="keyword">def</span> connection = <span class="keyword">new</span> URL(path).openConnection()</span><br><span class="line">    connection.setRequestMethod(<span class="string">"GET"</span>)</span><br><span class="line">    connection.connect()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> response = connection.content.text</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> slurper = <span class="keyword">new</span> JsonSlurper()</span><br><span class="line">    <span class="keyword">return</span> slurper.parseText(response)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol start="2">
-<li><p>文件操作</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> variable</span><br><span class="line"></span><br><span class="line"><span class="comment">//copy文件</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> file = <span class="keyword">new</span> File(<span class="string">'../../HelloGroovy.iml'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> b = copy(<span class="string">'../../HelloGroovy.iml'</span>, <span class="string">'../../HelloGroovy1.iml'</span>)</span><br><span class="line">println(b)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> copy(String sourcePath, String desPath) &#123;</span><br><span class="line">    <span class="comment">//    check des</span></span><br><span class="line">    <span class="keyword">def</span> destFile = <span class="keyword">new</span> File(desPath)</span><br><span class="line">    <span class="keyword">if</span> (!destFile.exists()) &#123;</span><br><span class="line">        destFile.createNewFile()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// copy</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">def</span> sourceFile = <span class="keyword">new</span> File(sourcePath)</span><br><span class="line">        sourceFile.withReader &#123; reader -&gt;</span><br><span class="line">            <span class="keyword">def</span> lines = reader.readLines();</span><br><span class="line">            destFile.withWriter &#123; writer -&gt;</span><br><span class="line">                lines.each &#123; line -&gt;</span><br><span class="line">                    writer.writeLine(line)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//copy Object</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> saveObj(Object o, String desPath) &#123;</span><br><span class="line">    <span class="comment">//    check des</span></span><br><span class="line">    <span class="keyword">def</span> destFile = <span class="keyword">new</span> File(desPath)</span><br><span class="line">    <span class="keyword">if</span> (!destFile.exists()) &#123;</span><br><span class="line">        destFile.createNewFile()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//copy</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        destFile.withObjectOutputStream &#123; oos -&gt;</span><br><span class="line">            oos.writeObject(o)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> readObj(String path) &#123;</span><br><span class="line">    <span class="keyword">def</span> obj = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">def</span> destFile = <span class="keyword">new</span> File(path)</span><br><span class="line">    <span class="keyword">if</span> (!destFile.exists()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        destFile.withObjectInputStream &#123; ois -&gt;</span><br><span class="line">            obj = ois.readObject();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        println(e.getMessage())</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> obj</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> obj = <span class="keyword">new</span> ObTest(<span class="string">name:</span> <span class="string">"wzq"</span>, <span class="string">age:</span> <span class="number">18</span>)</span><br><span class="line"><span class="keyword">def</span> save = saveObj(obj, <span class="string">'../../obj.bin'</span>)</span><br><span class="line">println(<span class="string">"save$&#123;save&#125;"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> test = readObj(<span class="string">'../../obj.bin'</span>)</span><br><span class="line">println <span class="string">"$&#123;test.name&#125;-&gt;$&#123;test.age&#125;"</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ObTest</span> <span class="keyword">implements</span> <span class="title">Serializable</span> &#123;</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h4 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h4><h5 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h5><ol>
-<li>初始化（init）：解析project，生成project对象</li>
-<li>配置（config）：解析project的task，构建task的拓扑图</li>
-<li>执行（exec）：执行task以及依赖的task</li>
-</ol>
-<h5 id="Project"><a href="#Project" class="headerlink" title="Project"></a>Project</h5><ol>
-<li>根project跟module都是project，执行</li>
-</ol>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/gradlew projects</span></span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>属性</li>
-</ol>
-<h5 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h5><ol>
-<li>Task 定义跟配置</li>
-<li>Task执行</li>
-<li>Task依赖跟执行顺序</li>
-<li>Task的类型</li>
-<li>挂接到生命周期</li>
-<li>Task实战</li>
-</ol>
-<h5 id="Settings"><a href="#Settings" class="headerlink" title="Settings"></a>Settings</h5><h5 id="SourceSet"><a href="#SourceSet" class="headerlink" title="SourceSet"></a>SourceSet</h5><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//修改jnilib-&gt;lib</span></span><br><span class="line">sourceSets &#123;</span><br><span class="line">    main &#123;</span><br><span class="line">        jniLibs.srcDirs = [<span class="string">'libs'</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//资源分模块    </span></span><br><span class="line">sourceSets &#123;</span><br><span class="line">    main&#123;</span><br><span class="line">        res.srcDirs = [<span class="string">'src/main/res'</span>,</span><br><span class="line">                       <span class="string">'src/main/res-ad'</span>,</span><br><span class="line">                       <span class="string">'src/main/res-player'</span>]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="自定义plugin"><a href="#自定义plugin" class="headerlink" title="自定义plugin"></a>自定义plugin</h5><p>源码地址：<a href="https://github.com/kbjay/Kj_ReleasInfoPlugin" target="_blank" rel="noopener">https://github.com/kbjay/Kj_ReleasInfoPlugin</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/30/Android-gradle/" data-id="ck5nonp7d000awsuqkwf07bc7" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-gradle/">android gradle</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android-jsbridge" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/04/01/Android-jsbridge/" class="article-date">
-  <time datetime="2019-04-01T08:13:50.083Z" itemprop="datePublished">2019-04-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/01/Android-jsbridge/">Android-jsbridge</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>java跟js交互的框架。</p>
-<p>git地址：<a href="https://github.com/lzyzsd/JsBridge" target="_blank" rel="noopener">https://github.com/lzyzsd/JsBridge</a></p>
-<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>git地址：<a href="https://github.com/kbjay/kj_jsbridge_use" target="_blank" rel="noopener">https://github.com/kbjay/kj_jsbridge_use</a></p>
-<ol>
-<li><p>关于导包，可以按照jsbridge的使用说明来</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">repositories &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    maven &#123; url <span class="string">"https://jitpack.io"</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    compile <span class="string">'com.github.lzyzsd:jsbridge:1.0.4'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>为了方便分析源码，我这边的demo（kj_kjbrigde_use）是将jsbridge作为一个module(library)引入。</p>
-</li>
-<li><p>java传递消息给js：两种方式一种是默认方式，一种是spec方式</p>
-<p>java中代码如下：</p>
-<p>webView.callHandler(tag, msg,callback):发送消息msg给js中tag对应的function，function执行完成之后有一个callback。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * java 发送消息给 js</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">java2jsSpec</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// java2js-&gt; step1</span></span><br><span class="line">    webView.callHandler(<span class="string">"functionInJs"</span>, <span class="string">"发送消息给js（spec方式！！）"</span>, <span class="keyword">new</span> CallBackFunction() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCallBack</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">            Toast.makeText(MainActivity.<span class="keyword">this</span>, data, Toast.LENGTH_SHORT).show();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">   </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * java 发送消息给 js</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">java2jsDefault</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    webView.send(<span class="string">"发送消息给js（默认方式！）"</span>, <span class="keyword">new</span> CallBackFunction() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCallBack</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">            Toast.makeText(MainActivity.<span class="keyword">this</span>, data, Toast.LENGTH_SHORT).show();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对应的js代码如下：</p>
-<p>js中需要注册接受消息handler（同样有两种类型：默认跟spec），处理完消息之后调用responseCallback(callbackMsg)将处理结果回传给java</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注册事件监听，初始化</span></span><br><span class="line"><span class="comment">// Java2js-&gt; step2</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initJsBridge</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.WebViewJavascriptBridge) &#123;</span><br><span class="line">        callback(WebViewJavascriptBridge)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">document</span>.addEventListener(</span><br><span class="line">            <span class="string">'WebViewJavascriptBridgeReady'</span></span><br><span class="line">            , <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                callback(WebViewJavascriptBridge)</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="literal">false</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//回调函数，接收java发送来的数据</span></span><br><span class="line">initJsBridge(<span class="function"><span class="keyword">function</span> (<span class="params">bridge</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//默认接收</span></span><br><span class="line">    bridge.init(<span class="function"><span class="keyword">function</span> (<span class="params">message, responseCallback</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">"show"</span>).innerHTML = <span class="string">'默认接收到Java的数据： '</span> + message;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> responseData = <span class="string">'js默认接收完毕，并回传数据给java'</span>;</span><br><span class="line">        responseCallback(responseData); <span class="comment">//回传数据给java</span></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//指定接收，参数functionInJs 与java保持一致</span></span><br><span class="line">    <span class="comment">//java2js -&gt; step 3;</span></span><br><span class="line">    bridge.registerHandler(<span class="string">"functionInJs"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">data, responseCallback</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">"show"</span>).innerHTML = <span class="string">'指定接收到Java的数据： '</span> + data;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> responseData = <span class="string">'js指定接收完毕，并回传数据给java'</span>;</span><br><span class="line">        responseCallback(responseData); <span class="comment">//回传数据给java</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>js传递消息给java，两种方式：默认跟spec</p>
-<p>js中发送消息，接收callback代码如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jsToJavaDefault</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">       <span class="keyword">var</span> msg = <span class="string">"js发送给java--&gt;默认消息"</span>;</span><br><span class="line">       <span class="built_in">window</span>.WebViewJavascriptBridge.send(msg, <span class="function"><span class="keyword">function</span> (<span class="params">resp</span>) </span>&#123;</span><br><span class="line">           <span class="built_in">document</span>.getElementById(<span class="string">"show"</span>).innerHTML = resp;</span><br><span class="line">       &#125;);</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="comment">//js2java-&gt; step1</span></span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">jsToJavaSpec</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">       <span class="keyword">var</span> msg = <span class="string">"js发送给java--&gt;指定消息"</span>;</span><br><span class="line">       <span class="built_in">window</span>.WebViewJavascriptBridge.callHandler(<span class="string">'submitFromWeb'</span>, msg, <span class="function"><span class="keyword">function</span> (<span class="params">resp</span>) </span>&#123;</span><br><span class="line">           <span class="built_in">document</span>.getElementById(<span class="string">"show"</span>).innerHTML = resp;</span><br><span class="line">       &#125;);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>java中处理消息，回传callback代码如下：同样两种方式</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 初始化jsbridge用于接受js发来的消息，并利用回调将传递数据给js。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initJs</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    webView.setDefaultHandler(<span class="keyword">new</span> BridgeHandler() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handler</span><span class="params">(String data, CallBackFunction function)</span> </span>&#123;</span><br><span class="line">            Toast.makeText(MainActivity.<span class="keyword">this</span>, data, Toast.LENGTH_SHORT).show();</span><br><span class="line">            function.onCallBack(<span class="string">"java默认接收完毕，并回传数据给js"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">//js2java-&gt; step2</span></span><br><span class="line">    webView.registerHandler(<span class="string">"submitFromWeb"</span>, <span class="keyword">new</span> BridgeHandler() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handler</span><span class="params">(String data, CallBackFunction function)</span> </span>&#123;</span><br><span class="line">            Toast.makeText(MainActivity.<span class="keyword">this</span>, data, Toast.LENGTH_SHORT).show();</span><br><span class="line">            function.onCallBack(<span class="string">"java指定接收完毕，并回传数据给js"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h4 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h4><h5 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h5><ol>
-<li><p>java跟js交互的原始方式</p>
-<p>java-&gt;js：</p>
-<ul>
-<li>webView.loadUrl(“javascript:functionInJs(msg)”)     jsBridge中选择的方式<br>   webView.evaluateJavascript(“javascript:functionInJs(msg)”,callback)    API19（4.4）之后都可以，带有callback        </li>
-</ul>
-<p>js-&gt;java:</p>
-<ul>
-<li>在java声明JsJavaBridge.class,类中的方法用@JavaScriptInterface标记，设置webView.addJavascriptInterface(new JsJavaBridge(),”bridge”)之后，可以在js中使用bridge.xxx()调用JsJavaBridge中的方法，这种方式在4.4之前有安全问题，不建议使用（不过现在基本上不会去适配4.4以下的了）</li>
-<li>自定义WebViewClient，在shouldOverrideUrlLoading()中拦截url之后调用java代码。（这个是jsbridge中选择的方式）需要注意版本适配 API24 （7.0）</li>
-<li>自定义WebChromeClient，拦截console之后调用java代码</li>
-<li>自定义WebChromeClient，拦截弹框事件之后调用Java 代码</li>
-</ul>
-<p>参考：<a href="https://www.jianshu.com/p/eb52ae7633b5" target="_blank" rel="noopener">https://www.jianshu.com/p/eb52ae7633b5</a></p>
-</li>
-<li><p>可以通过重写webviewClient的onPageFinished方法，在方法中通过loadurl的方式给webview注入js代码。</p>
-</li>
-<li><p>关于H5中的iframe：通过修改iframe的src来触发webViewClient的shouldOverrideUrlLoading方法。</p>
-</li>
-</ol>
-<h5 id="流程分析"><a href="#流程分析" class="headerlink" title="流程分析"></a>流程分析</h5><p>先简单描述下整个流程：</p>
-<p>首先在webViewClient的onPageFinished的方法里加载了assets中的WebViewJavascriptBridge.js。</p>
-<p>java-&gt;js ：</p>
-<ul>
-<li><p>Java处理消息体：生成一个唯一标示（callbackId）+  msg实体 +  functionTag封装成message对象；其中functionTag是js中<strong>消息map</strong>的key，js可以根据这个找到java希望js调用的方法。</p>
-</li>
-<li><p>将callbackId作为key，handler作为value放入java中的消息map；（<strong>我们给js发一个request，js处理完成之后会有一个response，这个handler就是处理response的</strong>）</p>
-</li>
-<li><p>上面的<strong>js消息map</strong>需要我们在js中注册，其实就是把functionTag作为key，把回调的方法作为value放入map中。</p>
-</li>
-<li><p>将message对象通过loadurl的方式传递给js</p>
-</li>
-<li><p>js收到消息会先判读是否有callbackId（原因在js传递消息给java中），因为我们传递过来了，那么肯定是有的，之后会去判断js的<strong>消息map</strong>中是否有functionTag这个key（原因在java传递消息给js的默认方式中），因为我们在js中注册过了，那么肯定是有的，然后取出key对应的回调，处理java传过来的msg实体。</p>
-</li>
-<li><p>将callbackId跟处理完成的结果放入js中的消息队列queue。</p>
-</li>
-<li><p>之后会修改iframe控件src的url，在url上会拼接上“我有新消息了”，这样就会触发WebViewClient中的shouldOverrideUrlLoading方法，这样java就知道了js消息队列中有新消息了。</p>
-</li>
-<li><p>java通过loadurl的方式通知js取出js消息队列中的所有消息，搞成jsonString。</p>
-</li>
-<li><p>修改iframe控件的url，在url上会拼接上“我的所有消息：jsonString”，此时会触发WebViewClient中的shouldOverrideUrlLoading方法，这样java就收到了js消息队列中的所有消息。</p>
-</li>
-<li><p>最后我们取出消息，根据消息中的callbackId在java的消息map中找到对应的handler，之后处理js的response。</p>
-</li>
-</ul>
-<p>对应的源码流程如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//发送消息给js</span></span><br><span class="line">webView.callHandler(<span class="string">"functionInJs"</span>, <span class="string">"发送消息给js（spec方式！！）"</span>, <span class="keyword">new</span> CallBackFunction() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCallBack</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">                Toast.makeText(MainActivity.<span class="keyword">this</span>, data, Toast.LENGTH_SHORT).show();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
-<p>进入callHandler方法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* call javascript registered handler</span></span><br><span class="line"><span class="comment">* 调用javascript处理程序注册</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> handlerName handlerName</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> data data</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> callBack CallBackFunction</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callHandler</span><span class="params">(String handlerName, String data, CallBackFunction callBack)</span> </span>&#123;</span><br><span class="line">	send(handlerName, data, callBack);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>进入send方法，作用就是上面提到的封装message。并且把callbackId跟处理response的handler放入了responseCallbacks中。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 保存message到java消息队列</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> handlerName handlerName</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data data</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> responseCallback CallBackFunction</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">send</span><span class="params">(String handlerName, String data, CallBackFunction responseCallback)</span> </span>&#123;</span><br><span class="line">    Message m = <span class="keyword">new</span> Message();</span><br><span class="line">    <span class="keyword">if</span> (!TextUtils.isEmpty(data)) &#123;</span><br><span class="line">        m.setData(data);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (responseCallback != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//生成唯一标示</span></span><br><span class="line">        String callbackStr = String.format(BridgeUtil.CALLBACK_ID_FORMAT, ++uniqueId + (BridgeUtil.UNDERLINE_STR + SystemClock.currentThreadTimeMillis()));</span><br><span class="line">        <span class="comment">//重点！！！！！！</span></span><br><span class="line">        responseCallbacks.put(callbackStr, responseCallback);</span><br><span class="line">        </span><br><span class="line">        m.setCallbackId(callbackStr);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!TextUtils.isEmpty(handlerName)) &#123;</span><br><span class="line">        m.setHandlerName(handlerName);</span><br><span class="line">    &#125;</span><br><span class="line">    queueMessage(m);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>进入queueMessage方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * list&lt;message&gt; != null 添加到消息集合否则分发消息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> m Message</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">queueMessage</span><span class="params">(Message m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (startupMessage != <span class="keyword">null</span>) &#123;</span><br><span class="line">        startupMessage.add(m);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        dispatchMessage(m);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>进入dispatchMessage,重点最后一句(将消息传递给了js)。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分发message 必须在主线程才分发成功</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> m Message</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dispatchMessage</span><span class="params">(Message m)</span> </span>&#123;</span><br><span class="line">    String messageJson = m.toJson();</span><br><span class="line">   	...</span><br><span class="line">    <span class="keyword">if</span> (Thread.currentThread() == Looper.getMainLooper().getThread()) &#123;</span><br><span class="line">        <span class="keyword">this</span>.loadUrl(javascriptCommand);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>进入js的_handleMessageFromNative方法</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//提供给native调用,receiveMessageQueue 在会在页面加载完后赋值为null,所以</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> _handleMessageFromNative(<span class="params">messageJSON</span>) </span>&#123;</span><br><span class="line">	...</span><br><span class="line">    _dispatchMessageFromNative(messageJSON);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>进入_dispatchMessageFromNative方法（根据functionTag找到在js中注册处理方法handler并调用）</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//提供给native使用,</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> _dispatchMessageFromNative(<span class="params">messageJSON</span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> message = <span class="built_in">JSON</span>.parse(messageJSON);</span><br><span class="line">        <span class="keyword">var</span> responseCallback;</span><br><span class="line">       ...</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> callbackResponseId = message.callbackId;</span><br><span class="line">        responseCallback = <span class="function"><span class="keyword">function</span>(<span class="params">responseData</span>) </span>&#123;</span><br><span class="line">            _doSend(&#123;</span><br><span class="line">                responseId: callbackResponseId,</span><br><span class="line">                responseData: responseData</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;;</span><br><span class="line">       ...</span><br><span class="line">       handler = messageHandlers[message.handlerName];</span><br><span class="line">        <span class="comment">//查找指定handler</span></span><br><span class="line">       ...</span><br><span class="line">       handler(message.data, responseCallback);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>handler处理完成之后有个回调responseCallback，会调用_doSend方法。（将java传递过来的callbackid和js处理完成之后的response封装成一个对象作为参数）</p>
-<p>进入_doSend方法，<strong>将消息放入消息队列</strong>。之后修改iframe控件的src。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//sendMessage add message, 触发native处理 sendMessage</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> _doSend(<span class="params">message, responseCallback</span>) </span>&#123;</span><br><span class="line">   ...</span><br><span class="line">    sendMessageQueue.push(message);</span><br><span class="line">    messagingIframe.src = CUSTOM_PROTOCOL_SCHEME + <span class="string">'://'</span> + QUEUE_HAS_MESSAGE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>进入WebViewClient的shouldOverrideUrlLoading方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldOverrideUrlLoading</span><span class="params">(WebView view, WebResourceRequest request)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    String url = request.getUrl().toString();</span><br><span class="line">   	...</span><br><span class="line">    url = URLDecoder.decode(url, <span class="string">"UTF-8"</span>);</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span> (url.startsWith(BridgeUtil.YY_RETURN_DATA)) &#123;</span><br><span class="line">        <span class="comment">//js返回消息队列中的消息</span></span><br><span class="line">        webView.handlerReturnData(url);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (url.startsWith(BridgeUtil.YY_OVERRIDE_SCHEMA)) &#123;</span><br><span class="line">        <span class="comment">//js返回有新消息的标示</span></span><br><span class="line">        webView.flushMessageQueue();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>进入flushMessageQueue方法,其实就调用了一个方法loadUrl，有一个callback（可以在回调的时候再看）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 刷新消息队列</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">flushMessageQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	...</span><br><span class="line">    loadUrl(BridgeUtil.JS_FETCH_QUEUE_FROM_JAVA, <span class="keyword">new</span> CallBackFunction() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCallBack</span><span class="params">(String data)</span> </span>&#123;</span><br><span class="line">        。。。</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>loadUrl方法：调用js的_fetchQueue方法并把“_fetchQueue”作为key，上面的callback作为value放入responseCallbacks中。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadUrl</span><span class="params">(String jsUrl, CallBackFunction returnCallback)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">this</span>.loadUrl(jsUrl);</span><br><span class="line">       <span class="comment">// 添加至 Map&lt;String, CallBackFunction&gt;</span></span><br><span class="line">   responseCallbacks.put(BridgeUtil.parseFunctionName(jsUrl), returnCallback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>进入js中的_fetchQueue方法：取出js中所有的消息，放在url的后面</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 提供给native调用,该函数作用:获取sendMessageQueue返回给native,由于android不能直接获取返回的内容,所以使用url shouldOverrideUrlLoading 的方式返回内容</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> _fetchQueue(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> messageQueueString = <span class="built_in">JSON</span>.stringify(sendMessageQueue);</span><br><span class="line">    sendMessageQueue = [];</span><br><span class="line">    <span class="comment">//android can't read directly the return data, so we can reload iframe src to communicate with java</span></span><br><span class="line">    <span class="keyword">if</span> (messageQueueString !== <span class="string">'[]'</span>) &#123;</span><br><span class="line">        bizMessagingIframe.src = CUSTOM_PROTOCOL_SCHEME + <span class="string">'://return/_fetchQueue/'</span> + <span class="built_in">encodeURIComponent</span>(messageQueueString);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>进入WebViewClient的shouldOverrideUrlLoading方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldOverrideUrlLoading</span><span class="params">(WebView view, WebResourceRequest request)</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    String url = request.getUrl().toString();</span><br><span class="line">   	...</span><br><span class="line">    url = URLDecoder.decode(url, <span class="string">"UTF-8"</span>);</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span> (url.startsWith(BridgeUtil.YY_RETURN_DATA)) &#123;</span><br><span class="line">        <span class="comment">//js返回消息队列中的消息</span></span><br><span class="line">        webView.handlerReturnData(url);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (url.startsWith(BridgeUtil.YY_OVERRIDE_SCHEMA)) &#123;</span><br><span class="line">        <span class="comment">//js返回有新消息的标示</span></span><br><span class="line">        webView.flushMessageQueue();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>进入handlerReturnData方法,根据callbackid在responseCallbacks中找到处理response的handler。执行handler的callback方法。流程结束！！！</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取到CallBackFunction data执行调用并且从数据集移除</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">handlerReturnData</span><span class="params">(String url)</span> </span>&#123;</span><br><span class="line">    String functionName = BridgeUtil.getFunctionFromReturnUrl(url);</span><br><span class="line">    CallBackFunction f = responseCallbacks.get(functionName);</span><br><span class="line">    String data = BridgeUtil.getDataFromReturnUrl(url);</span><br><span class="line">    <span class="keyword">if</span> (f != <span class="keyword">null</span>) &#123;</span><br><span class="line">        f.onCallBack(data);</span><br><span class="line">        responseCallbacks.remove(functionName);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>js-&gt;java:</p>
-<p>跟java-&gt;js在本质上没有什么区别，有兴趣可以自己跟一下（如果理解了上面的流程，会很顺利的跟下来的～）。</p>
-<h5 id="源码中的一个小问题"><a href="#源码中的一个小问题" class="headerlink" title="源码中的一个小问题"></a>源码中的一个小问题</h5><p>源码中BridgeWebView实现了WebViewJavascriptBridge接口，该接口是对外暴露的发送消息给js的接口，源码里面只声明了两种方式（1-&gt;默认方式发送消息给js，不带回调 ； 2-&gt;默认方式发送消息给js，带回调 ），但是实际上BridgeWebView对外暴露的有3种方式，还有一种（3-&gt; callHandler（spec方式，带回调的）），所以我把callHandler也声明到了接口里。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 对外暴露的方法接口</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">WebViewJavascriptBridge</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送消息给js（默认方式不带回调）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">send</span><span class="params">(String data)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送消息给js （默认方式带回调）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> responseCallback</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">send</span><span class="params">(String data, CallBackFunction responseCallback)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送消息给js（spec带回调）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> funNameInJs</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> responseCallback</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">callHandler</span><span class="params">(String funNameInJs, String data, CallBackFunction responseCallback)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/01/Android-jsbridge/" data-id="ck5nonp7i000ewsuqrbc3m7ux" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-server-springBoot" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/27/server-springBoot/" class="article-date">
-  <time datetime="2019-03-27T08:29:44.575Z" itemprop="datePublished">2019-03-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/27/server-springBoot/">server-springBoot</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h5><p>​    自己在封装net模块的时候一直希望有自己的api可以用来测试各种case。鉴于之前用springboot写过一个排班系统，所以想到用springboot写简单的server，里面包含一些简单的请求。</p>
-<h5 id="demo地址："><a href="#demo地址：" class="headerlink" title="demo地址："></a>demo地址：</h5><p><a href="https://github.com/kbjay/TestApi.git" target="_blank" rel="noopener">https://github.com/kbjay/TestApi.git</a></p>
-<p>新建springboot project,参考：<a href="https://www.jianshu.com/p/45ba074dbc81" target="_blank" rel="noopener">https://www.jianshu.com/p/45ba074dbc81</a><br>这里的数据库操作我选择了jpa。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/27/server-springBoot/" data-id="ck5nonpah003owsuqhvsmzpp5" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/server-test-api/">server test-api</a></li></ul>
 
     </footer>
   </div>
@@ -715,7 +682,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -729,7 +696,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-源码/">android 源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-源码/">android 源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
     </div>
   </div>
 
@@ -739,7 +706,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 17.5px;">JVM</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-源码/" style="font-size: 10px;">android 源码</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 17.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 12.5px;">设计模式</a> <a href="/tags/音视频/" style="font-size: 15px;">音视频</a>
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 17.5px;">JVM</a> <a href="/tags/Kotlin/" style="font-size: 10px;">Kotlin</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-源码/" style="font-size: 10px;">android 源码</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 17.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 12.5px;">设计模式</a> <a href="/tags/音视频/" style="font-size: 15px;">音视频</a>
     </div>
   </div>
 
@@ -748,7 +715,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -761,23 +728,23 @@
       <ul>
         
           <li>
-            <a href="/2020/01/21/设计模式--策略-观察者-装饰/">设计模式--策略 观察者 装饰</a>
+            <a href="/2020/06/09/kotlin-基础/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2020/01/21/2019年末总结/">2019年末总结</a>
+            <a href="/2020/03/19/后台开发/">后台开发</a>
           </li>
         
           <li>
-            <a href="/2020/01/07/源码分析-glide/">源码分析-glide</a>
+            <a href="/2020/03/18/mysql添加索引解决速度问题/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2019/12/16/andriod---ffmpeg-(三)/">andriod - ffmpeg (三)</a>
+            <a href="/2020/03/13/oss/">oss</a>
           </li>
         
           <li>
-            <a href="/2019/12/16/android---性能优化（内存）/">android - 性能优化（内存）</a>
+            <a href="/2020/03/10/python解析html/">python解析html</a>
           </li>
         
       </ul>

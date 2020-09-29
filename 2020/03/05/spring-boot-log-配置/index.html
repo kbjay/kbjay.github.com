@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>spring boot log 配置 | kb_jay的开发站台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​    使用log4j2 Q1:过滤掉系统日志？？123456789101112&amp;lt;loggers&amp;gt;       &amp;lt;!-- 过滤掉org.springframework包下面的日志--&amp;gt;  			&amp;lt;!-- name对应代码的包 additivity设置为false表示不会到root的log里面 --&amp;gt;       &amp;lt;logger name=&quot;org.spr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring boot log 配置">
+<meta property="og:url" content="http://yoursite.com/2020/03/05/spring-boot-log-配置/index.html">
+<meta property="og:site_name" content="kb_jay的开发站台">
+<meta property="og:description" content="​    使用log4j2 Q1:过滤掉系统日志？？123456789101112&amp;lt;loggers&amp;gt;       &amp;lt;!-- 过滤掉org.springframework包下面的日志--&amp;gt;  			&amp;lt;!-- name对应代码的包 additivity设置为false表示不会到root的log里面 --&amp;gt;       &amp;lt;logger name=&quot;org.spr">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-03-06T09:55:44.860Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spring boot log 配置">
+<meta name="twitter:description" content="​    使用log4j2 Q1:过滤掉系统日志？？123456789101112&amp;lt;loggers&amp;gt;       &amp;lt;!-- 过滤掉org.springframework包下面的日志--&amp;gt;  			&amp;lt;!-- name对应代码的包 additivity设置为false表示不会到root的log里面 --&amp;gt;       &amp;lt;logger name=&quot;org.spr">
+  
+    <link rel="alternate" href="/atom.xml" title="kb_jay的开发站台" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">kb_jay的开发站台</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-spring-boot-log-配置" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/05/spring-boot-log-配置/" class="article-date">
+  <time datetime="2020-03-05T04:59:01.000Z" itemprop="datePublished">2020-03-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      spring boot log 配置
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    使用log4j2</p>
+<h5 id="Q1-过滤掉系统日志？？"><a href="#Q1-过滤掉系统日志？？" class="headerlink" title="Q1:过滤掉系统日志？？"></a>Q1:过滤掉系统日志？？</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">loggers</span>&gt;</span></span><br><span class="line">       <span class="comment">&lt;!-- 过滤掉org.springframework包下面的日志--&gt;</span></span><br><span class="line">  			<span class="comment">&lt;!-- name对应代码的包 additivity设置为false表示不会到root的log里面 --&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">logger</span> <span class="attr">name</span>=<span class="string">"org.springframework"</span> <span class="attr">level</span>=<span class="string">"INFO"</span> <span class="attr">additivity</span>=<span class="string">"false"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">logger</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"INFO"</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"Console"</span>/&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"RollingFileInfo"</span>/&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"RollingFileWarn"</span>/&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"RollingFileError"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">loggers</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="Q2-不同级别的日志输出到不同的文件？？"><a href="#Q2-不同级别的日志输出到不同的文件？？" class="headerlink" title="Q2: 不同级别的日志输出到不同的文件？？"></a>Q2: 不同级别的日志输出到不同的文件？？</h5><p><a href="https://github.com/bycuimiao/springboot2-log4j2-demo/blob/master/src/main/resources/log4j2.xml" target="_blank" rel="noopener">https://github.com/bycuimiao/springboot2-log4j2-demo/blob/master/src/main/resources/log4j2.xml</a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">RollingFile</span> <span class="attr">name</span>=<span class="string">"RollingFileInfo"</span> <span class="attr">fileName</span>=<span class="string">"$&#123;FILE_PATH&#125;/info.log"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">filePattern</span>=<span class="string">"$&#123;FILE_PATH&#125;/$&#123;FILE_NAME&#125;-INFO-%d&#123;yyyy-MM-dd&#125;_%i.log.gz"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Filters</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 表示对于warn以及warn级别以上的日志 deny，对于warn一下子的日志不拦截 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ThresholdFilter</span> <span class="attr">level</span>=<span class="string">"WARN"</span> <span class="attr">onMatch</span>=<span class="string">"DENY"</span> <span class="attr">onMismatch</span>=<span class="string">"NEUTRAL"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 表示info以及以上的日志接受，以下的deny掉 （因为info的以上的日志都被上面的filter过滤掉了，所以只有info的日志可以通过这两个filter）--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ThresholdFilter</span> <span class="attr">level</span>=<span class="string">"INFO"</span> <span class="attr">onMatch</span>=<span class="string">"ACCEPT"</span> <span class="attr">onMismatch</span>=<span class="string">"DENY"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Filters</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">PatternLayout</span> <span class="attr">pattern</span>=<span class="string">"$&#123;LOG_PATTERN&#125;"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Policies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">SizeBasedTriggeringPolicy</span> <span class="attr">size</span>=<span class="string">"1M"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Policies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">RollingFile</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">RollingFile</span> <span class="attr">name</span>=<span class="string">"RollingFileWarn"</span> <span class="attr">fileName</span>=<span class="string">"$&#123;FILE_PATH&#125;/warn.log"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">filePattern</span>=<span class="string">"$&#123;FILE_PATH&#125;/$&#123;FILE_NAME&#125;-WARN-%d&#123;yyyy-MM-dd&#125;_%i.log.gz"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Filters</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ThresholdFilter</span> <span class="attr">level</span>=<span class="string">"ERROR"</span> <span class="attr">onMatch</span>=<span class="string">"DENY"</span> <span class="attr">onMismatch</span>=<span class="string">"NEUTRAL"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ThresholdFilter</span> <span class="attr">level</span>=<span class="string">"WARN"</span> <span class="attr">onMatch</span>=<span class="string">"ACCEPT"</span> <span class="attr">onMismatch</span>=<span class="string">"DENY"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Filters</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">PatternLayout</span> <span class="attr">pattern</span>=<span class="string">"$&#123;LOG_PATTERN&#125;"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Policies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">SizeBasedTriggeringPolicy</span> <span class="attr">size</span>=<span class="string">"1M"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Policies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">RollingFile</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">RollingFile</span> <span class="attr">name</span>=<span class="string">"RollingFileError"</span> <span class="attr">fileName</span>=<span class="string">"$&#123;FILE_PATH&#125;/error.log"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">filePattern</span>=<span class="string">"$&#123;FILE_PATH&#125;/$&#123;FILE_NAME&#125;-ERROR-%d&#123;yyyy-MM-dd&#125;_%i.log.gz"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ThresholdFilter</span> <span class="attr">level</span>=<span class="string">"ERROR"</span> <span class="attr">onMatch</span>=<span class="string">"ACCEPT"</span> <span class="attr">onMismatch</span>=<span class="string">"DENY"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">PatternLayout</span> <span class="attr">pattern</span>=<span class="string">"$&#123;LOG_PATTERN&#125;"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Policies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">SizeBasedTriggeringPolicy</span> <span class="attr">size</span>=<span class="string">"1M"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Policies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">RollingFile</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="Q3-不同环境日志文件位置问题？？"><a href="#Q3-不同环境日志文件位置问题？？" class="headerlink" title="Q3:不同环境日志文件位置问题？？"></a>Q3:不同环境日志文件位置问题？？</h5><p>对于日志的位置，不能使用绝对路径，原因是多人开发，每个人机器上的路径不一致，这个时候可以使用</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"FILE_PATH"</span> <span class="attr">value</span>=<span class="string">"$&#123;sys:user.home&#125;/home/logs"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>${sys:user.home}表示用户的目录，cd ～</p>
+<p>在docker容器中对应/root 目录</p>
+<h5 id="Q4-日志打印"><a href="#Q4-日志打印" class="headerlink" title="Q4:日志打印"></a>Q4:日志打印</h5><p>利用servelet拦截器</p>
+<p><a href="https://www.jianshu.com/p/afdd31bfbf94" target="_blank" rel="noopener">https://www.jianshu.com/p/afdd31bfbf94</a></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lingshiedu.lszy.filter</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory</span><br><span class="line"><span class="keyword">import</span> org.slf4j.MDC</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.util.ContentCachingRequestWrapper</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.util.ContentCachingResponseWrapper</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.util.WebUtils</span><br><span class="line"><span class="keyword">import</span> java.io.UnsupportedEncodingException</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.Charset</span><br><span class="line"><span class="keyword">import</span> java.util.*</span><br><span class="line"><span class="keyword">import</span> javax.servlet.*</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LogFilter</span> : <span class="type">Filter &#123;</span></span></span><br><span class="line">    <span class="keyword">val</span> Logger = LoggerFactory.getLogger(LogFilter::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line">    <span class="keyword">val</span> SPLIT_STRING_M = <span class="string">"="</span></span><br><span class="line">    <span class="keyword">val</span> SPLIT_STRING_DOT = <span class="string">", "</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">destroy</span><span class="params">()</span></span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">doFilter</span><span class="params">(req: <span class="type">ServletRequest</span>?, res: <span class="type">ServletResponse</span>?, filterChain: <span class="type">FilterChain</span>?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> request = req <span class="keyword">as</span> HttpServletRequest</span><br><span class="line">        <span class="keyword">val</span> response = res <span class="keyword">as</span> HttpServletResponse</span><br><span class="line">        MDC.clear()</span><br><span class="line">        <span class="comment">//给本次请求分配一个唯一的tradeId</span></span><br><span class="line">        MDC.put(<span class="string">"trade_id"</span>, UUID.randomUUID().toString().replace(<span class="string">"-"</span>, <span class="string">""</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">val</span> wrapperRequest = ContentCachingRequestWrapper(request)</span><br><span class="line">        <span class="keyword">val</span> wrapperResponse = ContentCachingResponseWrapper(response)</span><br><span class="line"></span><br><span class="line">        Logger.info(<span class="string">"method[&#123;&#125;] | queryUrl[&#123;&#125;] | headers[&#123;&#125;] | queryParams[&#123;&#125;] | body:&#123;&#125;"</span>, request.method, request.requestURL, getHeaders(req), getRequestParams(request), getRequestBody(wrapperRequest))</span><br><span class="line">        filterChain!!.doFilter(wrapperRequest, wrapperResponse)</span><br><span class="line">        Logger.info(<span class="string">"resp body:&#123;&#125;"</span>, getResponseBody(wrapperResponse))</span><br><span class="line"></span><br><span class="line">        wrapperResponse.copyBodyToResponse()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">getRequestBody</span><span class="params">(request: <span class="type">ContentCachingRequestWrapper</span>)</span></span>: String? &#123;</span><br><span class="line">        <span class="keyword">val</span> wrapper = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line">        <span class="keyword">if</span> (wrapper != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">val</span> buf = wrapper.contentAsByteArray</span><br><span class="line">            <span class="keyword">if</span> (buf.isNotEmpty()) &#123;</span><br><span class="line">                <span class="keyword">val</span> payload: String = <span class="keyword">try</span> &#123;</span><br><span class="line">                    String(buf, <span class="number">0</span>, buf.size, Charset.forName(wrapper.characterEncoding))</span><br><span class="line">                &#125; <span class="keyword">catch</span> (e: UnsupportedEncodingException) &#123;</span><br><span class="line">                    <span class="string">"[unknown]"</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> payload.replace(<span class="string">"\\n"</span>.toRegex(), <span class="string">""</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">getHeaders</span><span class="params">(req: <span class="type">HttpServletRequest</span>)</span></span>: String? &#123;</span><br><span class="line">        <span class="keyword">var</span> header = <span class="string">""</span></span><br><span class="line">        <span class="keyword">for</span> (key <span class="keyword">in</span> req.headerNames) &#123;</span><br><span class="line">            <span class="keyword">val</span> value = req.getHeader(key)</span><br><span class="line">            header += <span class="string">" [key:<span class="subst">$&#123;key&#125;</span> value:<span class="subst">$&#123;value&#125;</span>] "</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> header</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">getResponseBody</span><span class="params">(response: <span class="type">ContentCachingResponseWrapper</span>)</span></span>: String? &#123;</span><br><span class="line">        <span class="keyword">val</span> wrapper = WebUtils.getNativeResponse(response, ContentCachingResponseWrapper::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>)</span></span><br><span class="line">        <span class="keyword">if</span> (wrapper != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">val</span> buf = wrapper.contentAsByteArray</span><br><span class="line">            <span class="keyword">if</span> (buf.isNotEmpty()) &#123;</span><br><span class="line">                <span class="keyword">val</span> payload: String = <span class="keyword">try</span> &#123;</span><br><span class="line">                    String(buf, <span class="number">0</span>, buf.size, Charset.forName(wrapper.characterEncoding))</span><br><span class="line">                &#125; <span class="keyword">catch</span> (e: UnsupportedEncodingException) &#123;</span><br><span class="line">                    <span class="string">"[unknown]"</span></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> payload</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getRequestParams</span><span class="params">(request: <span class="type">HttpServletRequest</span>)</span></span>: String? &#123;</span><br><span class="line">        <span class="keyword">val</span> sb = StringBuilder()</span><br><span class="line">        <span class="keyword">val</span> enu = request.parameterNames</span><br><span class="line">        <span class="comment">//获取请求参数</span></span><br><span class="line">        <span class="keyword">while</span> (enu.hasMoreElements()) &#123;</span><br><span class="line">            <span class="keyword">val</span> name = enu.nextElement()</span><br><span class="line">            sb.append(name + SPLIT_STRING_M).append(request.getParameter(name))</span><br><span class="line">            <span class="keyword">if</span> (enu.hasMoreElements()) &#123;</span><br><span class="line">                sb.append(SPLIT_STRING_DOT)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> sb.toString()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">init</span><span class="params">(p0: <span class="type">FilterConfig</span>?)</span></span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/03/05/spring-boot-log-配置/" data-id="ckfncjic50043lyuqf3gvqqpi" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/03/10/Charles-抓包/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Charles 抓包
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/03/04/docker/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">docker</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-反编译-讯飞/">Andoird 反编译 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Andoird-第三方登录/">Andoird 第三方登录</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-tensorFlow/">Android  tensorFlow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-openCV/">Android openCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-itemDecoration/">Android recycleView itemDecoration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recycleView-瀑布流/">Android recycleView 瀑布流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-recyclerView/">Android recyclerView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-sdk/">Android sdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译/">Android 反编译</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-反编译-smali-讯飞/">Android 反编译 smali 讯飞</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-基础/">Android 基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-安全/">Android 安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-微信小程序/">Android 微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-懒加载/">Android 懒加载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-数据库/">Android 数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-架构/">Android 架构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-自定义View/">Android 自定义View</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-通信-eventBus/">Android 通信 eventBus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-音频/">Android 音频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-gradle/">android gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-net/">android net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-permission/">android permission</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-ui/">android ui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-内存优化/">android 内存优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-混合开发/">android 混合开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-源码/">android 源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android-音视频/">android 音视频</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jvm/">jvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp/">leetcode dp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-dp-01背包/">leetcode dp 01背包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode-stack/">leetcode stack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server-test-api/">server test-api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svg-java/">svg java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/后端-springBoot/">后端 springBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/混合开发-webView/">混合开发 webView</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/网络，安全/">网络，安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/音视频/">音视频</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Andoird-反编译-讯飞/" style="font-size: 10px;">Andoird 反编译 讯飞</a> <a href="/tags/Andoird-第三方登录/" style="font-size: 10px;">Andoird 第三方登录</a> <a href="/tags/Android/" style="font-size: 12.5px;">Android</a> <a href="/tags/Android-tensorFlow/" style="font-size: 10px;">Android  tensorFlow</a> <a href="/tags/Android-openCV/" style="font-size: 10px;">Android openCV</a> <a href="/tags/Android-recycleView-itemDecoration/" style="font-size: 10px;">Android recycleView itemDecoration</a> <a href="/tags/Android-recycleView-瀑布流/" style="font-size: 10px;">Android recycleView 瀑布流</a> <a href="/tags/Android-recyclerView/" style="font-size: 10px;">Android recyclerView</a> <a href="/tags/Android-sdk/" style="font-size: 10px;">Android sdk</a> <a href="/tags/Android-反编译/" style="font-size: 10px;">Android 反编译</a> <a href="/tags/Android-反编译-smali-讯飞/" style="font-size: 10px;">Android 反编译 smali 讯飞</a> <a href="/tags/Android-基础/" style="font-size: 10px;">Android 基础</a> <a href="/tags/Android-安全/" style="font-size: 10px;">Android 安全</a> <a href="/tags/Android-微信小程序/" style="font-size: 10px;">Android 微信小程序</a> <a href="/tags/Android-懒加载/" style="font-size: 10px;">Android 懒加载</a> <a href="/tags/Android-数据库/" style="font-size: 10px;">Android 数据库</a> <a href="/tags/Android-架构/" style="font-size: 10px;">Android 架构</a> <a href="/tags/Android-自定义View/" style="font-size: 10px;">Android 自定义View</a> <a href="/tags/Android-通信-eventBus/" style="font-size: 10px;">Android 通信 eventBus</a> <a href="/tags/Android-音频/" style="font-size: 10px;">Android 音频</a> <a href="/tags/JVM/" style="font-size: 17.5px;">JVM</a> <a href="/tags/Kotlin/" style="font-size: 10px;">Kotlin</a> <a href="/tags/android/" style="font-size: 15px;">android</a> <a href="/tags/android-gradle/" style="font-size: 10px;">android gradle</a> <a href="/tags/android-net/" style="font-size: 10px;">android net</a> <a href="/tags/android-permission/" style="font-size: 10px;">android permission</a> <a href="/tags/android-ui/" style="font-size: 10px;">android ui</a> <a href="/tags/android-内存优化/" style="font-size: 10px;">android 内存优化</a> <a href="/tags/android-混合开发/" style="font-size: 10px;">android 混合开发</a> <a href="/tags/android-源码/" style="font-size: 10px;">android 源码</a> <a href="/tags/android-音视频/" style="font-size: 10px;">android 音视频</a> <a href="/tags/jvm/" style="font-size: 17.5px;">jvm</a> <a href="/tags/leetcode/" style="font-size: 12.5px;">leetcode</a> <a href="/tags/leetcode-dp/" style="font-size: 20px;">leetcode dp</a> <a href="/tags/leetcode-dp-01背包/" style="font-size: 10px;">leetcode dp 01背包</a> <a href="/tags/leetcode-stack/" style="font-size: 12.5px;">leetcode stack</a> <a href="/tags/net/" style="font-size: 10px;">net</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/server-test-api/" style="font-size: 10px;">server test-api</a> <a href="/tags/svg-java/" style="font-size: 10px;">svg java</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a> <a href="/tags/后端-springBoot/" style="font-size: 10px;">后端 springBoot</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据结构/" style="font-size: 12.5px;">数据结构</a> <a href="/tags/混合开发-webView/" style="font-size: 10px;">混合开发 webView</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/网络，安全/" style="font-size: 10px;">网络，安全</a> <a href="/tags/设计模式/" style="font-size: 12.5px;">设计模式</a> <a href="/tags/音视频/" style="font-size: 15px;">音视频</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/09/kotlin-基础/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/19/后台开发/">后台开发</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/18/mysql添加索引解决速度问题/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/13/oss/">oss</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/10/python解析html/">python解析html</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 kb_jay<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
